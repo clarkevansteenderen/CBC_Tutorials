@@ -1,5 +1,4 @@
-# CBC Tutorials
-## Clarke van Steenderen
+# CBC Tutorials with Clarke
 
 Welcome to the CBC tutorials repository!
 
