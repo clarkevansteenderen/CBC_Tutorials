@@ -7,7 +7,7 @@ Clarke van Steenderen
 ## Getting started
 
 Open the “Chromatograms” folder. The sequencing facility will send you
-three files for each sample, nameley a **.ab1**, **.pdf**, and **.txt**
+three files for each sample, namely a **.ab1**, **.pdf**, and **.txt**
 file. The sequences here are *Dactylopius opuntiae* and *D. tomentosus*
 12S rRNA sequences. For a quick ID, you can copy the FASTA sequence in
 the .txt file, and paste it into the
