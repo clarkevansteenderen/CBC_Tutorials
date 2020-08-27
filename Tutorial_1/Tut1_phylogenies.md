@@ -8,9 +8,9 @@ Clarke van Steenderen
 
 Open the “Chromatograms” folder. The sequencing facility will send you
 three files for each sample, namely a **.ab1**, **.pdf**, and **.txt**
-file. The sequences here are *Dactylopius opuntiae* and *D. tomentosus*
-12S rRNA sequences. For a quick ID, you can copy the FASTA sequence in
-the .txt file, and paste it into the
+file. The data here are *Dactylopius opuntiae* and *D. tomentosus* 12S
+rRNA sequences. For a quick ID, you can copy the FASTA sequence in the
+.txt file, and paste it into the
 [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome)
 search engine. It will show you what the top matches are relative to
 what is available on the GenBank database.
@@ -36,25 +36,27 @@ now need to be aligned.
 ## Align sequences
 
 Open the [MAFFT](https://mafft.cbrc.jp/alignment/server/) server, and
-upload the **12S\_unaligned.fas**. Select the “Same as input” radio
+upload the **12S\_unaligned.fas** file. Select the “Same as input” radio
 buttons under the **UPPERCASE/lowercase** and **Output order** headings.
 Submit, and then click on **Fasta format** at the top of the page to
 download the alignment. The resulting file is called
-**12S\_aligned\_mafft\_needs\_editing.fasta** in the FASTA files folder.
-The beginning and end of the alignment have a number of dashes. Replace
-these with “N” characters to signify missing data. The processed file is
-called **12S\_aligned\_mafft\_ready.fasta**.
+**12S\_aligned\_mafft\_needs\_editing.fasta** in the FASTA files folder
+in this repository. The beginnings and ends of the alignmed sequences
+have a number of dashes. Replace these with the “N” character to signify
+missing data. Do not do this for dashes elsewhere in the sequences, as
+these indicate gaps, and may be biologically meaningful. The processed
+file is called **12S\_aligned\_mafft\_ready.fasta**.
 
 ## Create a haplotype network in PopART
 
 We’ll use some *Dactylopius confusus* 12S rRNA sequences for this.
 
-PopART reads in Nexus files, and so you need to convert from .fasta file
-to .nex. There are many online converters, but I like
+PopART reads in Nexus files, and so you need to convert from .fasta to
+.nex. There are many online converters, but I like
 [EMBOSS](https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/).
 
-Step 1: Select DNA from the dropdown list, and then upload the
-**12S\_confusus.fasta** file
+Step 1: Select DNA from the drop-down list, and then upload the
+**12S\_confusus.fasta** file.
 
 Step 2: Select the input format to be FASTA format including NCBI-style
 IDs, and the output format as Nexus/paup (either interleaved or
@@ -64,11 +66,12 @@ Download the .nex file, and open it in Notepad++. Delete the three lines
 that follow the first “end;” (begin assumptions; options deftype=unord;
 end;).
 
-This is available as the **12S\_confusus\_for\_popart.NEX** file in this
-repository. You can then add a TRAITS block section below the sequences.
-This is used to specify groupings within your sequences (e.g. geographic
-location or host plant), so that you can colour your haplotype network
-accordingly. Have a look at the example in this file.
+This file is available as the **12S\_confusus\_for\_popart.NEX** file in
+this repository. You can then add a TRAITS block section below the
+sequences. This is used to specify groupings within your sequences
+(e.g. geographic location or host plant), so that you can colour your
+haplotype network accordingly. Have a look at the formatting in this
+file.
 
 Read the **12S\_confusus\_for\_popart.NEX** file into PopART. Network
 –\> TCS network. Change colours by clicking Edit –\> Set trait colour.
