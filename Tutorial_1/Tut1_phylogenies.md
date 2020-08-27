@@ -6,12 +6,11 @@ Clarke van Steenderen
 
 ## Getting started
 
-Open the “Chromatograms” folder. You will receive three files for each
-sample from the sequencing facility (in this case, Macrogen); a
-**.ab1**, **.pdf**, and **.txt** file. The sequences here are
-*Dactylopius opuntiae* and *D. tomentosus* 12S rRNA sequences. For a
-quick ID, you can copy the FASTA sequence in the .txt ile, and paste it
-into the
+Open the “Chromatograms” folder. The sequencing facility will send you
+three files for each sample, nameley a **.ab1**, **.pdf**, and **.txt**
+file. The sequences here are *Dactylopius opuntiae* and *D. tomentosus*
+12S rRNA sequences. For a quick ID, you can copy the FASTA sequence in
+the .txt file, and paste it into the
 [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome)
 search engine. It will show you what the top matches are relative to
 what is available on the GenBank database.
@@ -92,7 +91,7 @@ pacman::p_load(ape, ade4, pegas, magrittr)
 # set your working directory. 
 # You can easily do this by pressing ctrl + shift + H, then select the folder containing the file
 # Then copy and paste the line produced in the console
-setwd("~/CBC_tuts/Genetics_1/Cochineal/FASTA files")
+setwd("~/CBC_tuts/Tutorial_1/FASTA files")
 seqs = ape::read.dna("12S_aligned_mafft_ready.fasta", format = "fasta")
 # get a basic summary of your file:
 seqs 
