@@ -37,5 +37,7 @@ EMBOSSseqret (for converting between file types, e.g. FASTA <-> NEXUS) https://w
 ## YouTube tutorials for making your own R package:
 
 PART1: https://www.youtube.com/watch?v=pMq42QT8AbE&t=7s (Basic setup)
+
 PART2: https://www.youtube.com/watch?v=1woJqeZCuog&t=34s (Adding a vignette)
+
 PART3: https://www.youtube.com/watch?v=QsNAhukSw1g&t=59s (Embedding example data into the package)
