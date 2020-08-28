@@ -34,10 +34,16 @@ CIPRES (for running various analyses on a server) http://www.phylo.org/
 
 EMBOSSseqret (for converting between file types, e.g. FASTA <-> NEXUS) https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/
 
-## YouTube tutorials for making your own R package:
-
+## YouTube tutorials:
+### Make your own R package:
 PART1: https://www.youtube.com/watch?v=pMq42QT8AbE&t=7s (Basic setup)
 
 PART2: https://www.youtube.com/watch?v=1woJqeZCuog&t=34s (Adding a vignette)
 
 PART3: https://www.youtube.com/watch?v=QsNAhukSw1g&t=59s (Embedding example data into the package)
+
+### A guide to the BinMat R package for fragment analysis data
+
+PART1: https://www.youtube.com/watch?v=RTHf7Naqr10
+
+PART 2: https://www.youtube.com/watch?v=jk4uBzVgqw8
