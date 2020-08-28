@@ -2,9 +2,18 @@ CBC Phylogenetics Tutorial 1
 ================
 Clarke van Steenderen
 
-<!-- <p style="color:red">text </p> -->
+## DOCUMENT CONTENTS
 
-## Getting started
+1.  [Getting started](#gettingstarted)
+2.  [View and trim chromatograms](#viewandtrim)
+3.  [Align sequences](#alignsequences)
+4.  [Create a haplotype network in PopART](#haplotypenetwork)
+5.  [Read genetic data into R](#readdata)
+6.  [Initial data exploration](#explore)
+7.  [Create a neighbour joining (NJ) tree](#njtree)
+8.  [Use ggtree](#ggtree)
+
+## Getting started <a name = "gettingstarted"></a>
 
 Open the “Chromatograms” folder. The sequencing facility will send you
 three files for each sample, namely a **.ab1**, **.pdf**, and **.txt**
@@ -15,7 +24,7 @@ rRNA sequences. For a quick ID, you can copy the FASTA sequence in the
 search engine. It will show you what the top matches are relative to
 what is available on the GenBank database.
 
-## View and trim chromatograms
+## View and trim chromatograms <a name = "viewandtrim"></a>
 
 Have a look at the PDF chromatogram of the BCCS1-green\_12S file. You’ll
 see that it’s a bit messy at the beginning, up to about 70 bp. The rest
@@ -33,7 +42,7 @@ AliView, and save it as one big FASTA file. Find this final file,
 **12S\_unaligned.fasta**, in the **FASTA files** folder. These sequences
 now need to be aligned.
 
-## Align sequences
+## Align sequences <a name = "alignsequences"></a>
 
 Open the [MAFFT](https://mafft.cbrc.jp/alignment/server/) server, and
 upload the **12S\_unaligned.fas** file. Select the “Same as input” radio
@@ -47,7 +56,7 @@ missing data. Do not do this for dashes elsewhere in the sequences, as
 these indicate gaps, and may be biologically meaningful. The processed
 file is called **12S\_aligned\_mafft\_ready.fasta**.
 
-## Create a haplotype network in PopART
+## Create a haplotype network in PopART <a name = "haplotypenetwork"></a>
 
 We’ll use some *Dactylopius confusus* 12S rRNA sequences for this.
 
@@ -80,7 +89,7 @@ mutations as –\> Numbers.
 
 ![](12S_confusus_for_popart.png)
 
-## Reading in genetic sequences and creating a distance matrix
+## Read genetic data into R <a name = "readdata"></a>
 
 ``` r
 if (!require("pacman")) install.packages("pacman") # pacman is a package that installs other required packages
@@ -91,11 +100,13 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 ``` r
 pacman::p_load(ape, ade4, pegas, magrittr, ggplot2, ggtree)
 
-# set your working directory. 
+# If you want to read in downloaded files, set your working directory accordingly
 # You can easily do this by pressing ctrl + shift + H, then select the folder containing the file
-# Then copy and paste the line produced in the console
-setwd("~/CBC_tuts/Tutorial_1/FASTA files")
-seqs = ape::read.dna("12S_aligned_mafft_ready.fasta", format = "fasta")
+# Then copy and paste the line produced in the console, for example:
+# setwd("~/CBC_tuts/Tutorial_1/FASTA files")
+# seqs = ape::read.dna("12S_aligned_mafft_ready.fasta", format = "fasta"")
+# Otherwise just read in the data straight from the GitHub repository as shown below
+seqs = ape::read.dna("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/FASTA%20files/12S_aligned_mafft_ready.fasta", format = "fasta")
 # get a basic summary of your file:
 seqs 
 ```
@@ -124,7 +135,7 @@ d = ape::dist.dna(seqs, model = "TN93", pairwise.deletion = T, as.matrix = T)
 # use ?dist.dna to see which other models are available. This uses the Tamura-Nei 93 model as an example
 ```
 
-## Initial data exploration
+## Initial data exploration <a name = "explore"></a>
 
 ``` r
 # Generate a heat-map, where the darker the colour, the greater the distance between pairs of sequences
@@ -157,7 +168,7 @@ for (i in 1: nrow(seqs)){
 
 ![](FigsTut1/unnamed-chunk-2-2.png)<!-- -->
 
-## Create a neighbour joining (NJ) tree
+## Create a neighbour joining (NJ) tree <a name = "njtree"></a>
 
 Have a look [here](https://rdrr.io/cran/ape/man/plot.phylo.html) for
 more parameters for tree plotting.
@@ -223,13 +234,20 @@ plot(unroot(tree),type="unrooted",cex=0.6, use.edge.length=FALSE,lab4ut="axial",
 
 ![](FigsTut1/unnamed-chunk-3-4.png)<!-- -->
 
-## A brief introduction to the ggtree package
+## Use ggtree <a name = "ggtree"></a>
 
-The primates.nex file was taken from the [10ktrees
-website](https://10ktrees.nunn-lab.org/Primates/dataset.html), and [from
-this great
+The ggtree package offers a really great variety of options to tweak
+your phylogenies. Read more about it
+[here](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12628).
+Also check out
+[this](https://guangchuangyu.github.io/ggtree-book/chapter-ggtree.html)
+great site for neat ideas\! The **primates.nex** file was taken from the
+[10ktrees website](https://10ktrees.nunn-lab.org/Primates/dataset.html),
+and [from this great
 blog](http://www.randigriffin.com/2017/05/11/primate-phylogeny-ggtree.html).
-This NEXUS file is available in the Tutorial\_1 repository.
+This file is available in the Tutorial\_1 repository. We add node
+numbers to the phylogeny using the geom\_label2() function so that we
+can refer to these nodes when we want to add highlighting or labels.
 
 ``` r
 # to install ggtree, use these lines of code:
@@ -237,13 +255,12 @@ This NEXUS file is available in the Tutorial\_1 repository.
 # if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 # BiocManager::install("ggtree")
 
-setwd("~/CBC_tuts/Tutorial_1")
-prim.tree = read.nexus("primates.nex")
+prim.tree = read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates.nex")
 
 # set a general dark blue colour for the tree lines
 prim1 = prim.tree %>% ggtree(., layout = "rectangular", colour = "darkblue", lwd=1.2) + xlim(0, 90) + 
   geom_tiplab(size=2.5, color="black") +
-  geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) # node numbers 
+  geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) # add node numbers 
 
 plot(prim1)
 ```
@@ -251,7 +268,7 @@ plot(prim1)
 ![](FigsTut1/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
-# colour according to branch lengths
+# colour according to branch lengths. If your tree has posterior probabilities, you can set that as the color if you prefer
 prim2 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 90) + 
   geom_tiplab(size=2.5, color="black") +
   geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) + # node numbers +
@@ -312,9 +329,10 @@ plot(prim4)
 
 ![](FigsTut1/unnamed-chunk-6-1.png)<!-- -->
 
-Perhaps you have additional binary (such as presence/absence,
-male/female), or continuous data that you want to include in the
-phylogeny. You can do this using the gheatmap() function.
+You might have additional binary (such as presence/absence), or
+continuous data for each individual in your phylogeny that you want to
+include in the graphic. You can do this using the gheatmap() function in
+the ggtree package.
 
 We will first read in two made-up .csv files; 1)
 **primates\_binary\_traits.csv** with presence/absence data for six
@@ -322,11 +340,10 @@ variables (X1 to X6), and 2) **primates\_continuous.csv** with randomly
 generated continuous data for four variables (X1 to X4).
 
 ``` r
-setwd("~/CBC_tuts/Tutorial_1")
-traits.bin = read.csv("primates_binary_traits.csv", row.names = 1)
-traits.cont = read.csv("primate_continuous.csv", row.names = 1)
+traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
+traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primate_continuous.csv", row.names = 1)
 
-# regenerate the phylogeny, but remove the clade labels
+# regenerate the phylogeny, but remove the clade labels to make it less cluttered
 prim5 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 120) + 
 # the tiplabels are offset here to make space for the additional trait data
   geom_tiplab(size=2.5, color="black", offset = 17) +
@@ -336,8 +353,8 @@ prim5 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular"
 scale_color_continuous(low='grey', high='red', name="Branch length")
   
 # add heatmap for the binary values
-binary_phylo =  gheatmap(prim5, traits.bin, offset=0.2, width=0.2, low="white", high="black", colnames_position = "top", colnames_angle = 90, font.size=2, color="black") + 
-  scale_fill_manual(values=c("white", "black"))
+binary_phylo =  gheatmap(prim5, traits.bin, offset=0.2, width=0.2, colnames_position = "top", colnames_angle = 90, font.size=2, color="black") + 
+  scale_fill_manual(values=c("white", "forestgreen"))
 ```
 
     ## Scale for 'fill' is already present. Adding another scale for 'fill', which
@@ -351,10 +368,12 @@ plot(binary_phylo)
 
 ``` r
 # add heatmap for continuous values
-cont_phylo = gheatmap(prim5, traits.cont, offset=0.2, width=0.2, low="white", high="black", 
+cont_phylo = gheatmap(prim5, traits.cont, offset=0.2, width=0.2, low="white", high="forestgreen", 
               colnames_position = "top", colnames_angle = 90, font.size=2, color="black", legend_title = "Value") 
 
 plot(cont_phylo)
 ```
 
 ![](FigsTut1/unnamed-chunk-7-2.png)<!-- -->
+
+## That’s it for the first tutorial\! Stay tuned for more :).
