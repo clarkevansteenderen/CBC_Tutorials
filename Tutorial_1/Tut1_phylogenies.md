@@ -89,7 +89,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
     ## Loading required package: pacman
 
 ``` r
-pacman::p_load(ape, ade4, pegas, magrittr)
+pacman::p_load(ape, ade4, pegas, magrittr, ggplot2, ggtree)
 
 # set your working directory. 
 # You can easily do this by pressing ctrl + shift + H, then select the folder containing the file
@@ -222,3 +222,139 @@ plot(unroot(tree),type="unrooted",cex=0.6, use.edge.length=FALSE,lab4ut="axial",
 ```
 
 ![](FigsTut1/unnamed-chunk-3-4.png)<!-- -->
+
+## A brief introduction to the ggtree package
+
+The primates.nex file was taken from the [10ktrees
+website](https://10ktrees.nunn-lab.org/Primates/dataset.html), and [from
+this great
+blog](http://www.randigriffin.com/2017/05/11/primate-phylogeny-ggtree.html).
+This NEXUS file is available in the Tutorial\_1 repository.
+
+``` r
+# to install ggtree, use these lines of code:
+
+# if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+# BiocManager::install("ggtree")
+
+setwd("~/CBC_tuts/Tutorial_1")
+prim.tree = read.nexus("primates.nex")
+
+# set a general dark blue colour for the tree lines
+prim1 = prim.tree %>% ggtree(., layout = "rectangular", colour = "darkblue", lwd=1.2) + xlim(0, 90) + 
+  geom_tiplab(size=2.5, color="black") +
+  geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) # node numbers 
+
+plot(prim1)
+```
+
+![](FigsTut1/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+# colour according to branch lengths
+prim2 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 90) + 
+  geom_tiplab(size=2.5, color="black") +
+  geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) + # node numbers +
+  theme(legend.position="bottom") +
+  scale_color_continuous(low='white', high='red', name="Branch length")
+
+plot(prim2)
+```
+
+![](FigsTut1/unnamed-chunk-4-2.png)<!-- -->
+
+The following information is given regarding which clade is which
+primate superfamily:
+
+  - Node 124: Galagoidea
+  - Node 113: Lemuroidea
+  - Node 110: Tarsioidea
+  - Node 96: Ceboidea
+  - Node 89: Hominoidea
+  - Node 70: Cercopithecoidea
+
+Using this, we can now add highlighting to specific clades, and side
+labels.
+
+``` r
+prim3 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 120) + 
+  geom_tiplab(size=2.5, color="black") +
+  geom_hilight(node=124, fill="yellow", alpha=0.3) + # Make Galagoidea yellow
+  geom_hilight(node=96, fill="steelblue", alpha=0.3) + # Make Ceboidea steel blue
+  geom_hilight(node=110, fill="orange", alpha=0.3) + # Make Tarsioidea orange
+  geom_cladelabel(124, "Galagoidea", offset=25, barsize=2, angle=0, offset.text=1.5, hjust=0.1, fontsize=4) +
+  geom_cladelabel(110, "Tarsioidea", offset=25, barsize=2, angle=0, offset.text=1.5, hjust=0.1, fontsize=4) +
+  # change the bar size, angle the text , and change the colour for fun
+  geom_cladelabel(96, "Ceboidea", offset=25, barsize=3, angle=90, offset.text=1.5, hjust=0.5, fontsize=4, colour =  "steelblue") +
+  geom_treescale() + theme(legend.position="bottom") +
+  scale_color_continuous(low='lightgrey', high='red', name="Branch length")
+ 
+plot(prim3)
+```
+
+![](FigsTut1/unnamed-chunk-5-1.png)<!-- -->
+
+Experiment with the different layout options. For example, a radial
+tree:
+
+``` r
+prim4 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "circular", lwd=1.2) + xlim(0, 120) + 
+  geom_tiplab(size=2.5, color="black") +
+  geom_hilight(node=124, fill="yellow", alpha=0.3) + # Make Galagoidea yellow
+  geom_hilight(node=96, fill="steelblue", alpha=0.3) + # Make Ceboidea steel blue
+  geom_hilight(node=110, fill="orange", alpha=0.3) + # Make Tarsioidea orange
+  geom_hilight(node=89, fill="blue", alpha=0.3) + # Make Hominoidea blue
+  geom_treescale() + theme(legend.position="bottom") +
+  scale_color_continuous(low='grey', high='red', name="Branch length")
+
+plot(prim4)
+```
+
+![](FigsTut1/unnamed-chunk-6-1.png)<!-- -->
+
+Perhaps you have additional binary (such as presence/absence,
+male/female), or continuous data that you want to include in the
+phylogeny. You can do this using the gheatmap() function.
+
+We will first read in two made-up .csv files; 1)
+**primates\_binary\_traits.csv** with presence/absence data for six
+variables (X1 to X6), and 2) **primates\_continuous.csv** with randomly
+generated continuous data for four variables (X1 to X4).
+
+``` r
+setwd("~/CBC_tuts/Tutorial_1")
+traits.bin = read.csv("primates_binary_traits.csv", row.names = 1)
+traits.cont = read.csv("primate_continuous.csv", row.names = 1)
+
+# regenerate the phylogeny, but remove the clade labels
+prim5 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 120) + 
+# the tiplabels are offset here to make space for the additional trait data
+  geom_tiplab(size=2.5, color="black", offset = 17) +
+  geom_hilight(node=124, fill="yellow", alpha=0.3) + # Make Galagoidea yellow
+  geom_hilight(node=96, fill="steelblue", alpha=0.3) + # Make Ceboidea steel blue
+  geom_hilight(node=110, fill="orange", alpha=0.3) +  # Make Tarsioidea orange 
+scale_color_continuous(low='grey', high='red', name="Branch length")
+  
+# add heatmap for the binary values
+binary_phylo =  gheatmap(prim5, traits.bin, offset=0.2, width=0.2, low="white", high="black", colnames_position = "top", colnames_angle = 90, font.size=2, color="black") + 
+  scale_fill_manual(values=c("white", "black"))
+```
+
+    ## Scale for 'fill' is already present. Adding another scale for 'fill', which
+    ## will replace the existing scale.
+
+``` r
+plot(binary_phylo)
+```
+
+![](FigsTut1/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+# add heatmap for continuous values
+cont_phylo = gheatmap(prim5, traits.cont, offset=0.2, width=0.2, low="white", high="black", 
+              colnames_position = "top", colnames_angle = 90, font.size=2, color="black", legend_title = "Value") 
+
+plot(cont_phylo)
+```
+
+![](FigsTut1/unnamed-chunk-7-2.png)<!-- -->
