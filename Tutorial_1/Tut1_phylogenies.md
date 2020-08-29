@@ -1,6 +1,7 @@
 CBC Phylogenetics Tutorial 1
 ================
 Clarke van Steenderen
+Last updated 29/08/2020
 
 ## DOCUMENT CONTENTS
 
@@ -245,9 +246,11 @@ great site for neat ideas\! The **primates.nex** file was taken from the
 [10ktrees website](https://10ktrees.nunn-lab.org/Primates/dataset.html),
 and [from this great
 blog](http://www.randigriffin.com/2017/05/11/primate-phylogeny-ggtree.html).
-This file is available in the Tutorial\_1 repository. We add node
-numbers to the phylogeny using the geom\_label2() function so that we
-can refer to these nodes when we want to add highlighting or labels.
+This is a .nex file for a tree that has already been created from
+aligned sequences. This file is available in the **Tutorial\_1
+repository**. We add node numbers to the phylogeny using the
+geom\_label2() function so that we can refer to these nodes when we want
+to add highlighting or labels.
 
 ``` r
 # to install ggtree, use these lines of code:
@@ -329,10 +332,10 @@ plot(prim4)
 
 ![](FigsTut1/unnamed-chunk-6-1.png)<!-- -->
 
-You might have additional binary (such as presence/absence), or
-continuous data for each individual in your phylogeny that you want to
-include in the graphic. You can do this using the gheatmap() function in
-the ggtree package.
+You might have additional binary (such as presence/absence,
+wings/wingless, etc.), or continuous data for each individual in your
+phylogeny that you want to include in the graphic. You can do this using
+the gheatmap() function in the ggtree package.
 
 We will first read in two made-up .csv files; 1)
 **primates\_binary\_traits.csv** with presence/absence data for six
