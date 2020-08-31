@@ -1,7 +1,20 @@
 CBC Phylogenetics Tutorial 1
 ================
 Clarke van Steenderen
-Last updated 29/08/2020
+Last updated 31/08/2020
+
+## AIMS OF THIS TUTORIAL
+
+1.  Assess and trim DNA chromatograms
+2.  Run a multiple sequence alignment algorithm using MAFFT
+3.  Convert files from FASTA to NEXUS format
+4.  Create a haplotype network in PopART
+5.  Read an alignment into R to:
+      - Create a distance matrix and a basic neighbour joining tree
+      - Create plots showing nucleotide frequencies and a heatmap for
+        pairwise distances
+      - Use the ggtree package to add colours, labels, and other tweaks
+        to the phylogeny
 
 ## DOCUMENT CONTENTS
 
