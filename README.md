@@ -4,6 +4,8 @@ Welcome to the CBC tutorials repository!
 
 This is where you can find a variety of helpful tips and tricks for phylogenetic analyses, and just general neat things to do in R. Please email me at <vsteenderen@gmail.com> if you have any questions or suggestions.
 
+Each tutorial folder contains an instruction file with the extension .md.
+
 ## For phylogenetic tutorials, please download the following software:
 
 * Chromas (free version 2.6.6) http://technelysium.com.au/wp/chromas/
