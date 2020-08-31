@@ -2,7 +2,7 @@
 
 Welcome to the CBC tutorials repository!
 
-This is where you can find a variety of helpful tips and tricks for phylogenetic analyses, and just general neat things to do in R. Please email me at <vsteenderen@gmail.com> if you have any questions or suggestions.
+This is where you can find a variety of helpful tips and tricks for phylogenetic analyses, and just general neat things to do in R. Please email me at <vsteenderen@gmail.com> if you have any questions or suggestions, or if you have some useful tips that you would like to share!
 
 Each tutorial folder contains an instruction file with the extension .md.
 
