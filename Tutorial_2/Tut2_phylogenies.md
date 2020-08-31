@@ -203,7 +203,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 ``` r
 pacman::p_load(ape, ade4, pegas, magrittr, ggplot2, ggtree, treeio)
 
-seqs = read.dna("16S.fas", format = "fasta") # read in the aligned FASTA file for the bacterial 16S rRNA sequences 
+seqs = read.dna("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/16S.fas", format = "fasta") # read in the aligned FASTA file for the bacterial 16S rRNA sequences 
 d = dist.dna(seqs, model = "TN93", pairwise.deletion = T, as.matrix = T) # Create a distance matrix
 t = njs(d) # Create a NJ tree
 t = ladderize(t)
@@ -244,7 +244,7 @@ gg
 Now let’s read in the result of the Bayesian analysis:
 
 ``` r
-bac.tree.10k = treeio::read.mrbayes("infile.nex.con_10k.tre") # read in the 10 000 generation tree file
+bac.tree.10k = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/infile.nex.con_10k.tre") # read in the 10 000 generation tree file
 # bac.tree.10k (run this line if you want to get an overall summary of what information the tree contains)
 
 # Plot the phylogeny  with branches coloured according to posterior probability values, and add node numbers 
@@ -303,7 +303,7 @@ iotree4
 > phylogeny created below).
 
 ``` r
-bac.tree.20M = treeio::read.mrbayes("infile.nex.con_20M.tre") # read in the 20 million generation run
+bac.tree.20M = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/infile.nex.con_20M.tre") # read in the 20 million generation run
 
 iotree5 = bac.tree.20M %>% ggtree(., color = "black", layout = "rectangular", lwd=1.2) +
   geom_tiplab(size=2.5, color="black", font = 4) +
@@ -323,3 +323,5 @@ new
 ```
 
 ![](FigsTut2/unnamed-chunk-3-2.png)<!-- -->
+
+## Tutorial 3 will have a look at running a Bayesian analysis with more than one gene. Stay tuned\!
