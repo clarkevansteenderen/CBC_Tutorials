@@ -3,6 +3,22 @@ CBC Phylogenetics Tutorial 2
 Clarke van Steenderen
 Last updated 31/08/2020
 
+## AIMS OF THIS TUTORIAL
+
+1.  Plot a quick neighbour joining tree from aligned sequences, with
+    bootstrapping
+2.  Find the optimal evolutionary model for aligned sequence data using
+    jModelTest
+3.  Prepare a NEXUS file for MrBayes using these optimal parameters
+4.  Create a Bayesian phylogeny
+5.  Check the quality of the run
+6.  Read the resulting tree file (.tre) into R to:
+      - Plot the phylogeny using ape and ggtree
+      - Tweak it by adding and/or colouring branches according to
+        posterior probability values
+7.  Compare a Bayesian analysis of 20 million generations to one of 10
+    000
+
 ## DOCUMENT CONTENTS
 
 1.  [Data Preparation](#dataprep)
@@ -131,7 +147,7 @@ end;
 
 begin mrbayes;  
 set autoclose=yes nowarn=yes;  
-lset nst=**6** rates=**gamma** ngammacat=4 code=universal;  
+lset nst=**6** rates=**gamma** ngammacat=4 code=**universal**;  
 outgroup **Clostridium\_botulinum\_A\_str\_ATCC\_3502**;  
 prset
 revmatpr=dirichlet(**0.5943**,**1.4398**,**1.0000**,**0.5943**,**3.0841**,**1.0000**)
@@ -139,8 +155,8 @@ statefreqpr=dirichlet(**0.2516**,**0.2276**,**0.3115**,**0.2093**)
 shapepr=fixed(**0.4520**); mcmc ngen=**10000** printfreq=1000
 samplefreq=**1000** nruns=**2** nchains=**4** savebrlens=yes
 starttree=random;  
-sumt burnin=250;  
-sump burnin=250;  
+sumt burnin=**250**;  
+sump burnin=**250**;  
 end;
 
 > Now you can add this block to the aligned sequences in the 16S.nex
