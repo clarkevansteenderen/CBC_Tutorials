@@ -100,8 +100,8 @@ prset revmatpr=dirichlet(6 values) statefreqpr=dirichlet(four values)
 shapepr=fixed(gamma shape) pinvarpr = fixed(pinvar) tratiopr =
 fixed(kappa value); mcmc ngen= printfreq=1000 samplefreq= nruns=
 nchains= savebrlens=yes starttree=random;  
-sumt burnin=;  
-sump burnin=;  
+sumt relburnin=yes burninfrac=0.25;  
+sump relburnin=yes burninfrac=0.25;  
 end;
 
 -----
@@ -139,11 +139,10 @@ end;
 > names do not end on a fullstop (.), underscore (\_), or with one or
 > more brackets, and also remove brackets within the name (this will
 > save you a lot of frustration later on\!). We’ll set this run to 10
-> 000 generations, and sampling frequency to 100 (burnin = (10 000/100)
-> x 0.25 = 250). The Tutorial\_2 folder contains the results of a run
-> using both 10 000 and 20 million generations (infile.nex.con\_20M.tre
-> and infile.nex.con\_10k.tre each with their two associated .p files
-> for run1 and run2).
+> 000 generations, and sampling frequency to 100. The Tutorial\_2 folder
+> contains the results of a run using both 10 000 and 20 million
+> generations (infile.nex.con\_20M.tre and infile.nex.con\_10k.tre each
+> with their two associated .p files for run1 and run2).
 
 begin mrbayes;  
 set autoclose=yes nowarn=yes;  
@@ -153,10 +152,10 @@ prset
 revmatpr=dirichlet(**0.5943**,**1.4398**,**1.0000**,**0.5943**,**3.0841**,**1.0000**)
 statefreqpr=dirichlet(**0.2516**,**0.2276**,**0.3115**,**0.2093**)
 shapepr=fixed(**0.4520**); mcmc ngen=**10000** printfreq=1000
-samplefreq=**1000** nruns=**2** nchains=**4** savebrlens=yes
+samplefreq=**100** nruns=**2** nchains=**4** savebrlens=yes
 starttree=random;  
-sumt burnin=**250**;  
-sump burnin=**250**;  
+sumt relburnin=yes burninfrac=0.25;  
+sump relburnin=yes burninfrac=0.25;  
 end;
 
 > Now you can add this block to the aligned sequences in the 16S.nex
