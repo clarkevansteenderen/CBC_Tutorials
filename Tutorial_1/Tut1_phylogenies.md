@@ -72,7 +72,9 @@ file is called **12S\_aligned\_mafft\_ready.fasta**.
 
 ## Create a haplotype network in PopART <a name = "haplotypenetwork"></a>
 
-We’ll use some *Dactylopius confusus* 12S rRNA sequences for this.
+We’ll use some *Dactylopius confusus* 12S rRNA sequences for this. These
+have already been trimmed, aligned, and prepared, and are saved in FASTA
+format.
 
 PopART reads in Nexus files, and so you need to convert from .fasta to
 .nex. There are many online converters, but I like
