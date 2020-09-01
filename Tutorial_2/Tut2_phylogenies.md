@@ -108,14 +108,16 @@ end;
 
 ### Some notes:
 
-  - nst will depend on the model selected by jModelTest:  
+  - nst will depend on the model selected by jModelTest (MrBayes only
+    accepts one of 1, 2, or 6):  
   - nst = 6 for GTR and SYM (TrNef = SYM)  
   - nst = 2 for HKY and K2P
   - nst = 1 for JC and F81
   - TIM1, TIM2, TIM3, TPM1uf, TPM2uf, TPM3uf, and TrN substitution
-    models are usually replaced by the GTR model. Have a look
+    models can be replaced by the GTR model. Have a look
     [here](https://gist.github.com/brantfaircloth/895282) for more
-    information.
+    information, and see [this
+    paper](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0065642).
   - Model with no “+ I” or “+ G” –\> do not add a rates parameter
   - Model + G –\> rates = gamma
   - Model + I –\> rates = propinv
@@ -323,4 +325,6 @@ new
 
 ![](FigsTut2/unnamed-chunk-3-2.png)<!-- -->
 
-## Tutorial 3 will have a look at running a Bayesian analysis with more than one gene. Stay tuned\!
+> Tutorial 3 will have a look at running a Bayesian analysis with more
+> than one gene, and how to run a maximum likelihood analysis on single
+> and multigene data. Stay tuned\!
