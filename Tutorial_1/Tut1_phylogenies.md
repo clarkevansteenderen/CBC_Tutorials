@@ -361,6 +361,9 @@ generated continuous data for four variables (X1 to X4).
 traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
 traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primate_continuous.csv", row.names = 1)
 
+# if you want to change column names from X's to something else, you can use this code:
+colnames(traits.bin) = c("A","B","C","D", "E", "F")
+
 # regenerate the phylogeny, but remove the clade labels to make it less cluttered
 prim5 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular", lwd=1.2) + xlim(0, 120) + 
 # the tiplabels are offset here to make space for the additional trait data
@@ -371,7 +374,7 @@ prim5 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular"
 scale_color_continuous(low='grey', high='red', name="Branch length")
   
 # add heatmap for the binary values
-binary_phylo =  gheatmap(prim5, traits.bin, offset=0.2, width=0.2, colnames_position = "top", colnames_angle = 90, font.size=2, color="black") + 
+binary_phylo =  gheatmap(prim5, traits.bin, offset=0.2, width=0.2, colnames_position = "top", colnames_angle = 90, font.size=2, color="black", colnames_offset_y = 0.5) + 
   scale_fill_manual(values=c("white", "forestgreen"))
 ```
 
@@ -386,7 +389,7 @@ plot(binary_phylo)
 
 ``` r
 # add heatmap for continuous values
-cont_phylo = gheatmap(prim5, traits.cont, offset=0.2, width=0.2, low="white", high="forestgreen", 
+cont_phylo = gheatmap(prim5, traits.cont, offset=0.2, width=0.2, low="white", high="forestgreen", colnames_offset_y = 0.5,
               colnames_position = "top", colnames_angle = 90, font.size=2, color="black", legend_title = "Value") 
 
 plot(cont_phylo)
