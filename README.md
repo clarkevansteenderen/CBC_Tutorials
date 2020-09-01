@@ -34,7 +34,7 @@ MAFFT (for multiple sequence alignment) https://mafft.cbrc.jp/alignment/software
 
 CIPRES (for running various analyses on a server) http://www.phylo.org/
 
-EMBOSSseqret (for converting between file types, e.g. FASTA <-> NEXUS) https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/
+EMBOSS seqret (for converting between file types, e.g. FASTA <-> NEXUS) https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/
 
 ## YouTube tutorials:
 ### Make your own R package:
