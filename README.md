@@ -7,7 +7,7 @@ This is where you can find a variety of helpful tips and tricks for phylogenetic
 
 > **Each tutorial folder contains an instruction file with the extension .md.**
 
-## For the phylogenetic tutorials, you need the following software:
+## For phylogenetic tutorials, you need the following software:
 
 * Chromas (free version 2.6.6) http://technelysium.com.au/wp/chromas/
 
