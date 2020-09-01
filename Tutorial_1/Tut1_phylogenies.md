@@ -91,14 +91,14 @@ Download the .nex file, and open it in Notepad++. Delete the three lines
 that follow the first “end;” (begin assumptions; options deftype=unord;
 end;).
 
-This file is available as the **12S\_confusus\_for\_popart.NEX** file in
+This file is available as the **12S\_confusus\_for\_popart.nex** file in
 this repository. You can then add a TRAITS block section below the
 sequences. This is used to specify groupings within your sequences
 (e.g. geographic location or host plant), so that you can colour your
 haplotype network accordingly. Have a look at the formatting in this
 file.
 
-Read the **12S\_confusus\_for\_popart.NEX** file into PopART. Network
+Read the **12S\_confusus\_for\_popart.nex** file into PopART. Network
 –\> TCS network. Change colours by clicking Edit –\> Set trait colour.
 I prefer to see mutations as numbers, so click on View –\> Show
 mutations as –\> Numbers.
