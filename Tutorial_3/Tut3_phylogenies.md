@@ -110,8 +110,9 @@ sumt relburnin=yes burninfrac=0.25;
 sump relburnin=yes burninfrac=0.25;  
 end;
 
-> Be very careful with commas and semi-colons. One incorrect syntactical
-> issue, and MrBayes will stop running and report an error.
+> :exclamation: Be very careful with commas and semi-colons. One
+> incorrect syntactical issue, and MrBayes will stop running and report
+> an error.
 
 As outlined in Tutorial 2, you would open the two .p files (run1 and
 run2) from the analysis in Tracer to check for mcmc convergence (ESS
@@ -283,9 +284,10 @@ invariantsites = estimate
 statefrequencies = equal  
 datatype = nucleotide
 
-Square brackets in a nexus file for MrBayes are not read, but in a .conf
-file, they are. Leave \[model1\], \[model2\], and so on exactly as they
-are. Set bootstrapreps to 1 in the conf file.
+:exclamation: Square brackets in a nexus file for MrBayes are not read,
+but in a .conf file, they are. Leave \[model1\], \[model2\], and so on
+exactly as they are; do not change the model names. Set bootstrapreps to
+1 in the conf file.
 
 Once you have uploaded the **bacteria.concat.garli.nex** file and the
 **bacteria.concat.conf\_file.conf** file to CIPRES and selected the
@@ -303,10 +305,10 @@ results page, and save the **allBootTrees.tre** file. This is in the
 GARLI folder if you want to have a look
 (**bacteria.concat.allBootTrees**).
 
-> To make things quicker, you can download the output straight back into
-> your current CIPRES data folder instead of downloading it locally, and
-> then re-uploading it. View the output file, and then save it to your
-> current folder with an altered name if desired.
+> :bulb: To make things quicker, you can download the output straight
+> back into your current CIPRES data folder instead of downloading it
+> locally, and then re-uploading it. View the output file, and then save
+> it to your current folder with an altered name if desired.
 
 Create a new task in CIPRES, select **bacteria.concat.allBootTrees** as
 input, and select NCLconverter as the tool. In the parameter settings,
@@ -388,4 +390,5 @@ exaclty the same way, but you’ll only have the one model block in the
 .conf file, and you can delete the **begin sets** blocks under the
 sequences in the NEXUS file.
 
-> Tutorial 4 will have a look at working with microsatellite (SSR) data.
+> :books: Tutorial 4 will have a look at working with microsatellite
+> (SSR) data.
