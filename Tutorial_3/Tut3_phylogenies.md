@@ -47,8 +47,9 @@ logic applies to the last gene block (23S). Be sure to set the **nchar**
 parameter at the top of the document to the full size of the data,
 i.e. 4231. Delete the three lines that follow the first “end;” (begin
 assumptions; options deftype=unord; end;) at the bottom of the document.
-Have a look at the **optimal\_models.txt** file for a summary of the
-results of jModelTest for each gene.
+Have a look at the **optimal\_models.txt** file in the
+**Aligned\_FASTA\_files** folder for a summary of the results of
+jModelTest for each gene.
 
 > The template below can be used for inserting the best models for each
 > gene block:
@@ -114,8 +115,8 @@ end;
 
 As outlined in Tutorial 2, you would open the two .p files (run1 and
 run2) from the analysis in Tracer to check for mcmc convergence (ESS
-values \> 200). We’ll now open the **concat\_20M.tre** file in R and use
-ggtree to plot the phylogeny.
+values \> 200). We’ll now open the **concat\_20M.tre** (in the MrBayes
+folder) file in R and use ggtree to plot the phylogeny.
 
 ## Use ggtree <a name = "ggtree"></a>
 
@@ -128,7 +129,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 ``` r
 pacman::p_load(ape, ade4, pegas, magrittr, ggplot2, ggtree, treeio, gridExtra)
 
-bac.concat.20M = treeio::read.mrbayes("concat_20M.tre")
+bac.concat.20M = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_3/MrBayes/concat_20M.tre")
 
 # Plot the phylogeny  with branches coloured according to posterior probability values, and add node numbers 
 iotree = bac.concat.20M %>% ggtree(., aes(color=as.numeric(prob)), layout = "rectangular", lwd=1.2) + 
@@ -202,9 +203,11 @@ A quick overview of this process:
 We will run a ML analysis on the concatenated dataset using GARLI on
 CIPRES (select the “GARLI XSEDE” tool). If inputting a concatenated
 dataset, the input file must be in NEXUS format. Single genes can be
-FASTA if preferred. To prep a NEXUS file for input, create a copy of the
-file used for the MrBayes run. Delete the Bayesian block at the bottom
-of the document, and add this:
+FASTA if preferred.
+
+To prep a NEXUS file for input, create a copy of the file used for the
+MrBayes run. Delete the Bayesian block at the bottom of the document,
+and add this:
 
 begin sets;  
 CHARSET 5S=1-108;  
@@ -213,8 +216,9 @@ CHARSET 23S=1486-4231;
 CHARPARTITION byPos = all:5S, all:16S, all:23S;  
 end;
 
-This file is availalbe in the **Tutorial 3** folder as
-**bacteria.concat.garli.nex**.
+This file is availalbe in the **GARLI** folder as
+**bacteria.concat.garli.nex**. The files mentioned hereafter are all in
+this same folder.
 
 Now we need to create a configuration file (.conf extension). Use the
 template saved as **bacteria.concat.conf\_file.conf**. This was gleaned
@@ -227,12 +231,13 @@ FAQ](https://molevol.mbl.edu/index.php/Garli_FAQ#MODELTEST_told_me_to_use_model_
 pages are very useful. For help with setting the correct model
 specifications, refer to Table 1 in this
 [jModelTest](https://academic.oup.com/mbe/article/25/7/1253/1045159)
-paper (for quick reference, see the jModelTest\_options.xls document in
-the Tutorial 3 GARLI folder). Leave all the settings as they are, and
-only change the outgroup parameter, and the model blocks. Keep outgroups
-together in your nexus file, so that you can refer to them as, for
-example, outgroup = 1-5. The outgroups are set by referring to their
-position in the data (sequence numbers 1 to 5). Here we’re setting
+paper (for quick reference, see the **jModelTest\_options.xls** file).
+
+Leave all the settings exactly as they are, and only change the outgroup
+parameter, and the model blocks. Keep outgroups together in your nexus
+file, so that you can refer to them as, for example, outgroup = 1-5. The
+outgroups are set by referring to their position in the data (sequence
+numbers 1 to 5), not by names. Here we’re setting
 *Clostridium\_botulinum\_A\_str\_Hall* as the outgroup again. Here it is
 the second sequence in the .nex file, so outgroup = 2.
 
@@ -284,45 +289,52 @@ are. Set bootstrapreps to 1 in the conf file.
 
 Once you have uploaded the **bacteria.concat.garli.nex** file and the
 **bacteria.concat.conf\_file.conf** file to CIPRES and selected the
-GARLI tool, select “I would like to provide my own GARLI configuration
-file (for help, see the GARLI.conf Creator tool)” and “The garli.conf
-file was created outside of CIPRES”, and then select the .conf file from
-the dropdown list. For memory, select 2000-4999. Select “I have set the
-values of searchreps and bootstrapreps correctly”, and set bootstrapreps
-to 500 (one would typically run 1000, but this is just a demo). Leave
-the independent search replicates at 2. Save and run task.
+GARLI tool, select *“I would like to provide my own GARLI configuration
+file (for help, see the GARLI.conf Creator tool)”* and *“The garli.conf
+file was created outside of CIPRES”*, and then select the .conf file
+from the dropdown list. Set **memory to 2000-4999**. Select *“I have set
+the values of searchreps and bootstrapreps correctly”*, and set
+**bootstrapreps to 500** (one would typically run 1000, but this is just
+a demo). Leave the independent search replicates at 2. Save and run
+task.
 
 Once the run has completed, scroll right to the bottom of the output
 results page, and save the **allBootTrees.tre** file. This is in the
-Tutorial 3 GARLI folder if you want to have a look
+GARLI folder if you want to have a look
 (**bacteria.concat.allBootTrees**).
+
+> To make things quicker, you can download the output straight back into
+> your current CIPRES data folder instead of downloading it locally, and
+> then re-uploading it. View the output file, and then save it to your
+> current folder with an altered name if desired.
 
 Create a new task in CIPRES, select **bacteria.concat.allBootTrees** as
 input, and select NCLconverter as the tool. In the parameter settings,
 only change the output format to “Phylip”. Save and run task. Save the
 **out.tre** file (if you want to see this file, it’s saved as
-**bacteria.GARLI.converted\_to\_phylip.tre** in the same GARLI folder).
+**bacteria.GARLI.converted\_to\_phylip.tre**).
 
 Create a new CIPRES task, set this phylip file as input, and the tool as
 CONSENSE. No need to change any parameter settings here apart from the
 run time memory, if one is working with a very large file.  
 Download the **outtree** file.
 
-I first opened this file in FigTree in order to reroot it on
+I first opened this file in FigTree to reroot it on
 *Clostridium\_botulinum\_A\_str\_Hall*. I then saved this as a NEXUS
-tree (**bacteria\_GARLI\_FIGTREE\_outtree.nex**).
+tree (File –\> Export trees)
+(**bacteria\_GARLI\_FIGTREE\_outtree.nex**). This file can now be opened
+in R.
 
 ## View the ML tree using ggtree <a name = "ggtreeML"></a>
 
 Open this NEXUS file in R:
 
 ``` r
-setwd("~/CBC_tuts/Tutorial_3/GARLI")
-# you can read the final tree from CONSENSE straight into R using the line below:
+# you can read the final tree from CONSENSE straight into R using the commented-out line below:
 # garli = treeio::read.tree("bacteria_GARLI_outtree")
 
-# But I'll rather use the Nexus file saved from FigTree, after rerooting it on C. botulinum
-garli = treeio::read.nexus("bacteria_GARLI_FIGTREE_outtree.nex")
+# But I'll rather use the Nexus file saved from FigTree, after re-rooting it on C. botulinum
+garli = treeio::read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_3/GARLI/bacteria_GARLI_FIGTREE_outtree.nex")
 garli$edge.length # these are out of 500 bootstrap repeats
 ```
 
@@ -336,7 +348,7 @@ garlitree = garli %>% ggtree(., aes(color=branch.length), layout = "rectangular"
   geom_tiplab(size=2.5, color="black") +
   geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) + # node numbers +
   theme(legend.position="bottom") +
-  scale_color_continuous(low="grey", high="red", limits=c(0,100), name="Bootstrap support (%)") # the limits parameter just forces the scale to have a max and min value of 0 and 100, respectively. Otherwise it sometimes includes a max value that is off the scale.
+  scale_color_continuous(low="white", high="red", limits=c(0,100), name="Bootstrap support (%)") # the limits parameter just forces the scale to have a max and min value of 0 and 100, respectively. Otherwise it sometimes includes a max value that is off the scale.
 
 plot(garlitree)
 ```
@@ -349,7 +361,7 @@ garlitree2 = garli %>% ggtree(., aes(color=branch.length), layout = "rectangular
   geom_tiplab(size=2.5, color="black", font = 4) +
   geom_label2(aes(subset=!isTip, label=branch.length), size=3, color="black", alpha=0.8) + 
   theme(legend.position="bottom") +
-  scale_color_continuous(low="grey", high="red", limits=c(0,100), name="Bootstrap support (%)") 
+  scale_color_continuous(low="white", high="red", limits=c(0,100), name="Bootstrap support (%)") 
 
 # rotate the branches so that it matches the topology of the Bayesian tree we created earlier
 garlitree2 = rotate(garlitree2, 12) 
@@ -371,9 +383,9 @@ gridExtra::grid.arrange(garlitree2, iotree2, ncol=2) # the gridExtra package all
 # Sequence names are cut off if they are long. Instead of setting margins, it's easier to edit this in Inkscape
 ```
 
-> If you want a ML phylogeny for just one gene, everything is done in
-> exaclty the same way, but you’ll only have the one model block in the
-> .conf file, and you can delete the **begin sets** blocks under the
-> sequences in the NEXUS file.
+If you want a ML phylogeny for just one gene, everything is done in
+exaclty the same way, but you’ll only have the one model block in the
+.conf file, and you can delete the **begin sets** blocks under the
+sequences in the NEXUS file.
 
 > Tutorial 4 will have a look at working with microsatellite (SSR) data.
