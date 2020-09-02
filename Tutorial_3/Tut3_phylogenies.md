@@ -3,7 +3,7 @@ CBC Phylogenetics Tutorial 3
 Clarke van Steenderen
 Last updated 31/08/2020
 
-## AIMS OF THIS TUTORIAL
+## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
 1.  Create a NEXUS file for MrBayes containing more than one gene, with
     an optimal evolutionary model for each

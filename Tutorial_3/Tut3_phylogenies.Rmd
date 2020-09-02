@@ -10,7 +10,7 @@ knitr::opts_chunk$set(fig.path='FigsTut3/') # this creates a folder called FigsT
 # You need to upload this folder to github along with the .md file if you want the R output to show up
 ```
 
-## AIMS OF THIS TUTORIAL
+## AIMS OF THIS TUTORIAL :white_check_mark:
 
 1. Create a NEXUS file for MrBayes containing more than one gene, with an optimal evolutionary model for each
 2. Read the Bayesian .con.tre output tree file into R and use ggtree to edit it
