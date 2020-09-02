@@ -1,0 +1,4 @@
+#NEXUS
+begin trees;
+	tree tree_1 = [&R] ((Butyrivibr:500.0,((Prochloroc:500.0,(Escherichi:500.0,Helicobact:500.0):438.0):192.0,(Methanobre:500.0,Methanobr1:1000.0):500.0):500.0):250.0,Clostridiu:250.0);
+end;
