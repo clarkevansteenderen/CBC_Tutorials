@@ -3,7 +3,7 @@ CBC Phylogenetics Tutorial 2
 Clarke van Steenderen
 Last updated 31/08/2020
 
-## AIMS OF THIS TUTORIAL
+## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
 1.  Plot a quick neighbour joining tree from aligned sequences, with
     bootstrapping
@@ -22,7 +22,8 @@ Last updated 31/08/2020
 ## DOCUMENT CONTENTS
 
 1.  [Data Preparation](#dataprep)
-2.  [ggtree for MrBayes output](#ggtree)
+2.  [Run MrBayes](#mrbayes)
+3.  [ggtree for MrBayes output](#ggtree)
 
 Create a profile on [CIPRES](http://www.phylo.org/). This is a very
 useful online server that you can use to run numerous programs on a
@@ -106,7 +107,7 @@ end;
 
 -----
 
-### Some notes:
+### :bulb: Some notes:
 
   - nst will depend on the model selected by jModelTest (MrBayes only
     accepts one of 1, 2, or 6):  
@@ -161,18 +162,28 @@ sump relburnin=yes burninfrac=0.25;
 end;
 
 > Now you can add this block to the aligned sequences in the 16S.nex
-> file. Upload this file to CIPRES, and then create a new task where you
-> select “MrBayes on XSEDE” as the tool. In the Input Parameters, select
-> that your data contains a MrBayes block, set the maximum hours to 168,
-> and select “Run Beagle” (this speeds up the analysis). Leave the other
-> settings on their defaults. Save and run the task. You can click on
-> “View Status” –\> Intermediate results –\> and then download the
-> STDOUT.txt to see how far the analysis is. Once the task has
-> completed, download the **infile.nex.run1.p**, **infile.nex.run2.p**,
-> and **infile.nex.con.tre** files. You would typically Open the two
-> run.p files in Tracer, and make sure that all the effective sample
-> size (ESS) values are greater than 200. Trace plots looks like a
-> “fuzzy caterpillar”:
+> file.
+
+## Run MrBayes <a name = "mrbayes"></a>
+
+Upload the **16S.nex** file to CIPRES, and then create a new task where
+you select “MrBayes on XSEDE” as the tool. In the Input Parameters,
+select that your data contains a MrBayes block, set the maximum hours to
+168, and select “Run Beagle” (this speeds up the analysis). Leave the
+other settings on their defaults. Save and run the task. You can click
+on “View Status” –\> Intermediate results –\> and then download the
+STDOUT.txt to see how far the analysis is.
+
+> :exclamation: The most common errors come about due to unacceptable
+> characters in sequence names, missing or incorrect syntax (missing
+> commas, semi-colons etc.), or the incorrect number of characters
+> specified in the file. Double check everything before running MrBayes.
+
+Once the task has completed, download the **infile.nex.run1.p**,
+**infile.nex.run2.p**, and **infile.nex.con.tre** files. You would
+typically Open the two run.p files in Tracer, and make sure that all the
+effective sample size (ESS) values are greater than 200. Trace plots
+looks like a “fuzzy caterpillar”:
 
 ![](tracer_combinedruns.png)
 
@@ -242,7 +253,7 @@ gg
 
 ![](FigsTut2/unnamed-chunk-1-3.png)<!-- -->
 
-Now let’s read in the result of the Bayesian analysis:
+Now let’s read in the result of the Bayesian analysis: :muscle:
 
 ``` r
 bac.tree.10k = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/infile.nex.con_10k.tre") # read in the 10 000 generation tree file
@@ -325,6 +336,6 @@ new
 
 ![](FigsTut2/unnamed-chunk-3-2.png)<!-- -->
 
-> Tutorial 3 will have a look at running a Bayesian analysis with more
-> than one gene, and how to run a maximum likelihood analysis on single
-> and multigene data. Stay tuned\!
+> :books: Tutorial 3 will have a look at running a Bayesian analysis
+> with more than one gene, and how to run a maximum likelihood analysis
+> on single and multigene data. Stay tuned\!
