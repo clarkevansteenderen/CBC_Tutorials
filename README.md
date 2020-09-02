@@ -1,4 +1,4 @@
-# CBC Tutorials with Clarke :pencil2:
+# CBC Tutorials with Clarke :herb:
 
 Welcome to the CBC tutorials repository!
 
