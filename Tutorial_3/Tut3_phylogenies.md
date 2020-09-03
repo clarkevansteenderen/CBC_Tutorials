@@ -1,7 +1,7 @@
 CBC Phylogenetics Tutorial 3
 ================
 Clarke van Steenderen
-Last updated 31/08/2020
+Last updated 03/09/2020
 
 ## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
@@ -110,9 +110,8 @@ sumt relburnin=yes burninfrac=0.25;
 sump relburnin=yes burninfrac=0.25;  
 end;
 
-> :exclamation: Be very careful with commas and semi-colons. One
-> incorrect syntactical issue, and MrBayes will stop running and report
-> an error.
+> :warning: Be very careful with commas and semi-colons. One incorrect
+> syntactical issue, and MrBayes will stop running and report an error.
 
 As outlined in Tutorial 2, you would open the two .p files (run1 and
 run2) from the analysis in Tracer to check for mcmc convergence (ESS
@@ -386,8 +385,8 @@ gridExtra::grid.arrange(garlitree2, iotree2, ncol=2) # the gridExtra package all
 ```
 
 If you want a ML phylogeny for just one gene, everything is done in
-exaclty the same way, but you’ll only have the one model block in the
-.conf file, and you can delete the **begin sets** blocks under the
+exactly the same way, but you’ll only have the one model block in the
+.conf file, and you can delete the **begin sets** block under the
 sequences in the NEXUS file.
 
 > :books: Tutorial 4 will have a look at working with microsatellite
