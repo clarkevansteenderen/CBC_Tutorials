@@ -48,8 +48,8 @@ AliView and press ctrl + v to paste.
 For this tutorial, we’ll use 16S rRNA sequences obtained from seven
 different bacterial species, taken from
 [here](http://evomics.org/learning/phylogenetics/mrbayes/). These files
-are in the **Tutorial 2** folder, saved as 16S.fas and 16S.nex. Convert
-the aligned FASTA file to NEXUS format using
+are in the **Tutorial 2/MrBayes** folder, saved as 16S.fas and 16S.nex.
+Convert the aligned FASTA file to NEXUS format using
 [EMBOSS](https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/).
 
 ### Find the optimal evolutionary model using jModelTest
@@ -142,10 +142,11 @@ end;
 > names do not end on a fullstop (.), underscore (\_), or with one or
 > more brackets, and also remove brackets within the name (this will
 > save you a lot of frustration later on\!). We’ll set this run to 10
-> 000 generations, and sampling frequency to 100. The Tutorial\_2 folder
-> contains the results of a run using both 10 000 and 20 million
-> generations (infile.nex.con\_20M.tre and infile.nex.con\_10k.tre each
-> with their two associated .p files for run1 and run2).
+> 000 generations, and sampling frequency to 100. The
+> Tutorial\_2/MrBayes folder contains the results of a run using both 10
+> 000 and 20 million generations (infile.nex.con\_20M.tre and
+> infile.nex.con\_10k.tre each with their two associated .p files for
+> run1 and run2).
 
 begin mrbayes;  
 set autoclose=yes nowarn=yes;  
@@ -215,7 +216,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 ``` r
 pacman::p_load(ape, ade4, pegas, magrittr, ggplot2, ggtree, treeio)
 
-seqs = read.dna("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/16S.fas", format = "fasta") # read in the aligned FASTA file for the bacterial 16S rRNA sequences 
+seqs = read.dna("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/16S.fas", format = "fasta") # read in the aligned FASTA file for the bacterial 16S rRNA sequences 
 d = dist.dna(seqs, model = "TN93", pairwise.deletion = T, as.matrix = T) # Create a distance matrix
 t = njs(d) # Create a NJ tree
 t = ladderize(t)
@@ -256,7 +257,7 @@ gg
 Now let’s read in the result of the Bayesian analysis: :muscle:
 
 ``` r
-bac.tree.10k = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/infile.nex.con_10k.tre") # read in the 10 000 generation tree file
+bac.tree.10k = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/infile.nex.con_10k.tre") # read in the 10 000 generation tree file
 # bac.tree.10k (run this line if you want to get an overall summary of what information the tree contains)
 
 # Plot the phylogeny  with branches coloured according to posterior probability values, and add node numbers 
@@ -315,7 +316,7 @@ iotree4
 > phylogeny created below).
 
 ``` r
-bac.tree.20M = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/infile.nex.con_20M.tre") # read in the 20 million generation run
+bac.tree.20M = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/infile.nex.con_20M.tre") # read in the 20 million generation run
 
 iotree5 = bac.tree.20M %>% ggtree(., color = "black", layout = "rectangular", lwd=1.2) +
   geom_tiplab(size=2.5, color="black", font = 4) +
