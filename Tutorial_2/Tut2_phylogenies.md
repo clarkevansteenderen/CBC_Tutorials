@@ -65,7 +65,7 @@ converted.
 
 **This is the output from jModelTest:**
 
-<span style="background-color:lightgreen"> Model selected:
+Model selected:
 
 Model = TIM3+G  
 partition = 012032  
@@ -82,8 +82,6 @@ R(d) \[CG\] = 0.5943
 R(e) \[CT\] = 3.0841  
 R(f) \[GT\] = 1.0000  
 gamma shape = 0.4520
-
-</span>
 
 > We need to incorporate this into the template for a MrBayes block
 > below. The sumt and sump burnin values discard the first 25% of trees
@@ -129,8 +127,8 @@ end;
   - Only one outgroup sequence name can be indicated  
   - “revmatpr” refers to the 6 substitution rates, if applicable.
     (A\<-\>C, A\<-\>G, A\<-\>T, C\<-\>G, C\<-\>T, and G\<-\>T)  
-  - statefreqpr = dirichlet(x, y, z, a), where you include the
-    probability frequencies of each base (A, C, G, and T)  
+  - statefreqpr = dirichlet(x, y, z, a), where you include the character
+    state frequencies of each base (A, C, G, and T)  
   - shapepr = fixed(gamma value)  
   - If there is a kappa value, then include tratiopr = fixed(kappa
     value)  
@@ -203,15 +201,15 @@ the ESS scores for the 20 million run are \> 200.
 > Data Table), and subsequently saved as a .csv file so that we can plot
 > these in R. These two files are in the MrBayes folder, saved as
 > **mrbayes\_10K\_run.csv** and **mrbayes\_20M\_run.csv**. Trace plots
-> should look like a “fuzzy caterpillar”, as in the 20 million
+> should look like a “fuzzy caterpillar”, as shown in the 20 million
 > generation run.
 
 ``` r
 # Plot the 10 000 generation run:
 bayes10K.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_10K_run.csv")
-# Plot run 1
-plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/ngen", ylab = "LnL")
-# Add run 2
+# Plot run 1 (red)
+plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
+# Add run 2 (blue)
 points(bayes10K.run$state_run2, bayes10K.run$LnL_run2, lwd = 3, pch=16, type = "l", col="blue")
 ```
 
@@ -221,14 +219,14 @@ points(bayes10K.run$state_run2, bayes10K.run$LnL_run2, lwd = 3, pch=16, type = "
 # Plot the 2 million generation run:
 bayes20M.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_20M_run.csv")
 # Run 1
-plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/ngen", ylab = "LnL")
+plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
 ```
 
 ![](FigsTut2/unnamed-chunk-1-2.png)<!-- -->
 
 ``` r
 # Run 2
-plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/ngen", ylab = "LnL")
+plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
 ```
 
 ![](FigsTut2/unnamed-chunk-1-3.png)<!-- -->

@@ -46,7 +46,6 @@ On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.
 
 **This is the output from jModelTest:**
 
-<span style="background-color:lightgreen">
    Model selected: 
  
    Model = TIM3+G  
@@ -64,8 +63,6 @@ On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.
    R(e) [CT] =  3.0841  
    R(f) [GT] =  1.0000  
    gamma shape = 0.4520   
-   
-</span>
 
 > We need to incorporate this into the template for a MrBayes block below. The sumt and sump burnin values discard the first 25% of trees created (ngen/samplefreq x 0.25. We can check whether the number of generations (ngen) was sufficient after the run has completed using Tracer. If you're working with mitochondrial DNA from invertebrates, set **code =metmt**, for vertebrate mtDNA, set it to **code=vertmt**, otherwise set it to **code=universal**. Typically **nruns=2** and **nchains=4**. Anything in square brackets in a NEXUS file is not read, and so you can use this to make comments and notes.
 
@@ -95,7 +92,7 @@ begin mrbayes;
 * ngammacat usually stays as 4  
 * Only one outgroup sequence name can be indicated  
 * "revmatpr" refers to the 6 substitution rates, if applicable. (A<->C, A<->G, A<->T, C<->G, C<->T, and G<->T)  
-* statefreqpr = dirichlet(x, y, z, a), where you include the probability frequencies of each base (A, C, G, and T)  
+* statefreqpr = dirichlet(x, y, z, a), where you include the character state frequencies of each base (A, C, G, and T)  
 * shapepr = fixed(gamma value)  
 * If there is a kappa value, then include tratiopr = fixed(kappa value)  
 * If there is a proportion of invariable sites (p-inv), then add pinvarpr = fixed(value)  
@@ -128,22 +125,22 @@ You would typically open the two run.p files in Tracer, and make sure that all t
 You will see that the two .p files for the 10 000 generation run have ESS values less than 200, and that the trace plots have not reached a state of equilibrium. In order to have sufficient coverage, a much larger number of generations needs to be set. Compare the ESS values for the 20 million generation run to the 10 0000 run. You will see that all the ESS scores for the 20 million run are > 200.
 
 > Let's quickly have a look at the trace plots for the 10 000 and 20 million Bayesian runs.
-The two .p files for each run were opened in Tracer. Both runs were highlighted, and then the Trace file was viewed. A data table was then exported as a .txt file (File --> Export Data Table), and subsequently saved as a .csv file so that we can plot these in R. These two files are in the MrBayes folder, saved as **mrbayes_10K_run.csv** and **mrbayes_20M_run.csv**. Trace plots should look like a "fuzzy caterpillar", as in the 20 million generation run.
+The two .p files for each run were opened in Tracer. Both runs were highlighted, and then the Trace file was viewed. A data table was then exported as a .txt file (File --> Export Data Table), and subsequently saved as a .csv file so that we can plot these in R. These two files are in the MrBayes folder, saved as **mrbayes_10K_run.csv** and **mrbayes_20M_run.csv**. Trace plots should look like a "fuzzy caterpillar", as shown in the 20 million generation run.
 
 ```{r}
 # Plot the 10 000 generation run:
 bayes10K.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_10K_run.csv")
-# Plot run 1
-plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/ngen", ylab = "LnL")
-# Add run 2
+# Plot run 1 (red)
+plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
+# Add run 2 (blue)
 points(bayes10K.run$state_run2, bayes10K.run$LnL_run2, lwd = 3, pch=16, type = "l", col="blue")
 
 # Plot the 2 million generation run:
 bayes20M.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_20M_run.csv")
 # Run 1
-plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/ngen", ylab = "LnL")
+plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
 # Run 2
-plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/ngen", ylab = "LnL")
+plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/Number of Generations (MCMC repeats)", ylab = "LnL")
 
 ```
 
