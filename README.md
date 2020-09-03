@@ -1,4 +1,4 @@
-# CBC Tutorials with Clarke :books:
+# CBC Tutorials with Clarke :book:
 
 Welcome to the CBC tutorials repository! :smiley:
 
