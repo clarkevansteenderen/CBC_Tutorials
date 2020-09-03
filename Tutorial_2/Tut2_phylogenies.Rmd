@@ -9,6 +9,9 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.path='FigsTut2/') # this creates a folder called FigsTut2, in which all R plots are stored.
 # You need to upload this folder to github along with the .md file if you want the R output to show up
+
+# use this to add background colour to text:
+# <span style="background-color:lightgreen">Mrs. Robinson</span>
 ```
 
 ## AIMS OF THIS TUTORIAL :white_check_mark:
@@ -43,6 +46,7 @@ On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.
 
 **This is the output from jModelTest:**
 
+<span style="background-color:lightgreen">
    Model selected: 
  
    Model = TIM3+G  
@@ -60,6 +64,8 @@ On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.
    R(e) [CT] =  3.0841  
    R(f) [GT] =  1.0000  
    gamma shape = 0.4520   
+   
+</span>
 
 > We need to incorporate this into the template for a MrBayes block below. The sumt and sump burnin values discard the first 25% of trees created (ngen/samplefreq x 0.25. We can check whether the number of generations (ngen) was sufficient after the run has completed using Tracer. If you're working with mitochondrial DNA from invertebrates, set **code =metmt**, for vertebrate mtDNA, set it to **code=vertmt**, otherwise set it to **code=universal**. Typically **nruns=2** and **nchains=4**. Anything in square brackets in a NEXUS file is not read, and so you can use this to make comments and notes.
 
@@ -114,12 +120,33 @@ Upload the **16S.nex** file to CIPRES, and then create a new task where you sele
 
 > :warning: The most common errors come about due to unacceptable characters in sequence names, missing or incorrect syntax (missing commas, semi-colons etc.), or the incorrect number of characters specified in the file. Double check everything before running MrBayes.
 
+### Tracer: check whether there were enough runs in the analysis
+
 Once the task has completed, download the **infile.nex.run1.p**, **infile.nex.run2.p**, and **infile.nex.con.tre** files. 
-You would typically Open the two run.p files in Tracer, and make sure that all the effective sample size (ESS) values are greater than 200. Trace plots looks like a "fuzzy caterpillar": 
+You would typically open the two run.p files in Tracer, and make sure that all the effective sample size (ESS) values are greater than 200. 
 
-![](tracer_combinedruns.png)
+You will see that the two .p files for the 10 000 generation run have ESS values less than 200, and that the trace plots have not reached a state of equilibrium. In order to have sufficient coverage, a much larger number of generations needs to be set. Compare the ESS values for the 20 million generation run to the 10 0000 run. You will see that all the ESS scores for the 20 million run are > 200.
 
-> You will see that the two .p files for the 10 000 generation run have ESS values less than 200. In order to have sufficient coverage, a much larger number of generations needs to be set. Compare the ESS values for the 20 million generation run to the previous 10 0000 run.
+> Let's quickly have a look at the trace plots for the 10 000 and 20 million Bayesian runs.
+The two .p files for each run were opened in Tracer. Both runs were highlighted, and then the Trace file was viewed. A data table was then exported as a .txt file (File --> Export Data Table), and subsequently saved as a .csv file so that we can plot these in R. These two files are in the MrBayes folder, saved as **mrbayes_10K_run.csv** and **mrbayes_20M_run.csv**. Trace plots should look like a "fuzzy caterpillar", as in the 20 million generation run.
+
+```{r}
+# Plot the 10 000 generation run:
+bayes10K.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_10K_run.csv")
+# Plot run 1
+plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/ngen", ylab = "LnL")
+# Add run 2
+points(bayes10K.run$state_run2, bayes10K.run$LnL_run2, lwd = 3, pch=16, type = "l", col="blue")
+
+# Plot the 2 million generation run:
+bayes20M.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_20M_run.csv")
+# Run 1
+plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/ngen", ylab = "LnL")
+# Run 2
+plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/ngen", ylab = "LnL")
+
+```
+
 
 The .con.tre file can now be opened in FigTree for quick viewing (the tree can be saved to multiple formats from this program. You can save it as a .svg file, and then edit it manually in a program like [Inkscape](https://inkscape.org/).
 We will use R to create a pretty phylogeny using the ggtree package.
@@ -158,7 +185,7 @@ gg
 
 ```
 
-Now let's read in the result of the Bayesian analysis: :muscle:
+Now let's read in the result of the 10 000 generation Bayesian analysis: :muscle:
 
 ```{r}
 

@@ -65,7 +65,7 @@ converted.
 
 **This is the output from jModelTest:**
 
-Model selected:
+<span style="background-color:lightgreen"> Model selected:
 
 Model = TIM3+G  
 partition = 012032  
@@ -82,6 +82,8 @@ R(d) \[CG\] = 0.5943
 R(e) \[CT\] = 3.0841  
 R(f) \[GT\] = 1.0000  
 gamma shape = 0.4520
+
+</span>
 
 > We need to incorporate this into the template for a MrBayes block
 > below. The sumt and sump burnin values discard the first 25% of trees
@@ -180,18 +182,56 @@ STDOUT.txt to see how far the analysis is.
 > commas, semi-colons etc.), or the incorrect number of characters
 > specified in the file. Double check everything before running MrBayes.
 
+### Tracer: check whether there were enough runs in the analysis
+
 Once the task has completed, download the **infile.nex.run1.p**,
 **infile.nex.run2.p**, and **infile.nex.con.tre** files. You would
-typically Open the two run.p files in Tracer, and make sure that all the
-effective sample size (ESS) values are greater than 200. Trace plots
-looks like a “fuzzy caterpillar”:
+typically open the two run.p files in Tracer, and make sure that all the
+effective sample size (ESS) values are greater than 200.
 
-![](tracer_combinedruns.png)
+You will see that the two .p files for the 10 000 generation run have
+ESS values less than 200, and that the trace plots have not reached a
+state of equilibrium. In order to have sufficient coverage, a much
+larger number of generations needs to be set. Compare the ESS values for
+the 20 million generation run to the 10 0000 run. You will see that all
+the ESS scores for the 20 million run are \> 200.
 
-> You will see that the two .p files for the 10 000 generation run have
-> ESS values less than 200. In order to have sufficient coverage, a much
-> larger number of generations needs to be set. Compare the ESS values
-> for the 20 million generation run to the previous 10 0000 run.
+> Let’s quickly have a look at the trace plots for the 10 000 and 20
+> million Bayesian runs. The two .p files for each run were opened in
+> Tracer. Both runs were highlighted, and then the Trace file was
+> viewed. A data table was then exported as a .txt file (File –\> Export
+> Data Table), and subsequently saved as a .csv file so that we can plot
+> these in R. These two files are in the MrBayes folder, saved as
+> **mrbayes\_10K\_run.csv** and **mrbayes\_20M\_run.csv**. Trace plots
+> should look like a “fuzzy caterpillar”, as in the 20 million
+> generation run.
+
+``` r
+# Plot the 10 000 generation run:
+bayes10K.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_10K_run.csv")
+# Plot run 1
+plot(bayes10K.run$state_run1, bayes10K.run$LnL_run1, lwd = 3, type = "l", col = "red", main = "MrBayes run for ngen = 10 000", xlab = "State/ngen", ylab = "LnL")
+# Add run 2
+points(bayes10K.run$state_run2, bayes10K.run$LnL_run2, lwd = 3, pch=16, type = "l", col="blue")
+```
+
+![](FigsTut2/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+# Plot the 2 million generation run:
+bayes20M.run = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/mrbayes_20M_run.csv")
+# Run 1
+plot(bayes20M.run$state_run1, bayes20M.run$LnL_run1, lwd = 2, type = "l", col = "red", main = "MrBayes run for ngen = 20 million, RUN 1", xlab = "State/ngen", ylab = "LnL")
+```
+
+![](FigsTut2/unnamed-chunk-1-2.png)<!-- -->
+
+``` r
+# Run 2
+plot(bayes20M.run$state_run2, bayes20M.run$LnL_run2, lwd = 2, type = "l", col="blue", main = "MrBayes run for ngen = 20 million, RUN 2", xlab = "State/ngen", ylab = "LnL")
+```
+
+![](FigsTut2/unnamed-chunk-1-3.png)<!-- -->
 
 The .con.tre file can now be opened in FigTree for quick viewing (the
 tree can be saved to multiple formats from this program. You can save it
@@ -224,7 +264,7 @@ plot(t, cex = 0.8, edge.color = "red", tip.color = "blue", font = 4)
 nodelabels()
 ```
 
-![](FigsTut2/unnamed-chunk-1-1.png)<!-- -->
+![](FigsTut2/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 # We can apply 1000 bootstrap runs to the tree:
@@ -242,7 +282,7 @@ plot(t, cex = 0.8, edge.color = "red", tip.color = "blue", font = 4)
 nodelabels(boots/bootstrap.reps*100, cex = 0.8, bg="white", frame = "none", adj = c(1.2, 0.5))
 ```
 
-![](FigsTut2/unnamed-chunk-1-2.png)<!-- -->
+![](FigsTut2/unnamed-chunk-2-2.png)<!-- -->
 
 ``` r
 # We can also plot using ggtree:
@@ -252,9 +292,10 @@ gg = t %>% ggtree(., color = "darkgreen", lwd = 1.2) +
 gg
 ```
 
-![](FigsTut2/unnamed-chunk-1-3.png)<!-- -->
+![](FigsTut2/unnamed-chunk-2-3.png)<!-- -->
 
-Now let’s read in the result of the Bayesian analysis: :muscle:
+Now let’s read in the result of the 10 000 generation Bayesian analysis:
+:muscle:
 
 ``` r
 bac.tree.10k = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/infile.nex.con_10k.tre") # read in the 10 000 generation tree file
@@ -270,7 +311,7 @@ iotree = bac.tree.10k %>% ggtree(., aes(color=as.numeric(prob)), layout = "recta
 iotree
 ```
 
-![](FigsTut2/unnamed-chunk-2-1.png)<!-- -->
+![](FigsTut2/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 # add posterior probability values instead of node numbers 
@@ -283,7 +324,7 @@ iotree2 = bac.tree.10k %>% ggtree(., aes(color=as.numeric(prob)), layout = "rect
 iotree2
 ```
 
-![](FigsTut2/unnamed-chunk-2-2.png)<!-- -->
+![](FigsTut2/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 # just have plain black branches, but add posterior probability values
@@ -294,7 +335,7 @@ iotree3 = bac.tree.10k %>% ggtree(., color = "black", layout = "rectangular", lw
 iotree3
 ```
 
-![](FigsTut2/unnamed-chunk-2-3.png)<!-- -->
+![](FigsTut2/unnamed-chunk-3-3.png)<!-- -->
 
 ``` r
 # add in a blue highlight block for node 12, and add a vertical label
@@ -307,7 +348,7 @@ iotree4 = bac.tree.10k %>% ggtree(., color = "black", layout = "rectangular", lw
 iotree4
 ```
 
-![](FigsTut2/unnamed-chunk-2-4.png)<!-- -->
+![](FigsTut2/unnamed-chunk-3-4.png)<!-- -->
 
 > Out of interest, we’ll view the phylogeny for the 20 million
 > generation run as well, and compare that to the shorter 10 000 run.
@@ -326,7 +367,7 @@ iotree5 = bac.tree.20M %>% ggtree(., color = "black", layout = "rectangular", lw
 iotree5
 ```
 
-![](FigsTut2/unnamed-chunk-3-1.png)<!-- -->
+![](FigsTut2/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 # You can also flip clades and branches:
@@ -335,7 +376,7 @@ new <- rotate(iotree5, 10)
 new
 ```
 
-![](FigsTut2/unnamed-chunk-3-2.png)<!-- -->
+![](FigsTut2/unnamed-chunk-4-2.png)<!-- -->
 
 > :books: Tutorial 3 will have a look at running a Bayesian analysis
 > with more than one gene, and how to run a maximum likelihood analysis
