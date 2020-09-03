@@ -59,7 +59,7 @@ the 16S.fas file –\> Select jModelTest2 as the tool –\> leave input
 parameters as is –\> Save and run task. Upon completion, select
 ‘Output’, and from the list of files, click to view the **STDOUT**
 file. Scroll to the **BAYESIAN INFORMATION CRITERION (BIC)** section
-(ctrl + f and type Bayesian to get there quickly). We’ll use this
+(:bulb: ctrl + f and type Bayesian to get there quickly). We’ll use this
 information to set up a Bayesian block in the Nexus file we just
 converted.
 

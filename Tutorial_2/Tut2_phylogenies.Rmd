@@ -39,7 +39,7 @@ Convert the aligned FASTA file to NEXUS format using [EMBOSS](https://www.ebi.ac
 
 ### Find the optimal evolutionary model using jModelTest
 
-On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.fas file --> Select jModelTest2 as the tool --> leave input parameters as is --> Save and run task. Upon completion, select 'Output', and from the list of files, click to view the **STDOUT** file. Scroll to the **BAYESIAN INFORMATION CRITERION (BIC)** section (ctrl + f and type Bayesian to get there quickly). We'll use this information to set up a Bayesian block in the Nexus file we just converted.
+On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.fas file --> Select jModelTest2 as the tool --> leave input parameters as is --> Save and run task. Upon completion, select 'Output', and from the list of files, click to view the **STDOUT** file. Scroll to the **BAYESIAN INFORMATION CRITERION (BIC)** section (:bulb: ctrl + f and type Bayesian to get there quickly). We'll use this information to set up a Bayesian block in the Nexus file we just converted.
 
 **This is the output from jModelTest:**
 
