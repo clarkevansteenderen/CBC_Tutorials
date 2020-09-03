@@ -1,7 +1,7 @@
 CBC Phylogenetics Tutorial 2
 ================
 Clarke van Steenderen
-Last updated 31/08/2020
+Last updated 03/09/2020
 
 ## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
@@ -174,7 +174,7 @@ other settings on their defaults. Save and run the task. You can click
 on “View Status” –\> Intermediate results –\> and then download the
 STDOUT.txt to see how far the analysis is.
 
-> :exclamation: The most common errors come about due to unacceptable
+> :warning: The most common errors come about due to unacceptable
 > characters in sequence names, missing or incorrect syntax (missing
 > commas, semi-colons etc.), or the incorrect number of characters
 > specified in the file. Double check everything before running MrBayes.

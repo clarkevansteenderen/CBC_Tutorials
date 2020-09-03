@@ -1,7 +1,7 @@
 ---
 title: "CBC Phylogenetics Tutorial 2"
 author: "Clarke van Steenderen"
-date: "Last updated 31/08/2020"
+date: "Last updated 03/09/2020"
 output: github_document
 ---
 
@@ -112,7 +112,7 @@ begin mrbayes;
 
 Upload the **16S.nex** file to CIPRES, and then create a new task where you select "MrBayes on XSEDE" as the tool. In the Input Parameters, select that your data contains a MrBayes block, set the maximum hours to 168, and select "Run Beagle" (this speeds up the analysis). Leave the other settings on their defaults. Save and run the task. You can click on "View Status" --> Intermediate results --> and then download the STDOUT.txt to see how far the analysis is. 
 
-> :exclamation: The most common errors come about due to unacceptable characters in sequence names, missing or incorrect syntax (missing commas, semi-colons etc.), or the incorrect number of characters specified in the file. Double check everything before running MrBayes.
+> :warning: The most common errors come about due to unacceptable characters in sequence names, missing or incorrect syntax (missing commas, semi-colons etc.), or the incorrect number of characters specified in the file. Double check everything before running MrBayes.
 
 Once the task has completed, download the **infile.nex.run1.p**, **infile.nex.run2.p**, and **infile.nex.con.tre** files. 
 You would typically Open the two run.p files in Tracer, and make sure that all the effective sample size (ESS) values are greater than 200. Trace plots looks like a "fuzzy caterpillar": 
