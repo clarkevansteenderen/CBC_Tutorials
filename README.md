@@ -38,7 +38,7 @@ CIPRES (for running various analyses on a server) http://www.phylo.org/
 
 EMBOSS seqret (for converting between file types, e.g. FASTA <-> NEXUS) https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/
 
-## YouTube tutorials:
+## :movie_camera: YouTube tutorials:
 ### Make your own R package:
 PART1: https://www.youtube.com/watch?v=pMq42QT8AbE&t=7s (Basic setup)
 
