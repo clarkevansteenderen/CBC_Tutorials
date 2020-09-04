@@ -120,7 +120,7 @@ Upload the **16S.nex** file to CIPRES, and then create a new task where you sele
 ### Tracer: check whether there were enough runs in the analysis
 
 Once the task has completed, download the **infile.nex.run1.p**, **infile.nex.run2.p**, and **infile.nex.con.tre** files. 
-You would typically open the two run.p files in Tracer, and make sure that all the effective sample size (ESS) values are greater than 200. 
+You would typically open the two run.p files in Tracer, and make sure that all the effective sample size (ESS) values are greater than 200. You can also report the mean LnL value for both runs (here it is -5878 and -5874.983 for the 10 000 and 20 million generation runs, respectively).
 
 You will see that the two .p files for the 10 000 generation run have ESS values less than 200, and that the trace plots have not reached a state of equilibrium. In order to have sufficient coverage, a much larger number of generations needs to be set. Compare the ESS values for the 20 million generation run to the 10 0000 run. You will see that all the ESS scores for the 20 million run are > 200.
 

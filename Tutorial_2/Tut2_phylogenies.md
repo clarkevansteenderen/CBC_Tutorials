@@ -185,7 +185,9 @@ STDOUT.txt to see how far the analysis is.
 Once the task has completed, download the **infile.nex.run1.p**,
 **infile.nex.run2.p**, and **infile.nex.con.tre** files. You would
 typically open the two run.p files in Tracer, and make sure that all the
-effective sample size (ESS) values are greater than 200.
+effective sample size (ESS) values are greater than 200. You can also
+report the mean LnL value for both runs (here it is -5878 and -5874.983
+for the 10 000 and 20 million generation runs, respectively).
 
 You will see that the two .p files for the 10 000 generation run have
 ESS values less than 200, and that the trace plots have not reached a
