@@ -64,13 +64,13 @@ On CIPRES, upload the aligned 16S.fas file. Create a new task --> input the 16S.
    gamma shape = 0.4520   
 
 > We need to incorporate this into the template for a MrBayes block below.  
-The sumt and sump burnin values discard the first 25% of trees created (ngen/samplefreq x 0.25). We can check whether the number of generations (ngen) was sufficient after the run has completed using Tracer. If you're working with mitochondrial DNA from invertebrates, set **code =metmt**, for vertebrate mtDNA, set it to **code=vertmt**, otherwise set it to **code=universal**. Typically **nruns=2** and **nchains=4**. Anything in square brackets in a NEXUS file is not read, and so you can use this to make comments and notes.
+**lset** sets the likelihood parameters, **prset** sets the priors for the model, **mcmc** starts the Markov chain Monte Carlo analysis, and the **sumt** and **sump** burnin values discard the first 25% of trees created (ngen/samplefreq x 0.25). We can check whether the number of generations (ngen) was sufficient after the run has completed using Tracer. If you're working with mitochondrial DNA from invertebrates, set **code =metmt**, for vertebrate mtDNA, set it to **code=vertmt**, otherwise set it to **code=universal**. Typically **nruns=2** and **nchains=4**. Anything in square brackets in a NEXUS file is not read, and so you can use this to make comments and notes.
 
 begin mrbayes;  
  set autoclose=yes nowarn=yes;  
  lset nst= rates= ngammacat=4 code=;  
  outgroup ;  
- prset revmatpr=dirichlet(6 values) statefreqpr=dirichlet(four values) shapepr=fixed(gamma shape) pinvarpr = fixed(pinvar) tratiopr = fixed(kappa value); 
+ prset revmatpr=dirichlet(six values) statefreqpr=dirichlet(four values) shapepr=fixed(gamma shape) pinvarpr = fixed(pinvar) tratiopr = fixed(kappa value); 
  mcmc ngen= printfreq=1000 samplefreq= nruns= nchains= savebrlens=yes starttree=random;   
  sumt relburnin=yes burninfrac=0.25;   
  sump relburnin=yes burninfrac=0.25;   
