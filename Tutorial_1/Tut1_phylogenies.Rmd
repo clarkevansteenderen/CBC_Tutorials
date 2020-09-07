@@ -168,7 +168,7 @@ This file is available in the **Tutorial_1 repository**. We add node numbers to 
 # if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 # BiocManager::install("ggtree")
 
-prim.tree = read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates.nex")
+prim.tree = read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primates.nex")
 
 # set a general dark blue colour for the tree lines
 prim1 = prim.tree %>% ggtree(., layout = "rectangular", colour = "darkblue", lwd=1.2) + xlim(0, 90) + 
@@ -236,8 +236,8 @@ We will first read in two made-up .csv files; 1) **primates_binary_traits.csv** 
 
 
 ```{r}
-traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
-traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primate_continuous.csv", row.names = 1)
+traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
+traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primate_continuous.csv", row.names = 1)
 
 # if you want to change column names from X's to something else, you can use this code:
 colnames(traits.bin) = c("A","B","C","D", "E", "F")

@@ -273,7 +273,7 @@ to add highlighting or labels.
 # if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 # BiocManager::install("ggtree")
 
-prim.tree = read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates.nex")
+prim.tree = read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primates.nex")
 
 # set a general dark blue colour for the tree lines
 prim1 = prim.tree %>% ggtree(., layout = "rectangular", colour = "darkblue", lwd=1.2) + xlim(0, 90) + 
@@ -358,8 +358,8 @@ variables (X1 to X6), and 2) **primates\_continuous.csv** with randomly
 generated continuous data for four variables (X1 to X4).
 
 ``` r
-traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
-traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/primate_continuous.csv", row.names = 1)
+traits.bin = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primates_binary_traits.csv", row.names = 1) # row.names = 1 makes sure that the first column is read in as row names, not as a data column
+traits.cont = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_1/Data/primate_continuous.csv", row.names = 1)
 
 # if you want to change column names from X's to something else, you can use this code:
 colnames(traits.bin) = c("A","B","C","D", "E", "F")
@@ -397,4 +397,4 @@ plot(cont_phylo)
 
 ![](FigsTut1/unnamed-chunk-7-2.png)<!-- -->
 
-## That’s it for the first tutorial\! Stay tuned for more :).
+> That’s it for the first tutorial\! Stay tuned for more :).
