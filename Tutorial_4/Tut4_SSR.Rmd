@@ -12,11 +12,11 @@ knitr::opts_chunk$set(fig.path='FigsTut4/')
 
 ## AIMS OF THIS TUTORIAL :white_check_mark:
 
-1. Analyse microsatellite (SSR) data in R using a range of different packages
+1. Analyse microsatellite (SSR) data in R using a range of different R packages
 2. Reproduce the results reported by [Hopper *et. al.* (2018)](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12755) for *Neochetina bruchi* SSR data, with a few additional neat functions
-3. Convert data into different formats 
+3. Convert SSR data into different formats for use across R packages
 
-Many of the functions used here were gleaned from [this great population genetics tutorial](http://grunwaldlab.github.io/Population_Genetics_in_R/Introduction.html).
+Many of the functions used here were gleaned from [this great population genetics tutorial](http://grunwaldlab.github.io/Population_Genetics_in_R/Introduction.html) by NJ Grünwald, ZN Kamvar and SE Everhart.
 
 ## DOCUMENT CONTENTS
 1. [Overview of the SSR data](#overview)
@@ -40,8 +40,7 @@ We will use the data for *Neochetina bruchi* provided in the supplementary secti
 if (!require("pacman")) install.packages("pacman") # pacman is a package that installs other required packages
 pacman::p_load(adegenet, car, diveRsity, genepop, ggplot2, inbreedR, lattice, lme4, lmerTest, magrittr, nlme, pegas, PopGenReport, poppr, RColorBrewer, tidyr, vegan)
 
-setwd("~/CBC_tuts/Tutorial_4/Data")
-neochetina_b = poppr::read.genalex("hopper_neochetina_b.csv")
+neochetina_b = poppr::read.genalex("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_4/Data/hopper_neochetina_b.csv")
 
 # create a genotype accumulation curve
 gac_neochetina_b = poppr::genotype_curve(neochetina_b, sample = 1000, quiet = TRUE)
@@ -399,6 +398,8 @@ writeGenPop <- function(gi, file.name, comment) {
 }
 ```
 
+Let's use this to convert the **neochetina_b** object into genepop format, and then run some basic stats (rare alleles, expected and observed heterozygosities, HWE, and inbreeding coefficients) using the diveRsity package.
+
 ## Ar, He, Ho, HWE, and Fis <a name = "diveRsity"></a>
 
 Ar = rare alleles   
@@ -406,8 +407,6 @@ He = expected heterozygosity
 Ho = observed heterozygosity  
 HWE = Hardy-Weinberg Equilibrium  
 Fis = fixation index/inbreeding coefficient
-
-Let's use this to convert the **neochetina_b** object into genepop format, and then run some basic stats using the diveRsity package:
 
 ```{r}
 # specify where the output file must be written to, and save as a .txt file
@@ -449,7 +448,7 @@ Let's see how the g2 and pg2 values (inbreeding coefficients) were obtained:
 
 ```{r}
 setwd("~/CBC_tuts/Tutorial_4/Data")
-neochetina_inbreedR = read.csv("hopper_neochetina_b.csv", row.names = 1) # read in the same original genalex data, but as a plain .csv file now instead of read.genalex()
+neochetina_inbreedR = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_4/Data/hopper_neochetina_b.csv", row.names = 1) # read in the same original genalex data, but as a plain .csv file now instead of read.genalex()
 neochetina_inbreedR = neochetina_inbreedR[-c(1,2),] # remove rows 1 and 2 
 colnames(neochetina_inbreedR)[1]="pop" # reassign this column name to make things easier down the line
 
@@ -534,7 +533,7 @@ Now let's have a look at Linkage Disequilibrium again, using the genepop package
 ```{r}
 # we'll read in the file that was converted using the writeGenPop function again
 # this writes out a results .txt file in the same folder
-test_LD("C:/Users/s1000334/Documents/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outputFile = "LD.txt", settingsFile = "", dememorization = 10000, batches = 100, iterations = 5000,  verbose = interactive())
+test_LD("C:/Users/s1000334/Documents/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outputFile = "LD_genepop.txt", settingsFile = "", dememorization = 10000, batches = 100, iterations = 5000,  verbose = interactive())
 
 ```
 

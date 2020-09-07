@@ -5,17 +5,18 @@ Last updated 03/09/2020
 
 ## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
-1.  Analyse microsatellite (SSR) data in R using a range of different
+1.  Analyse microsatellite (SSR) data in R using a range of different R
     packages
 2.  Reproduce the results reported by [Hopper *et. al.*
     (2018)](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12755)
     for *Neochetina bruchi* SSR data, with a few additional neat
     functions
-3.  Convert data into different formats
+3.  Convert SSR data into different formats for use across R packages
 
 Many of the functions used here were gleaned from [this great population
 genetics
-tutorial](http://grunwaldlab.github.io/Population_Genetics_in_R/Introduction.html).
+tutorial](http://grunwaldlab.github.io/Population_Genetics_in_R/Introduction.html)
+by NJ Grünwald, ZN Kamvar and SE Everhart.
 
 ## DOCUMENT CONTENTS
 
@@ -50,8 +51,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 ``` r
 pacman::p_load(adegenet, car, diveRsity, genepop, ggplot2, inbreedR, lattice, lme4, lmerTest, magrittr, nlme, pegas, PopGenReport, poppr, RColorBrewer, tidyr, vegan)
 
-setwd("~/CBC_tuts/Tutorial_4/Data")
-neochetina_b = poppr::read.genalex("hopper_neochetina_b.csv")
+neochetina_b = poppr::read.genalex("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_4/Data/hopper_neochetina_b.csv")
 
 # create a genotype accumulation curve
 gac_neochetina_b = poppr::genotype_curve(neochetina_b, sample = 1000, quiet = TRUE)
@@ -171,12 +171,12 @@ neo_b.hwe
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40 241.62465 21 0.000000e+00    0.000
     ## NB46 125.15612 21 1.110223e-16    0.000
-    ## NB27   7.05961  1 7.884115e-03    0.013
-    ## NB5   60.28414 28 3.745816e-04    0.083
+    ## NB27   7.05961  1 7.884115e-03    0.009
+    ## NB5   60.28414 28 3.745816e-04    0.059
     ## NB43  42.18962  6 1.686862e-07    0.031
     ## NB8  256.53829 55 0.000000e+00    0.000
-    ## NB26  28.20725 15 2.030713e-02    0.016
-    ## NB13  16.58297 21 7.360548e-01    0.312
+    ## NB26  28.20725 15 2.030713e-02    0.022
+    ## NB13  16.58297 21 7.360548e-01    0.302
 
 ``` r
 # HWE for each marker within each population:
@@ -186,91 +186,91 @@ neo_b.hwe.pop
 
     ## $AUSTRALIA
     ##            chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  0.41200783  3 9.377509e-01    0.863
-    ## NB46 21.84000000  3 7.042735e-05    0.001
+    ## NB40  0.41200783  3 9.377509e-01    0.901
+    ## NB46 21.84000000  3 7.042735e-05    0.000
     ## NB27  0.04338843  1 8.349956e-01    1.000
     ## NB5   0.38349160  3 9.436312e-01    1.000
     ## NB43  0.01249256  1 9.110057e-01    1.000
-    ## NB8  13.72000000 10 1.861506e-01    0.120
-    ## NB26  2.40304311  6 8.791570e-01    0.698
+    ## NB8  13.72000000 10 1.861506e-01    0.125
+    ## NB26  2.40304311  6 8.791570e-01    0.707
     ## NB13  1.56198347  3 6.680402e-01    1.000
     ## 
     ## $CA
     ##           chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  5.5074611  6 4.805554e-01    0.213
+    ## NB40  5.5074611  6 4.805554e-01    0.188
     ## NB46 19.6111111  3 2.043380e-04    0.002
-    ## NB27  3.0738742  1 7.955966e-02    0.105
+    ## NB27  3.0738742  1 7.955966e-02    0.107
     ## NB5   0.9070295  3 8.237311e-01    1.000
-    ## NB43 25.0472590  3 1.509315e-05    0.038
-    ## NB8  27.1648586 21 1.654628e-01    0.033
-    ## NB26  5.0302457  6 5.399398e-01    0.261
+    ## NB43 25.0472590  3 1.509315e-05    0.032
+    ## NB8  27.1648586 21 1.654628e-01    0.030
+    ## NB26  5.0302457  6 5.399398e-01    0.247
     ## NB13  1.9888231  6 9.207237e-01    1.000
     ## 
     ## $FL
     ##           chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40  3.9002836  6 0.690168739    0.394
-    ## NB46 21.0581717  6 0.001790981    0.052
+    ## NB40  3.9002836  6 0.690168739    0.432
+    ## NB46 21.0581717  6 0.001790981    0.055
     ## NB27  0.2568249  1 0.612309921    0.667
     ## NB5   0.3834916  6 0.998981706    1.000
     ## NB43  0.1242604  3 0.988775019    1.000
-    ## NB8  21.5933333 21 0.423259647    0.025
+    ## NB8  21.5933333 21 0.423259647    0.029
     ## NB26  0.1620370  3 0.983471757    1.000
-    ## NB13  5.4791439  6 0.483981027    0.372
+    ## NB13  5.4791439  6 0.483981027    0.359
     ## 
     ## $TX
     ##           chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40  0.0000000  0 1.000000e+00    1.000
     ## NB46 41.7355372  6 2.073621e-07    0.000
-    ## NB27  0.9872206  1 3.204226e-01    0.408
+    ## NB27  0.9872206  1 3.204226e-01    0.397
     ## NB5   0.6625203  3 8.819821e-01    1.000
     ## NB43  0.1890359  3 9.793396e-01    1.000
-    ## NB8  15.9743487 10 1.003691e-01    0.208
-    ## NB26  2.4963018  3 4.759598e-01    0.324
-    ## NB13 12.0867347  6 6.006160e-02    0.066
+    ## NB8  15.9743487 10 1.003691e-01    0.199
+    ## NB26  2.4963018  3 4.759598e-01    0.344
+    ## NB13 12.0867347  6 6.006160e-02    0.051
     ## 
     ## $SAB
     ##          chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40 6.3750000  6   0.3825186    0.191
+    ## NB40 6.3750000  6   0.3825186    0.199
     ## NB46 0.2400000  3   0.9708874    1.000
     ## NB27 0.3750000  1   0.5402914    1.000
-    ## NB5  3.0612245  3   0.3822816    0.637
+    ## NB5  3.0612245  3   0.3822816    0.638
     ## NB43 0.6666667  1   0.4142162    1.000
-    ## NB8  4.3600000  6   0.6280814    0.852
-    ## NB26 6.2400000  3   0.1005000    0.117
-    ## NB13 5.6250000  6   0.4664793    0.529
+    ## NB8  4.3600000  6   0.6280814    0.859
+    ## NB26 6.2400000  3   0.1005000    0.139
+    ## NB13 5.6250000  6   0.4664793    0.526
     ## 
     ## $SAE
     ##          chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40 17.431953 10  0.06533589    0.033
+    ## NB40 17.431953 10  0.06533589    0.030
     ## NB46 22.888889 15  0.08652761    0.000
-    ## NB27  3.306122  1  0.06902218    0.137
-    ## NB5  15.245000 10  0.12338162    0.056
+    ## NB27  3.306122  1  0.06902218    0.133
+    ## NB5  15.245000 10  0.12338162    0.063
     ## NB43  0.281250  1  0.59588309    1.000
-    ## NB8  29.039715 21  0.11305127    0.403
-    ## NB26  2.450617  3  0.48428179    0.372
-    ## NB13  1.469388  1  0.22544232    0.512
+    ## NB8  29.039715 21  0.11305127    0.396
+    ## NB26  2.450617  3  0.48428179    0.351
+    ## NB13  1.469388  1  0.22544232    0.528
     ## 
     ## $UGANDA
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  7.940877  6 2.424669e-01    0.029
-    ## NB46 32.587350  6 1.258755e-05    0.002
-    ## NB27  4.012755  1 4.515730e-02    0.127
+    ## NB40  7.940877  6 2.424669e-01    0.039
+    ## NB46 32.587350  6 1.258755e-05    0.000
+    ## NB27  4.012755  1 4.515730e-02    0.111
     ## NB5   1.235000  6 9.751207e-01    1.000
     ## NB43  0.000000  0 1.000000e+00    1.000
-    ## NB8   2.081327 10 9.956780e-01    0.905
-    ## NB26  5.747018 10 8.360509e-01    0.745
-    ## NB13  5.155834  3 1.607354e-01    0.132
+    ## NB8   2.081327 10 9.956780e-01    0.906
+    ## NB26  5.747018 10 8.360509e-01    0.739
+    ## NB13  5.155834  3 1.607354e-01    0.117
     ## 
     ## $URUGUAY
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40 90.592301 21 1.275255e-10    0.000
-    ## NB46 21.086029  6 1.770446e-03    0.005
-    ## NB27  3.399967  1 6.519772e-02    0.117
-    ## NB5  31.752870 21 6.200875e-02    0.117
-    ## NB43  3.473136  3 3.242630e-01    0.246
-    ## NB8  23.559927 36 9.450839e-01    0.733
-    ## NB26 14.284145 10 1.604209e-01    0.055
-    ## NB13  3.074968 15 9.995314e-01    0.956
+    ## NB46 21.086029  6 1.770446e-03    0.006
+    ## NB27  3.399967  1 6.519772e-02    0.107
+    ## NB5  31.752870 21 6.200875e-02    0.125
+    ## NB43  3.473136  3 3.242630e-01    0.286
+    ## NB8  23.559927 36 9.450839e-01    0.737
+    ## NB26 14.284145 10 1.604209e-01    0.073
+    ## NB13  3.074968 15 9.995314e-01    0.946
 
 ``` r
 neo_b.hwe.mat = sapply(neo_b.hwe.pop, "[", i = TRUE, j = 3) # Take the third column with all rows (chi square p-value)
@@ -810,6 +810,11 @@ writeGenPop <- function(gi, file.name, comment) {
 }
 ```
 
+Let’s use this to convert the **neochetina\_b** object into genepop
+format, and then run some basic stats (rare alleles, expected and
+observed heterozygosities, HWE, and inbreeding coefficients) using the
+diveRsity package.
+
 ## Ar, He, Ho, HWE, and Fis <a name = "diveRsity"></a>
 
 Ar = rare alleles  
@@ -817,9 +822,6 @@ He = expected heterozygosity
 Ho = observed heterozygosity  
 HWE = Hardy-Weinberg Equilibrium  
 Fis = fixation index/inbreeding coefficient
-
-Let’s use this to convert the **neochetina\_b** object into genepop
-format, and then run some basic stats using the diveRsity package:
 
 ``` r
 # specify where the output file must be written to, and save as a .txt file
@@ -885,7 +887,7 @@ obtained:
 
 ``` r
 setwd("~/CBC_tuts/Tutorial_4/Data")
-neochetina_inbreedR = read.csv("hopper_neochetina_b.csv", row.names = 1) # read in the same original genalex data, but as a plain .csv file now instead of read.genalex()
+neochetina_inbreedR = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_4/Data/hopper_neochetina_b.csv", row.names = 1) # read in the same original genalex data, but as a plain .csv file now instead of read.genalex()
 neochetina_inbreedR = neochetina_inbreedR[-c(1,2),] # remove rows 1 and 2 
 colnames(neochetina_inbreedR)[1]="pop" # reassign this column name to make things easier down the line
 
@@ -985,9 +987,6 @@ fst_vals = round(fst_vals,2) ;fst_vals
 jostsD = popgenreport(convert_neo, mk.counts = F, mk.differ.stats = T, mk.pdf = F, path.pgr="~/CBC_tuts/Tutorial_4")
 ```
 
-    ## Warning in dir.create(file.path(path.pgr, foldername)): 'C:
-    ## \Users\s1000334\Documents\CBC_tuts\Tutorial_4\results' already exists
-
     ## There is no  results  folder. I am trying to create it; 
     ## otherwise please create the folder manually. 
     ## Compiling report...
@@ -1008,7 +1007,7 @@ package. The **LD.txt** file produced here is in the Tutorial 4 folder.
 ``` r
 # we'll read in the file that was converted using the writeGenPop function again
 # this writes out a results .txt file in the same folder
-test_LD("C:/Users/s1000334/Documents/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outputFile = "LD.txt", settingsFile = "", dememorization = 10000, batches = 100, iterations = 5000,  verbose = interactive())
+test_LD("C:/Users/s1000334/Documents/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outputFile = "LD_genepop.txt", settingsFile = "", dememorization = 10000, batches = 100, iterations = 5000,  verbose = interactive())
 ```
 
 These results correspond with the supplementary data (Appendix 1, Table
