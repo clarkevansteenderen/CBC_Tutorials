@@ -11,7 +11,7 @@ knitr::opts_chunk$set(fig.path='FigsTut1/') # this creates a folder called FigsT
 # You need to upload this folder to github along with the .MD file if you want the R output to show up
 ```
 
-## AIMS OF THIS TUTORIAL
+## AIMS OF THIS TUTORIAL :white_check_mark:
 
 1. Assess and trim DNA chromatograms
 2. Run a multiple sequence alignment algorithm using MAFFT
@@ -47,7 +47,7 @@ Click Export, and save the file with a .fasta or .fas extension.
 You would do this for all the chromatograms, and then open all the resulting trimmed FASTA files in AliView, and save it as one big FASTA file. Find this final file, **12S_unaligned.fasta**, in the **FASTA files** folder. 
 These sequences now need to be aligned.
 
-## Align sequences <a name = "alignsequences"></a>
+## Align sequences <a name = "alignsequences"></a> :bar_chart:
 
 Open the [MAFFT](https://mafft.cbrc.jp/alignment/server/) server, and upload the **12S_unaligned.fas** file. Select the "Same as input" radio buttons under the **UPPERCASE/lowercase** and **Output order** headings. Submit, and then click on **Fasta format** at the top of the page to download the alignment.
 The resulting file is called **12S_aligned_mafft_needs_editing.fasta** in the FASTA files folder in this repository. 
@@ -124,7 +124,7 @@ for (i in 1: nrow(seqs)){
 
 ```
 
-## Create a neighbour joining (NJ) tree <a name = "njtree"></a>
+## Create a neighbour joining (NJ) tree <a name = "njtree"></a> :deciduous_tree:
 
 Have a look [here](https://rdrr.io/cran/ape/man/plot.phylo.html) for more parameters for tree plotting.
 

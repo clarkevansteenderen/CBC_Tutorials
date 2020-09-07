@@ -3,7 +3,7 @@ CBC Phylogenetics Tutorial 1
 Clarke van Steenderen
 Last updated 31/08/2020
 
-## AIMS OF THIS TUTORIAL
+## AIMS OF THIS TUTORIAL :white\_check\_mark:
 
 1.  Assess and trim DNA chromatograms
 2.  Run a multiple sequence alignment algorithm using MAFFT
@@ -56,7 +56,7 @@ AliView, and save it as one big FASTA file. Find this final file,
 **12S\_unaligned.fasta**, in the **FASTA files** folder. These sequences
 now need to be aligned.
 
-## Align sequences <a name = "alignsequences"></a>
+## Align sequences <a name = "alignsequences"></a> :bar\_chart:
 
 Open the [MAFFT](https://mafft.cbrc.jp/alignment/server/) server, and
 upload the **12S\_unaligned.fas** file. Select the “Same as input” radio
@@ -184,7 +184,7 @@ for (i in 1: nrow(seqs)){
 
 ![](FigsTut1/unnamed-chunk-2-2.png)<!-- -->
 
-## Create a neighbour joining (NJ) tree <a name = "njtree"></a>
+## Create a neighbour joining (NJ) tree <a name = "njtree"></a> :deciduous\_tree:
 
 Have a look [here](https://rdrr.io/cran/ape/man/plot.phylo.html) for
 more parameters for tree plotting.
