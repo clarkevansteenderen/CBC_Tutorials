@@ -1,0 +1,202 @@
+\documentclass[a4paper]{scrartcl}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{lscape}
+\usepackage[section]{placeins}
+\usepackage{rotating}
+\usepackage[margin=1.0in]{geometry}
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{A Population Genetic Report}
+
+
+\subtitle {using PopGenReport Version  3.0.4 }
+
+\author{Adamack \& Gruber}
+\maketitle
+
+\begin{itemize}
+  \item Adamack, A. T., Gruber, B. (2014), PopGenReport: simplifying basic population genetic analyses in R. \emph{Methods in Ecology and Evolution}, 5: 384-387. \href{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12158/full}{doi: 10.1111/2041-210X.12158}.
+  \item Gruber, B. and Adamack, A. T. (2015), landgenreport: a new r function to simplify landscape genetic analysis using resistance surface layers. \emph{Molecular Ecology Resources}, 15: 1172-1178. \href{http://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12381/full}{doi: 10.1111/1755-0998.12381}.
+\end{itemize}
+
+
+%<<echo=FALSE, results='asis'>>=
+%rref <- citation("PopGenReport")
+%print(rref[1], style="latex")
+%@
+  
+%<<echo=FALSE, results='asis'>>=
+%print(rref[2], style="latex")
+%@
+
+\tableofcontents
+\newpage
+
+
+
+
+\section{Hs and Ht based population differentiation statistics}
+
+
+
+% latex table generated in R 4.0.2 by xtable 1.8-4 package
+% Mon Sep 07 17:16:50 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+ & Hs & Ht & Gst & Gprime\_st & D \\ 
+  \hline
+NB40 & 0.530 & 0.637 & 0.168 & 0.400 & 0.261 \\ 
+   \rowcolor[gray]{0.9} NB46 & 0.382 & 0.398 & 0.041 & 0.074 & 0.030 \\ 
+  NB27 & 0.472 & 0.493 & 0.043 & 0.093 & 0.046 \\ 
+   \rowcolor[gray]{0.9} NB5 & 0.386 & 0.418 & 0.077 & 0.141 & 0.059 \\ 
+  NB43 & 0.160 & 0.166 & 0.038 & 0.052 & 0.009 \\ 
+   \rowcolor[gray]{0.9} NB8 & 0.701 & 0.779 & 0.101 & 0.380 & 0.301 \\ 
+  NB26 & 0.579 & 0.646 & 0.103 & 0.275 & 0.180 \\ 
+   \rowcolor[gray]{0.9} NB13 & 0.467 & 0.473 & 0.013 & 0.027 & 0.013 \\ 
+   \hline
+\end{tabular}
+\caption{Hs and Ht based estimates of differentiation: Gst, Gst and Dest for each locus} 
+\end{table}
+% latex table generated in R 4.0.2 by xtable 1.8-4 package
+% Mon Sep 07 17:16:50 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+  \hline
+Hs & Ht & Gst\_est & Gprime\_st & D\_het & D\_mean \\ 
+  \hline
+0.459 & 0.501 & 0.083 & 0.174 & 0.088 & 0.029 \\ 
+   \rowcolor[gray]{0.9}  \hline
+\end{tabular}
+\caption{Hs and Ht based global estimates of differentiation: Gst, Gst and Dest for each locus} 
+\end{table}
+
+
+
+
+
+% latex table generated in R 4.0.2 by xtable 1.8-4 package
+% Mon Sep 07 17:16:53 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+ & AUSTRALIA & CA & FL & TX & SAB & SAE & UGANDA & URUGUAY \\ 
+  \hline
+AUSTRALIA &  &  &  &  &  &  &  &  \\ 
+  CA & 0.030 &  &  &  &  &  &  &  \\ 
+  FL & 0.017 & 0.042 &  &  &  &  &  &  \\ 
+  TX & 0.142 & 0.073 & 0.124 &  &  &  &  &  \\ 
+  SAB & 0.052 & 0.074 & 0.062 & 0.240 &  &  &  &  \\ 
+  SAE & 0.106 & 0.079 & 0.134 & 0.149 & 0.079 &  &  &  \\ 
+  UGANDA & 0.002 & 0.036 & 0.023 & 0.133 & 0.058 & 0.124 &  &  \\ 
+  URUGUAY & 0.081 & 0.050 & 0.110 & 0.101 & 0.124 & 0.161 & 0.082 &  \\ 
+   \hline
+\end{tabular}
+\caption{mmod Jost's D pairwise} 
+\end{table}
+% latex table generated in R 4.0.2 by xtable 1.8-4 package
+% Mon Sep 07 17:16:53 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+ & AUSTRALIA & CA & FL & TX & SAB & SAE & UGANDA & URUGUAY \\ 
+  \hline
+AUSTRALIA &  &  &  &  &  &  &  &  \\ 
+  CA & 0.066 &  &  &  &  &  &  &  \\ 
+  FL & 0.039 & 0.089 &  &  &  &  &  &  \\ 
+  TX & 0.285 & 0.149 & 0.248 &  &  &  &  &  \\ 
+  SAB & 0.104 & 0.137 & 0.118 & 0.393 &  &  &  &  \\ 
+  SAE & 0.200 & 0.144 & 0.239 & 0.263 & 0.135 &  &  &  \\ 
+  UGANDA & 0.004 & 0.077 & 0.052 & 0.263 & 0.113 & 0.224 &  &  \\ 
+  URUGUAY & 0.176 & 0.105 & 0.224 & 0.208 & 0.226 & 0.283 & 0.172 &  \\ 
+   \hline
+\end{tabular}
+\caption{Pairwise Gst - Hedrick} 
+\end{table}
+% latex table generated in R 4.0.2 by xtable 1.8-4 package
+% Mon Sep 07 17:16:53 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+ & AUSTRALIA & CA & FL & TX & SAB & SAE & UGANDA & URUGUAY \\ 
+  \hline
+AUSTRALIA &  &  &  &  &  &  &  &  \\ 
+  CA & 0.019 &  &  &  &  &  &  &  \\ 
+  FL & 0.012 & 0.025 &  &  &  &  &  &  \\ 
+  TX & 0.091 & 0.043 & 0.076 &  &  &  &  &  \\ 
+  SAB & 0.028 & 0.035 & 0.031 & 0.112 &  &  &  &  \\ 
+  SAE & 0.055 & 0.037 & 0.065 & 0.072 & 0.031 &  &  &  \\ 
+  UGANDA & 0.001 & 0.022 & 0.015 & 0.081 & 0.030 & 0.060 &  &  \\ 
+  URUGUAY & 0.055 & 0.030 & 0.068 & 0.063 & 0.062 & 0.078 & 0.052 &  \\ 
+   \hline
+\end{tabular}
+\caption{Pairwise Gst - Nei} 
+\end{table}
+
+
+
+
+
+\FloatBarrier
+\end{document}

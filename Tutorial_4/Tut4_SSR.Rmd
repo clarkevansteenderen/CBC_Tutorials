@@ -1,0 +1,616 @@
+---
+title: "CBC Phylogenetics Tutorial 4: Population Genetics using SSRs"
+author: "Clarke van Steenderen"
+date: "Last updated 03/09/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path='FigsTut4/')
+```
+
+## AIMS OF THIS TUTORIAL :white_check_mark:
+
+1. Analyse microsatellite (SSR) data in R using a range of different packages
+2. Reproduce the results reported by [Hopper *et. al.* (2018)](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12755) for *Neochetina bruchi* SSR data, with a few additional neat functions
+3. Convert data into different formats 
+
+Many of the functions used here were gleaned from [this great population genetics tutorial](http://grunwaldlab.github.io/Population_Genetics_in_R/Introduction.html).
+
+## DOCUMENT CONTENTS
+1. [Overview of the SSR data](#overview)
+2. [DAPC analysis](#dapc)
+3. [STRUCTURE-like "compoplots"](#compoplots)
+4. [Linkage Disequilibrium (poppr)](#LDpoppr)
+5. [Minimum spanning networks](#msn)
+6. [Private Alleles (Ap)](#Ap)
+7. [Convert from genclone/genind](#convert)
+8. [Ar, He, Ho, HWE, and Fis](#diveRsity)
+9. [Inbreeding coefficients using inbreedR](#inbreedR)
+10. [FST and Jost's D values](#fst)
+11. [Linkage Disequilibrium (genepop)](#LDgenepop)
+12. [Linear Mixed Models for genetic diversity](#lmm)
+
+We will use the data for *Neochetina bruchi* provided in the supplementary section of the Hopper *et. al.* 2018 paper. This is in the **Tutorial 4/Data** folder (**hopper_neochetina_b.csv**). The paper reports that raw SSR data were read into Geneious first, and then the output was opened in Excel and saved in GenAlex format (Microsoft Excel plugin).
+
+## Overview of the SSR data <a name = "overview"></a>
+
+```{r}
+if (!require("pacman")) install.packages("pacman") # pacman is a package that installs other required packages
+pacman::p_load(adegenet, car, diveRsity, genepop, ggplot2, inbreedR, lattice, lme4, lmerTest, magrittr, nlme, pegas, PopGenReport, poppr, RColorBrewer, tidyr, vegan)
+
+setwd("~/CBC_tuts/Tutorial_4/Data")
+neochetina_b = poppr::read.genalex("hopper_neochetina_b.csv")
+
+# create a genotype accumulation curve
+gac_neochetina_b = poppr::genotype_curve(neochetina_b, sample = 1000, quiet = TRUE)
+# if you want to change the theme:
+p = last_plot() + theme_bw()
+p
+
+# create a locus summary table
+
+locus_tab_neo_b = locus_table(neochetina_b)
+locus_tab_neo_b
+
+# genotypic diversity:
+
+# MLG = Number of multilocus genotypes (MLG) observed
+# eMLG = The number of expected MLG at the smallest sample size ≥ 10 based on rarefaction
+# H = Shannon-Wiener Index of MLG diversity
+# G = Stoddart and Taylor’s Index of MLG diversity
+# lambda = Simpson’s Index
+# E.5 = Evenness
+# Hexp = Nei’s unbiased gene diversity
+# these last two are for dealing with linkage disequlibrium, which we'll look at later:
+# Ia = The index of association
+# rbarD = The standardized index of association
+
+summary_stats = poppr(neochetina_b)
+summary_stats
+
+# multilocus genotype table. High evenness (E.5 value close to, or equal to 1) will correspond with consistent genotype numbers in graphs (i.e a more equal abundance of MLGs, where there isn't one, or a group of genotypes that predominate)
+n_b_tab = mlg.table(neochetina_b)
+
+
+# rarefaction curve to see how sample size affects genotypic richness results. A group might initially appear to have more genotypes than another, but that's only because it has a larger sample size.
+# Have a look at how the eMLG (expected MLG values, which are based on a refraction curve) differ from the observed MLG values
+
+min_sample = min(rowSums(n_b_tab))
+vegan::rarecurve(n_b_tab, sample = min_sample, xlab = "Sample Size", ylab = "Expected MLGs",
+                 main = "Rarefaction of Neochetina bruchi populations")
+
+```
+
+This rarefaction graph is not as drastic as the one presented [here](http://grunwaldlab.github.io/Population_Genetics_in_R/Genotypic_EvenRichDiv.html). 
+Now we can check whether there are any deviations from Hardy-Weinberg Equilibrium (HWE) across and within each population. See page 75 of the **Introduction to Conservation Genetics** by Frankham *et. al* 2002 for some really great definitions and explanations of various population genetics concepts (in the **Helpful Books** folder). 
+
+```{r}
+
+# HW equilibrium (for each marker across all populations)
+neo_b.hwe = pegas::hw.test(neochetina_b, B = 1000) # performs 1000 permutations
+neo_b.hwe 
+
+# HWE for each marker within each population:
+neo_b.hwe.pop = seppop(neochetina_b) %>% lapply(hw.test, B = 1000)
+neo_b.hwe.pop
+
+neo_b.hwe.mat = sapply(neo_b.hwe.pop, "[", i = TRUE, j = 3) # Take the third column with all rows (chi square p-value)
+
+# produce a heat map to show deviations from HWE across populations and markers
+alpha  = 0.05 # set significance at p <= 0.05
+newmat_Neo_b = neo_b.hwe.mat
+newmat_Neo_b[newmat_Neo_b > alpha] = 1
+colrs = colorRampPalette(brewer.pal(8, "Blues"))(25) # could choose Blues, Greens, Reds, BuPu, etc.
+lattice::levelplot(t(newmat_Neo_b), col.regions = colrs, ylab = "SSR Marker", xlab = "Population", main = "Deviations from HWE",
+                   scales=list(x=list(rot=90))) 
+# the 't' before the newmat_Neo_b just swaps rows and columns around so that population is on the x and SSR marker on the y
+# the scales argument changes the text direction. Here it's changing the x labels to 90 degrees
+
+```
+## DAPC analysis  <a name = "dapc"></a>
+
+Let's have a look at genetic cluster groups; similar to a STRUCTURE analysis. The Hopper *et. al.* (2018) paper mentions that they didn't present STRUCTURE results in their main document, because the program assumes HWE and LE (linkage equilibrium). It seems advisable to first run the tests for HWE and LE assumptions, and then decide which genetic clustering method to use.
+
+> Using the **adegenet** package, we will create a discriminant analysis of principal components (DAPC). It is very important to first obtain an optimal number of PCs to use in the analysis. Too many leads to overestimates of accuracy (over-fitting), but too few loses power to discriminate between groups.
+
+```{r}
+
+set.seed(123) # this makes the results reproducible if you run it again at another time
+
+best_a_score = adegenet::optim.a.score(dapc(neochetina_b, n.pca = 50, n.da = nPop(neochetina_b))) # shows that the best no. of PCs is 21
+
+# another validation check for the number of PCs:
+x = neochetina_b 
+mat = tab(x, NA.method = "mean") # the tab function accesses allele counts for each sample at each locus. The NA.method = "mean" replaces any NA values with the mean, if applicable
+gr = pop(x) # access group names. Same as using as.factor(neochetina_b$pop)
+xval = xvalDapc(mat, gr, n.pca.max = 300, training.set = 0.9, result = "groupMean", center = T, scale = F, n.pca = NULL, n.rep = 50, xval.plot = T) # a training set of 90% of the data is sub-setted, and used to test the remaining 10%
+xval[2:6] # this indicates that the best no. of PCs is 25
+# select the lowest of the two PCs from the two methods
+
+# plot the DAPC
+dapc.neo_b = dapc(neochetina_b, var.contrib = TRUE, scale = FALSE, n.pca = 21, n.da = nPop(neochetina_b)) # set the n.pca to 21, as predicted by the optim.a.score() function above
+levels(pop(neochetina_b)) # confirm the number of populations in the data, so that you can assign colours:
+colrs = c("blue", "black", "deeppink", "grey", "gold", "orange", "green", "red")
+scatter(dapc.neo_b, clabel = F, cstar = 1, cell = 1, col = colrs, cex = 1, solid = 0.8, legend = T, scree.pca = T) 
+# mstree = TRUE adds a minimum spanning tree
+# cstar adds in lines joining points
+# cell = 1 adds ellipses around groups
+
+# if you want to automatically assign colours, you can use this:
+jBrewColors = brewer.pal(n = 8, name = "Set1") # see this site for more colour options! https://www.datanovia.com/en/blog/the-a-z-of-rcolorbrewer-palette/#:~:text=Display%20all%20brewer%20palettes,-To%20display%20all&text=Sequential%20palettes%20(first%20list%20of,YlGn%2C%20YlGnBu%20YlOrBr%2C%20YlOrRd. 
+scatter(dapc.neo_b, clabel = F, cstar = 1, cell = 1, col = jBrewColors, cex = 1, solid = 0.8, legend = T, scree.pca = T) 
+
+# if you want to view discriminant functions as distribution graphs instead
+# discriminant function 1:
+scatter(dapc.neo_b, 1, 1, col = colrs, solid = 0.4, legend = T)
+# discriminant function 2:
+scatter(dapc.neo_b, 2, 2, col = colrs, solid = 0.4, legend = T)
+
+# have a look at the loading plot to see which marker produced the most variation
+# axis refers to PC1 or PC2
+# setting the thresh allows for all markers with a loading above that to be labelled on the graph
+contrib = loadingplot(dapc.neo_b$var.contr, axis = 2, thresh = 0.1, lab.jitter = 1)
+
+```
+
+Hopper *et. al* report an additional two DAPC plots in Figure 2, where they have removed the SAE and SAB populations. Let's do that here, using the **popsub()** function in the poppr package.
+
+```{r}
+
+# removing SAB
+neo_sub_SAB = popsub(neochetina_b, blacklist = "SAB")
+# get the new optimal PCA number
+best_a_score = optim.a.score(dapc(neo_sub_SAB, n.pca = 50, n.da = nPop(neo_sub_SAB)))
+
+# create the DAPC
+dapc.neo_b2 = dapc(neo_sub_SAB, var.contrib = TRUE, scale = FALSE, n.pca = 20, n.da = nPop(neo_sub_SAB))
+levels(pop(neo_sub_SAB)) # confirm the number of populations in the data, so that you can assign colours:
+colrs = c("blue", "black", "deeppink", "grey", "orange", "green", "red")
+# plot the DAPC
+scatter(dapc.neo_b2, clabel = F, cstar = 1, cell = 1, col = colrs, cex = 1, solid = 0.8, legend = T, scree.pca = T) #mstree = TRUE adds a minimum spanning tree
+
+
+# remove both SAB and SAE
+neo_sub_SAB.SAE = popsub(neochetina_b, blacklist = c("SAB", "SAE"))
+best_a_score = optim.a.score(dapc(neo_sub_SAB.SAE, n.pca = 50, n.da = nPop(neo_sub_SAB.SAE)))
+
+dapc.neo_b3 = dapc(neo_sub_SAB.SAE, var.contrib = TRUE, scale = FALSE, n.pca = 27, n.da = nPop(neo_sub_SAB.SAE))
+levels(pop(neo_sub_SAB.SAE)) # confirm the number of populations in the data, so that you can assign colours:
+colrs = c("blue", "black", "deeppink", "grey","green", "red")
+scatter(dapc.neo_b3, clabel = F, cstar = 1, cell = 1, col = colrs, cex = 1, solid = 0.8, legend = T, scree.pca = T) #mstree = TRUE adds a minimum spanning tree
+
+```
+
+Now we can start having a look at how accurate our predefined groups are based on the DAPC analysis. 
+
+```{r}
+# get a summary of the DAPC on all populations
+s = summary(dapc.neo_b)
+s$assign.prop # the DAPC analysis had an overall accuracy of 66% (i.e. overall successful assignment of samples to their predefined cluster groups)
+s$assign.per.pop # accuracy of sample assignment to each predefined group. The least accurate was the Australia group (48%), and the highest Texas (TX) (84%)
+
+# we can plot a bar chart showing these accuracy figures:
+par(mar=c(6, 5, 2, 1))
+success_vals = summary(dapc.neo_b)$assign.per.pop*100
+barplot_success_props = barplot(success_vals, ylab = "% reassignment to actual cluster group", xlab = "Cluster Group", ylim = c(0,100), las = 2, main = "Successful reassignments to cluster groups for N. bruchi", col = "white") # las changes the orientation of x labels
+text(barplot_success_props, success_vals, labels = round(success_vals, 0), pos = 3, col = "black", cex = 0.8)
+
+# you can access the posterior probability values for each sample to a group with this line:
+# dapc.neo_b$posterior
+
+# graphical representation of posterior probabilities of each sample to each possible group (i.e. assignment accuracy):
+# heat colours represent cluster group probability, and blue dots are the predefined groups for individuals
+# really nice way to see what the probability is of an individual falling in a specific cluster group compared to what was expected/predefined
+assignplot(dapc.neo_b, cex = 0.6, pch=16)
+
+```
+
+> Having a look at the assignment plot for all populations, one can visually see that the Australian group had quite a low accuracy rate (48%) (darker red = higher probability of assignment). 
+
+Zoom in on just the Australian samples :mag: 
+
+```{r}
+assignplot(dapc.neo_b, cex = 0.8, only.grp = "AUSTRALIA", pch=16)
+```
+
+Look at sample **NBAU2**, for example. It was predefined as an Australian sample (blue cross), but it had a very high posterior probability of belonging to the SAE population. If we have a look again at the posterior probability values (using **dapc.neo_b$posterior**), you will see that this sample was assigned to the Australian group with a probability score of 0.0069, and to the SAE group with a value of 0.973:
+
+```{r}
+dapc.neo_b$posterior[2,] # NBAU2 is the second sample. Use index numbers to access particular posterior probability values
+```
+
+Now zoom in on the Texas population :mag: 
+
+```{r}
+assignplot(dapc.neo_b, cex.lab = 0.8, only.grp = "TX", pch=16)
+```
+
+We can see that most assignments were accurate (84%), but some had higher probabilities of belonging elsewhere. For example, sample **NBTX2** had a higher probability of belonging to the Uruguay group
+
+We can also plot a contingency table (Fig. 2(d) in the Hopper paper) to get an overall view of how well samples are reassigned to their predefined groups:
+
+```{r}
+table.value(table(dapc.neo_b$assign, pop(neochetina_b)), col.lab = levels(pop(neochetina_b)))
+```
+
+## STRUCTURE-like "compoplots"  <a name = "compoplots"></a>
+
+Similar to the output of STRUCTURE, we can create a graphic showing the membership posterior probabilities of each sample to our predefined groups.
+
+```{r}
+# we will assign the same colours here as we did in the DAPC plot
+mycol = c("blue", "black", "deeppink", "grey", "gold", "orange", "green", "red")
+adegenet::compoplot(dapc.neo_b, show.lab = T, posi = "topright", col.pal = mycol)
+# otherwise, you can just pick random colours, using this line, for example:
+# mycol = rainbow(8)
+
+# subset data to look at particular populations: 
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="AUSTRALIA"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="CA"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="FL"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="TX"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="SAB"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="SAE"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="UGANDA"), show.lab = T, posi = "topright", col.pal = mycol)
+adegenet::compoplot(dapc.neo_b, subset = (dapc.neo_b$grp=="URUGUAY"), show.lab = T, posi = "topright", col.pal = mycol)
+
+# create a subset of samples with a proportion of successful reassignments less than a certain threshold
+# for example, less than a 40% probability of belonging to a specific cluster group (an indication of high admixture):
+temp = which(apply(dapc.neo_b$posterior, 1, function(e) all(e < 0.4)))
+compoplot(dapc.neo_b, subset = temp, show.lab = T, posi = "topright", col.pal = mycol)
+```
+
+## Linkage Disequilibrium (poppr) <a name = "LDpoppr"></a>
+
+The null hypothesis for LD is that there is no linkage between markers (i.e. the presence of one locus doesn't determine the presence of another; all loci are independent. In such a case, there is not significant LD, or rather, there is a state of linkage equilibrium). [This YouTube video](https://www.youtube.com/watch?v=OnAk6cEbRyU&ab_channel=BigBio) explains LD very well, and helped me to better understand the concept.
+Clonal populations (or those with high levels of interbreeding) will typically have significant linkage between loci, where sexual ones won't. 
+
+> LD is expressed using the Index of Association (IA and rd values), with an associated p-value. High index values indicate linkage disequilibrium (i.e. alleles are linked, and not independent)
+We will first have a look at assessing LD using the poppr package. Hopper *et. al.* used the genepop package, which we'll get to later.
+
+```{r}
+# LD across marker pairs over all populations:
+LD_pairs = pair.ia(neochetina_b, sample = 999, index = "rbarD") 
+# extract just the p-values for rD
+rD_p_vals = LD_pairs[,4]
+# find how many are significant (i.e. are in significant linkage disequilibrium)
+length(which(rD_p_vals < 0.05))
+
+# if you want to look at individual populations, you can first subset them:
+LD.Aus <- popsub(neochetina_b, "AUSTRALIA")
+LD.CA = popsub(neochetina_b, "CA")
+LD.FL = popsub(neochetina_b, "FL")
+LD.TX = popsub(neochetina_b, "TX")
+LD.SAB = popsub(neochetina_b, "SAB")
+LD.SAE = popsub(neochetina_b, "SAE")
+LD.UGANDA = popsub(neochetina_b, "UGANDA")
+LD.URUGUAY = popsub(neochetina_b, "URUGUAY")
+
+# and then have a look at each one:
+# Australia:
+LD.Aus # 21 diploid individuals, with 20 original MLGs. This means that one sample was identical to another 
+rD.Aus = pair.ia(LD.Aus, sample = 999)
+# and the number of marker pairs that showed a significant p-value:
+length(which(rD.Aus[,4] < 0.05))
+
+# do the same for the others, if required.
+
+```
+
+## Minimum spanning networks <a name = "msn"></a>
+
+Let's have a quick look at the markers used in the Hopper study:
+
+|     Locus    |     Primer Sequences 5'-3'                           |     Dye    |     bp         |     Motif      |     (Q)/Ta°    |
+|--------------|------------------------------------------------------|------------|----------------|----------------|----------------|
+|     Nb_40    |     F:   GCCTCCCTCGCGCCAAGCCACTCGTGCTAGACTTC         |     FAM    |     168-212    |     AAT(10)    |     60         |
+|              |     R:   GTTTATCAGCAGCCTCAATAACCTC                   |            |                |                |                |
+|     Nb_46    |     F:   GCCTTGCCAGCCCGCTTGGTCAGGGTTGTGAGAAG         |     VIC    |     217-244    |     AGG(8)     |                |
+|              |     R:   GTTTCGAACACCGTGACAGTTAAAG                   |            |                |                |                |
+|     Nb_5     |     F:   GCCTTGCCAGCCCGCGTTTCCGGTTCAGGGTTGTG         |     VIC    |     230-257    |     AGG(9)     |     (Q) 64     |
+|              |     R:   GTTTACCACCTACGCATAATCCC                     |            |                |                |                |
+|     Nb_27    |     F:   GCCTCCCTCGCGCCAGCAGACTTATCCGATCTCAAGG       |     FAM    |     201-207    |     AGG(8)     |                |
+|              |     R:   GTTTATTCTGTCAGGGTTGTGAGAC                   |            |                |                |                |
+|     Nb_43    |     F:   CAGGACCAGGCTACCGTGTTTCGAACCGCACAAGATCC      |     NED    |     199-211    |     AGG(8)     |                |
+|              |     R:   GTTTAGAACCTCCTCCTCTTGTCAG                   |            |                |                |                |
+|     Nb_8     |     F:   GCCTTGCCAGCCCGCTTGAGTTAGCTAGACTTCGCC        |     VIC    |     263-290    |     AAT(13)    |     (Q) 63     |
+|              |     R:   GTTTCTCACAACCCTGACAAGAGG                    |            |                |                |                |
+|     Nb_13    |     F:   CGGAGAGCCGAGAGGTGTTTGTGAGGTCGCTGGTTAC       |     PET    |     224-245    |     AGG(10)    |                |
+|              |     R:   GTTTACAAGGAAATTCTGCCAGGG                    |            |                |                |                |
+|     Nb_26    |     F:   CAGGACCAGGCTACCGTGAGATGGGAAATGATGTTGCTTG    |     NED    |     208-223    |     AGG(8)     |                |
+|              |     R:   GTTTCTGCATGGAAATTCTGTCAGG                   |            |                |                |                |
+
+
+```{r}
+# specify the nucleotide repeats for each motif for each marker
+reps = c(NB40 = 3, NB46 = 3,  NB27 = 3, NB5 = 3, NB43 = 3,  NB8 = 3, NB26 = 3, NB13 = 3)
+msn_grps = c("AUSTRALIA", "CA", "FL", "SAB", "SAE", "TX", "UGANDA", "URUGUAY")
+msn_grps2 = c("TX", "UGANDA") # make a list of populations you want to include
+# plot the network:
+msn_neo_b = bruvo.msn(neochetina_b, replen = reps, sublist = msn_grps2, showplot = F)
+# or, use the plot_poppr_msn function:
+set.seed(120) # makes sure that you get the same output if this is run again (as opposed to a ranmdom start)
+# inds = "none" removes labels, nodebase scales the size of the nodes to log(1.25)
+# could use palette = cm.colors, heat.colors, terrain.colors, or use the RCOlor Brewer to choose other palettes
+cols_msn <- colorRampPalette(brewer.pal(8, "Paired")) #Blues, Greens, Reds, BuPu
+plot_poppr_msn(neochetina_b, msn_neo_b, inds = "none", palette = cols_msn)
+```
+
+We will get the values reported in Table 2 of the Hopper paper in the sections that follow:
+
+## Private Alleles (Ap) <a name = "Ap"></a>
+
+```{r}
+# private alleles (Ap). These are alleles that occur in only one population
+Ap = poppr::private_alleles(neochetina_b, count.alleles = F)
+rowSums(Ap)
+```
+
+## Convert from genclone/genind --> genepop format <a name = "convert"></a>
+
+> To start working in other R packages, such as diveRsity, inbreedR, PopGenReport, and genepop, we need to convert the genalex file we initially read from a **genclone/genind** object into a **genepop** object. The following function does this, and was taken from [this](https://github.com/romunov/zvau/blob/master/R/writeGenPop.R) GitHub repository.
+
+```{r}
+writeGenPop <- function(gi, file.name, comment) {
+  
+  if (is.list(gi)) {
+    # do all genind objects have the same number of loci?
+    if (length(unique(sapply(gi, nLoc))) != 1) stop("Number of loci per individual genind object in a list is not equal for all.")
+    gi.char <- gi[[1]]
+    loc.names <- locNames(gi[[1]])
+  } else {
+    gi.char <- gi
+    loc.names <- locNames(gi)
+  }
+  
+  # Calculate the length of two alleles.
+  lng <- as.character(na.omit(genind2df(gi.char)[, locNames(gi.char)[1]]))
+  lng <- unique(nchar(lng))
+  
+  stopifnot(length(lng) == 1)
+  
+  cat(paste(comment, "\n"), file = file.name)
+  cat(paste(paste(loc.names, collapse = ", "), "\n"), file = file.name, append = TRUE)
+  
+  if (is.list(gi)) {
+    pop.names <- seq_len(length(gi))
+  } else {
+    pop.names <- popNames(gi)
+  }
+  
+  for (i in pop.names) {
+    cat("pop\n", file = file.name, append = TRUE)
+    if (is.list(gi)) {
+      intm <- gi[[i]]
+      loc.names <- locNames(gi[[i]])
+    } else {
+      intm <- gi[pop(gi) == i, drop = FALSE]
+    }
+    ind.names <- indNames(intm)
+    intm <- genind2df(intm, sep = "")
+    intm[is.na(intm)] <- paste(rep("0", lng), collapse = "")
+    out <- cbind(names = paste(ind.names, ",", sep = ""), intm[, loc.names])
+    write.table(out, file = file.name, row.names = FALSE, col.names = FALSE, append = TRUE, quote = FALSE)
+  }
+  
+  return(NULL)
+}
+```
+
+## Ar, He, Ho, HWE, and Fis <a name = "diveRsity"></a>
+
+Ar = rare alleles   
+He = expected heterozygosity   
+Ho = observed heterozygosity  
+HWE = Hardy-Weinberg Equilibrium  
+Fis = fixation index/inbreeding coefficient
+
+Let's use this to convert the **neochetina_b** object into genepop format, and then run some basic stats using the diveRsity package:
+
+```{r}
+# specify where the output file must be written to, and save as a .txt file
+writeGenPop(neochetina_b, "~/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", comment = "Neochetina_b object converted using the writeGenPop function") 
+# read in the converted file, and then specify a name for the output results folder 
+# we'll run 1000 bootstraps for these tests, and we'll set the Hardy-Weinberg exact test to 10 000 monte carlo repetitions
+div_basic_stats = diveRsity::divBasic("~/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outfile = "diveRsity_Results", gp = 3, bootstraps = 1000, HWEexact = T, mcRep = 10000)
+```
+
+Have a look at the "overall" column in the [divBasic] output Excel file, and compare the values to those in Hopper's Table 2.
+
+The significant FIS values are marked in bold in the table. This was ascertained through the upper and lower confidence intervals. If the range of the upper and lower CI values do not cross zero, then the value is significant:
+
+```{r}
+# First we want to extract the relevant information from our results
+ciTable <- lapply(div_basic_stats$fis, function(x){
+  return(c(x["overall", "fis"], x["overall", "BC_lower_CI"],
+           x["overall", "BC_upper_CI"]))
+})
+# convert this into a dataframe
+ciTable <- as.data.frame(do.call("rbind", ciTable))
+dimnames(ciTable) <- list(paste("pop_", 1:nrow(ciTable), sep = ""),
+                          c("Fis", "lower", "upper"))
+# inspect the table
+ciTable
+# plot the CI values
+ggplot(ciTable, aes(x = levels(pop(neochetina_b)), y = Fis)) +
+  geom_point() + 
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.3) +
+  theme(axis.text.x=element_text(angle = 90))
+
+```
+
+> From this graph, CA, SAE, and URUGUAY are significant.
+
+## Inbreeding coefficients using inbreedR <a name = "inbreedR"></a>
+
+Let's see how the g2 and pg2 values (inbreeding coefficients) were obtained:
+
+```{r}
+setwd("~/CBC_tuts/Tutorial_4/Data")
+neochetina_inbreedR = read.csv("hopper_neochetina_b.csv", row.names = 1) # read in the same original genalex data, but as a plain .csv file now instead of read.genalex()
+neochetina_inbreedR = neochetina_inbreedR[-c(1,2),] # remove rows 1 and 2 
+colnames(neochetina_inbreedR)[1]="pop" # reassign this column name to make things easier down the line
+
+# create an empty data frame to store results
+g2.data = matrix(ncol=3, nrow=8)
+colnames(g2.data) = c("Population", "g^2", "p")
+g2.data[,1] = levels(as.factor(neochetina_inbreedR$pop))
+
+# australia
+aus_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="AUSTRALIA",-1]) # convert the dataframe to the format that the inbreedR package requires
+g.aus = inbreedR::g2_microsats(aus_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[1,2]=round(g.aus$g2,2)
+g2.data[1,3]=round(g.aus$p_val,2)
+
+# california
+CA_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="CA",-1])
+g.CA = inbreedR::g2_microsats(CA_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[2,2]=round(g.CA$g2,2)
+g2.data[2,3]=round(g.CA$p_val,2)
+
+# florida
+FL_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="FL",-1])
+g.FL = inbreedR::g2_microsats(FL_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[3,2]=round(g.FL$g2,2)
+g2.data[3,3]=round(g.FL$p_val,2)
+
+# SAB
+SAB_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="SAB",-1])
+g.SAB = inbreedR::g2_microsats(SAB_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[4,2]=round(g.SAB$g2,2)
+g2.data[4,3]=round(g.SAB$p_val,2)
+
+# SAE
+SAE_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="SAE",-1])
+g.SAE = inbreedR::g2_microsats(SAE_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[5,2]=round(g.SAE$g2,2)
+g2.data[5,3]=round(g.SAE$p_val,2)
+
+# texas
+TX_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="TX",-1])
+g.TX = inbreedR::g2_microsats(TX_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[6,2]=round(g.TX$g2,2)
+g2.data[6,3]=round(g.TX$p_val,2)
+
+# uganda
+UGANDA_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="UGANDA",-1])
+g.UGANDA = inbreedR::g2_microsats(UGANDA_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[7,2]=round(g.UGANDA$g2,2)
+g2.data[7,3]=round(g.UGANDA$p_val,2)
+
+#uruguay
+URU_inbreedR = inbreedR::convert_raw(neochetina_inbreedR[neochetina_inbreedR$pop=="URUGUAY",-1])
+g.URUGUAY = inbreedR::g2_microsats(URU_inbreedR, nperm = 1000, nboot = 1000, verbose = F)
+g2.data[8,2]=round(g.URUGUAY$g2,2)
+g2.data[8,3]=round(g.URUGUAY$p_val,2)
+
+g2.data = as.data.frame(g2.data) ;g2.data
+
+```
+## FST and Jost's D values <a name = "fst"></a>
+
+Let's get the pairwise FST and Jost's D values, as reported in Table 3 of the Hopper paper. We'll use the PopGenReport package.
+
+```{r}
+# First, we need to convert the original neochetina_b data into a genind object using the genclone2genind() function:
+convert_neo = poppr::genclone2genind(neochetina_b)
+# pairwise FST values:
+fst_vals = pairwise.fstb(convert_neo)
+# round them off to two decimal places
+fst_vals = round(fst_vals,2) ;fst_vals
+
+# Jost's D:
+# this creates a folder in the location specified by path.pgr, with all the results, saved in a folder called "results"
+jostsD = popgenreport(convert_neo, mk.counts = F, mk.differ.stats = T, mk.pdf = F, path.pgr="~/CBC_tuts/Tutorial_4")
+
+```
+
+## Linkage Disequilibrium (genepop) <a name = "LDgenepop"></a>
+
+Now let's have a look at Linkage Disequilibrium again, using the genepop package. The **LD.txt** file produced here is in the Tutorial 4 folder.
+
+```{r}
+# we'll read in the file that was converted using the writeGenPop function again
+# this writes out a results .txt file in the same folder
+test_LD("C:/Users/s1000334/Documents/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outputFile = "LD.txt", settingsFile = "", dememorization = 10000, batches = 100, iterations = 5000,  verbose = interactive())
+
+```
+
+These results correspond with the supplementary data (Appendix 1, Table S3) in the Hopper paper, where only one pairwise difference was significant for the *N. bruchi* markers (Nb27 and Nb26; Chi-square >91.293022, df = 16, p <1.44e-12). 
+
+## Linear Mixed Models for genetic diversity <a name = "lmm"></a>
+
+The final part of this tut will look at the comparisons of allelic richness and expected heterozygosity across populations using linear mixed models.
+Page 779 of the Hopper paper states:
+
+> "To compare genetic diversity among the introduced and native populations, we tested for the effects of population (collection site) on genetic diversity by fitting linear mixed models (LMM) with the lmer function in the lme4 package (Bates, Maechler, Bolker, & Walker, 2015). Implementing an LMM accounts for the variability of the microsatellite loci by modeling locus as a random effect, and collection site [population] as a fixed effect with allelic richness or expected heterozygosity as the response variables in separate models."
+
+
+Let's reproduce that by extracting the allelic richness and expected heterozygosity results from the **div_basic_stats** object we created earlier using the divBasic() function in the diveRsity package. We'll use the **nlme** package, which does exactly the same thing as lme4; it just has a slighlty different format for arguments.
+
+```{r}
+# extract allele richness data
+allele_richness_neo_b = div_basic_stats$Allelic_richness
+allele_richness_neo_b = allele_richness_neo_b[-9,] # remove the "overall" row
+allele_richness_neo_b = cbind(marker = rownames(allele_richness_neo_b), allele_richness_neo_b) # make a column for marker names
+allele_richness_neo_b = as.data.frame(allele_richness_neo_b) # make sure it's a data frame object
+allele_richness_neo_b = tidyr::gather(allele_richness_neo_b, key = "Pop", value = "Allelic_richness", -marker) # use the gather function in the tidyr package to reorganise data so that you can model it
+str(allele_richness_neo_b) # allelic richness is a character class at the moment
+allele_richness_neo_b$Allelic_richness = as.numeric(allele_richness_neo_b$Allelic_richness) # change it to numeric
+# create factors for marker and population:
+ssr.marker = as.factor(allele_richness_neo_b$marker)
+ssr.pop = as.factor(allele_richness_neo_b$Pop)
+
+# Create Linear Mixed Models:
+#----------------------------
+
+# model first without any variance structure for the response variable:
+# allelic richness as the response and population as the fixed variables, and marker as the random effect:
+mod1 = nlme::lme(Allelic_richness~ssr.pop, random = ~1|ssr.marker, data = allele_richness_neo_b)
+plot(mod1, pch=16, main="Allelic richness ~ Population, \nwith no variance structure.") # the residuals seem to be increasing as the fitted values increase, and so we'll create another model where we apply a different variance structure to each population.
+Anova(mod1)
+
+# give a variance structure to each population using the varIdent() function:
+varstruc <- varIdent(form= ~ 1|ssr.pop)
+mod2 = lme(Allelic_richness ~ ssr.pop, random = ~1 | ssr.marker, weights = varstruc, data = allele_richness_neo_b)
+plot(mod2, pch=16, main="Allelic richness ~ Population, with a unique \nvariance structure for each population") # these residuals look better
+Anova(mod2) # Hopper reported Chi^2 of 11.03, df = 7, and p = 0.14
+
+anova(mod1, mod2) # comparing the two models, the second one with the variance structure is significantly better (smaller AIC and larger log likelihood)
+```
+
+Let's do the same for expected heterozygosities:
+
+```{r}
+# extract expected heterozygosity data
+heterozyg_neo_b = div_basic_stats$He
+heterozyg_neo_b = heterozyg_neo_b[-9,] # remove the "overall" row
+heterozyg_neo_b = cbind(marker = rownames(heterozyg_neo_b), heterozyg_neo_b) # make a column for marker names
+heterozyg_neo_b = as.data.frame(heterozyg_neo_b) # make sure it's a data frame object
+heterozyg_neo_b = tidyr::gather(heterozyg_neo_b, key = "Pop", value = "Allelic_richness", -marker) # use the gather function in the tidyr package to reorganise data so that you can model it
+str(heterozyg_neo_b) # currently a character class
+heterozyg_neo_b$He = as.numeric(heterozyg_neo_b$Allelic_richness) # change it to numeric
+# create factors for marker and population:
+ssr.marker = as.factor(heterozyg_neo_b$marker)
+ssr.pop = as.factor(heterozyg_neo_b$Pop)
+
+# Create Linear Mixed Models:
+#----------------------------
+
+# model first without any variance structure
+mod3 = lme(He ~ ssr.pop, random = ~1 | ssr.marker, data = heterozyg_neo_b)
+plot(mod3, pch=16, main="Heterozygosity ~ Population")
+Anova(mod3) # Hopper reported Chi^2 of 6.89, df = 7, p = 0.44
+
+# experiment with a variance structure to each population:
+varstruc1 <- varIdent(form= ~ 1|ssr.pop)
+mod4 = lme(He ~ ssr.pop, random = ~1 | ssr.marker, weights = varstruc1, data = heterozyg_neo_b)
+plot(mod4, pch=16, main="Heterozygosity ~ Population with a unique \nvariance structure for each population")
+Anova(mod4)
+
+anova(mod3, mod4) # not a significant difference between models: variance structure not important here
+```
+
+## The next tut will have a look at processing ISSR data :smiley:

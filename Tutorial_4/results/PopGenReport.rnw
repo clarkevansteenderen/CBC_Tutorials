@@ -1,0 +1,290 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage{lscape}
+\usepackage[section]{placeins}
+\usepackage{rotating}
+\usepackage[margin=1.0in]{geometry}
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
+\begin{document}
+
+\title{A Population Genetic Report}
+
+<<echo=FALSE,results='hide'>>=
+ip <- installed.packages()
+ver <- ip[which(ip[,1]=="PopGenReport"),"Version"]
+@
+<<echo=FALSE, results='asis'>>=
+cat(paste("\\subtitle {using PopGenReport Version ",ver,"}\n"))
+@
+\author{Adamack \& Gruber}
+\maketitle
+
+\begin{itemize}
+  \item Adamack, A. T., Gruber, B. (2014), PopGenReport: simplifying basic population genetic analyses in R. \emph{Methods in Ecology and Evolution}, 5: 384-387. \href{http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12158/full}{doi: 10.1111/2041-210X.12158}.
+  \item Gruber, B. and Adamack, A. T. (2015), landgenreport: a new r function to simplify landscape genetic analysis using resistance surface layers. \emph{Molecular Ecology Resources}, 15: 1172-1178. \href{http://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12381/full}{doi: 10.1111/1755-0998.12381}.
+\end{itemize}
+
+
+%<<echo=FALSE, results='asis'>>=
+%rref <- citation("PopGenReport")
+%print(rref[1], style="latex")
+%@
+  
+%<<echo=FALSE, results='asis'>>=
+%print(rref[2], style="latex")
+%@
+
+\tableofcontents
+\newpage
+
+<<echo=FALSE,results='hide', message=FALSE>>=
+suppressPackageStartupMessages(library(RgoogleMaps))
+suppressPackageStartupMessages(library(adegenet))
+suppressPackageStartupMessages(library(ade4))
+suppressPackageStartupMessages(library(pegas))
+suppressPackageStartupMessages(library(genetics))
+suppressPackageStartupMessages(library(gap))
+suppressPackageStartupMessages(library(lattice))
+suppressPackageStartupMessages(library(calibrate))
+suppressPackageStartupMessages(library(xtable))
+suppressPackageStartupMessages(library(plyr))
+suppressPackageStartupMessages(library(mmod))
+suppressPackageStartupMessages(library(dismo))
+suppressPackageStartupMessages(library(R.utils))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(reshape))
+suppressPackageStartupMessages(library(gdistance))
+suppressPackageStartupMessages(library(vegan))
+suppressPackageStartupMessages(library(sp))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(raster))
+suppressPackageStartupMessages(library(GGally))
+suppressPackageStartupMessages(library(hierfstat))
+suppressPackageStartupMessages(library(data.table))
+options(width = 80)
+
+#global functions and parameters....
+brtab <- function(mat,capt,rown, width=9)
+{
+
+n.entry<- dim(t(mat))[2]
+tab <- t(mat)
+pta <- matrix(NA,ncol=min(width,n.entry), nrow=2*ceiling(n.entry/width))
+for (i in 1:n.entry)
+{
+pta[2*(floor((i-1)/width)+1),((i-1) %% width)+1] <- tab[i]
+pta[2*(floor((i-1)/width)+1)-1,((i-1) %% width)+1] <- colnames(tab)[i]
+}
+
+
+pta <- cbind(rep(rown,ceiling(n.entry/width)),pta)
+
+
+print(xtable(pta,  cap=capt), add.to.row=list(list(seq(1,2*ceiling(n.entry/width),2)),"\\rowcolor[gray]{0.9} "), include.rownames=FALSE, include.colnames=FALSE, hline.after=c(0,nrow(pta)))
+}
+
+#long table break
+breaktab <- function(tab, cap_first, cap_cont)
+{
+num_tables<-ceiling(dim(tab)[2]/8)
+for(i in 1:num_tables){
+  if(i==1) {
+    tempcap<-cap_first
+  } else if (i>1) {
+    tempcap<-cap_cont
+  }
+  firstcol<-1+(8*(i-1))
+  lastcol<-i*8
+  if(lastcol>dim(tab)[2]) lastcol<-dim(tab)[2]
+  tempdata2<-as.matrix(tab[,firstcol:lastcol])
+  if((lastcol-firstcol)==0) colnames(tempdata2)<-colnames(tab)[dim(tab)[2]]
+  tab2<-xtable(tempdata2,cap=tempcap, digits=3)
+  print(tab2,include.rownames=TRUE, ,add.to.row=list(list(seq(1,nrow(tab2),2)),"\\rowcolor[gray]{0.9} ")) 
+}
+}
+
+
+#initial calculations
+sumcats<-summary(cats)
+samplocnum<-sumcats$n.by.pop
+filename<-cats@other$filename
+allresults<-list()
+
+
+#figure parameters....
+fig.path <- paste(cats@other$filename,"-",sep="")
+dev <- c('pdf', 'png','svg')
+dpi <- 300
+@
+
+
+\section{Hs and Ht based population differentiation statistics}
+
+<<echo=FALSE, results='hide'>>=
+# fixed error in harmonic mean due to low sample size!!!!
+# pgrharmonic_mean<-    function (x) 
+# {
+#     if (sum(is.na(x)>0)) return(NA) else
+#     {
+#     if (!all(x >= 0)) {
+#         return(NA)
+#     }
+#     return(1/mean(1/x))
+#     }
+# }
+#  reassignInPackage("harmonic_mean", pkgName="mmod", pgrharmonic_mean)
+
+differentiate<-diff_stats(cats)
+difftitle1<-"Hs and Ht based estimates of differentiation: Gst, Gst and Dest for each locus"
+difftitle2<-"Hs and Ht based global estimates of differentiation: Gst, Gst and Dest for each locus"
+diffglobmat<-matrix(NA,nrow=1,ncol=length(differentiate$global))
+diffglobmat[1,]<-differentiate$global
+colnames(diffglobmat)<-names(differentiate$global)
+diffbylocus<-xtable(differentiate$per.locus, cap=difftitle1, digits=3)
+diffglobal<-xtable(diffglobmat, cap=difftitle2, digits=3)
+write.csv(differentiate$per.locus, paste(cats@other$filename,"-differentiate_by_loc.csv", sep=""), row.names=TRUE)
+write.csv(diffglobmat, paste(cats@other$filename,"-differentiate_global.csv", sep=""), row.names=TRUE)
+@
+
+<<echo=FALSE,results='asis'>>=
+print(diffbylocus,include.rownames=TRUE, ,add.to.row=list(list(seq(1,nrow(differentiate$per.locus),2)),"\\rowcolor[gray]{0.9} "))
+print(diffglobal,include.rownames=FALSE, ,add.to.row=list(list(seq(1,nrow(diffglobmat),2)),"\\rowcolor[gray]{0.9} "))
+@
+
+<<echo=FALSE,results='hide'>>=
+
+
+pairwise_D2 <- 
+function (x, linearized = FALSE) 
+{
+    pops <- seppop(x)
+    n.pops <- length(pops)
+    allP <- utils::combn(1:n.pops, 2)
+    pair <- function(index.a, index.b) {
+        a <- pops[[index.a]]
+        b <- pops[[index.b]]
+        temp <- repool(a, b)
+        return(D_Jost(temp)$global.het)
+    }
+    res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
+        allP[, i][2]))
+    attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
+        Labels = popNames(x), Size = n.pops)
+    if (linearized) {
+        return(res/(1 - res))
+    }
+    else (return(res))
+}
+
+pairwise_Gst_Hedrick2 <-
+function (x, linearized = FALSE) 
+{
+    pops <- seppop(x)
+    n.pops <- length(pops)
+    allP <- utils::combn(1:n.pops, 2)
+    pair <- function(index.a, index.b) {
+        a <- pops[[index.a]]
+        b <- pops[[index.b]]
+        temp <- repool(a, b)
+        return(Gst_Hedrick(temp)$global)
+    }
+    res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
+        allP[, i][2]))
+    attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
+        Labels = popNames(x), Size = n.pops)
+    if (linearized) {
+        return(res/(1 - res))
+    }
+    return(res)
+}
+
+pairwise_Gst_Nei2 <-
+function (x, linearized = FALSE) 
+{
+    pops <- seppop(x)
+    n.pops <- length(pops)
+    allP <- utils::combn(1:n.pops, 2)
+    pair <- function(index.a, index.b) {
+        a <- pops[[index.a]]
+        b <- pops[[index.b]]
+        temp <- repool(a, b)
+        return(Gst_Nei(temp)$global)
+    }
+    res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
+        allP[, i][2]))
+    attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
+        Labels = popNames(x), Size = n.pops)
+    if (linearized) {
+        return(res/(1 - res))
+    }
+    return(res)
+}
+
+if (length(levels(cats@pop))>2){
+  pairD<-pairwise_D2(cats)
+  pairDmat<-as.matrix(pairD)
+  pairDmat[upper.tri(pairDmat,diag=TRUE)]<-NA
+  colnames(pairDmat)<-popNames(cats)
+  rownames(pairDmat)<-popNames(cats)
+ # pairDmat<-pairDmat[-1,]
+
+  pairGstH<-pairwise_Gst_Hedrick2(cats)
+  pairGstHmat<-as.matrix(pairGstH)
+  pairGstHmat[upper.tri(pairGstHmat,diag=TRUE)]<-NA
+  colnames(pairGstHmat)<-popNames(cats)
+  rownames(pairGstHmat)<-popNames(cats)
+ # pairGstHmat<-pairGstHmat[-1,]
+
+
+  pairGstN<-pairwise_Gst_Nei2(cats)
+  pairGstNmat<-as.matrix(pairGstN)
+  pairGstNmat[upper.tri(pairGstNmat,diag=TRUE)]<-NA
+  colnames(pairGstNmat)<-popNames(cats)
+  rownames(pairGstNmat)<-popNames(cats)
+ # pairGstNmat<-pairGstNmat[-1,]
+
+  pairdiff1<-"mmod Jost's D pairwise"
+  pairdiff2<-"Pairwise Gst - Hedrick"
+  pairdiff3<-"Pairwise Gst - Nei"
+
+  pairDtab<-xtable(pairDmat, cap=pairdiff1, digits=3)
+  pairGstHtab<-xtable(pairGstHmat, cap=pairdiff2, digits=3)
+  pairGstNtab<-xtable(pairGstNmat, cap=pairdiff3, digits=3)
+  write.csv(pairDmat, paste(cats@other$filename,"-pairwise_JostD.csv", sep=""), row.names=TRUE)
+  write.csv(pairGstHmat, paste(cats@other$filename,"-pairwise_Gst_Hedricks.csv", sep=""), row.names=TRUE)
+  write.csv(pairGstNmat, paste(cats@other$filename,"-pairwise_Gst_Nei.csv", sep=""), row.names=TRUE)
+}
+@
+
+
+<<echo=FALSE,results='asis'>>=
+if (length(levels(cats@pop))>2){
+
+if (dim(pairDmat)[1]<13)   print(pairDtab,include.rownames=TRUE)  else
+  print(pairDtab,include.rownames=TRUE, floating.environment='sidewaystable', scalebox=max(1-(dim(pairDmat)[1]-15)/50,0.2))
+
+if (dim(pairGstHmat)[1]<13)   print(pairGstHtab,include.rownames=TRUE)  else
+  print(pairGstHtab,include.rownames=TRUE, floating.environment='sidewaystable', scalebox=max(1-(dim(pairGstHmat)[1]-15)/50,0.2))
+
+if (dim(pairGstNmat)[1]<13)   print(pairGstNtab,include.rownames=TRUE)  else
+  print(pairGstNtab,include.rownames=TRUE, floating.environment='sidewaystable', scalebox=max(1-(dim(pairGstNmat)[1]-15)/50,0.2))
+  
+#  print(pairDtab,include.rownames=TRUE)
+ # print(pairGstHtab,include.rownames=TRUE)
+ # print(pairGstNtab,include.rownames=TRUE)
+}
+@
+
+
+<<echo=FALSE, results='hide'>>=
+if (length(levels(cats@pop))>2){
+allresults$differ.stats<-list(HsHt=differentiate,pairwise.D=pairDmat, pairwise.GstH=pairGstH, pairwise.GstN=pairGstN)
+}
+@
+
+\FloatBarrier
+\end{document}
