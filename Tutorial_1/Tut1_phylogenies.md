@@ -352,7 +352,7 @@ wings/wingless, etc.), or continuous data for each individual in your
 phylogeny that you want to include in the graphic. You can do this using
 the gheatmap() function in the ggtree package.
 
-We will first read in two made-up .csv files; 1)
+We will first read in two made-up .csv files in the Data folder; 1)
 **primates\_binary\_traits.csv** with presence/absence data for six
 variables (X1 to X6), and 2) **primates\_continuous.csv** with randomly
 generated continuous data for four variables (X1 to X4).
