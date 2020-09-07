@@ -48,9 +48,7 @@ AliView and press ctrl + v to paste.
 For this tutorial, we’ll use 16S rRNA sequences obtained from seven
 different bacterial species, taken from
 [here](http://evomics.org/learning/phylogenetics/mrbayes/). These files
-are in the **Tutorial 2/MrBayes** folder, saved as 16S.fas and 16S.nex.
-Convert the aligned FASTA file to NEXUS format using
-[EMBOSS](https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/).
+are in the **Tutorial 2/MrBayes** folder, saved as 16S.fas.
 
 ### Find the optimal evolutionary model using jModelTest
 
@@ -60,8 +58,7 @@ parameters as is –\> Save and run task. Upon completion, select
 ‘Output’, and from the list of files, click to view the **STDOUT**
 file. Scroll to the **BAYESIAN INFORMATION CRITERION (BIC)** section
 (:bulb: ctrl + f and type Bayesian to get there quickly). We’ll use this
-information to set up a Bayesian block in the Nexus file we just
-converted.
+information to set up a Bayesian block in a Nexus file.
 
 **This is the output from jModelTest:**
 
@@ -84,8 +81,9 @@ R(f) \[GT\] = 1.0000
 gamma shape = 0.4520
 
 > We need to incorporate this into the template for a MrBayes block
-> below. The sumt and sump burnin values discard the first 25% of trees
-> created (ngen/samplefreq x 0.25. We can check whether the number of
+> below.  
+> The sumt and sump burnin values discard the first 25% of trees created
+> (ngen/samplefreq x 0.25). We can check whether the number of
 > generations (ngen) was sufficient after the run has completed using
 > Tracer. If you’re working with mitochondrial DNA from invertebrates,
 > set **code =metmt**, for vertebrate mtDNA, set it to **code=vertmt**,
@@ -162,8 +160,10 @@ sumt relburnin=yes burninfrac=0.25;
 sump relburnin=yes burninfrac=0.25;  
 end;
 
-> Now you can add this block to the aligned sequences in the 16S.nex
-> file.
+> Convert the aligned FASTA file to NEXUS format using
+> [EMBOSS](https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/). Now you can
+> add the completed MrBayes block to this NEXUS file (the final file is
+> available in the **MrBayes** folder, saved as **16S.nex**).
 
 ## Run MrBayes <a name = "mrbayes"></a>
 
