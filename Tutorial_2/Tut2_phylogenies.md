@@ -1,4 +1,4 @@
-CBC Phylogenetics Tutorial 2
+CBC Phylogenetics Tutorial 2: an introduction to MrBayes
 ================
 Clarke van Steenderen
 Last updated 03/09/2020
@@ -125,11 +125,11 @@ end;
   - Model + I –\> rates = propinv
   - Model + I + G –\> rates = invgamma
   - ngammacat usually stays as 4  
-  - Only one outgroup sequence name can be indicated  
+  - Only one outgroup sequence name can be set
   - “revmatpr” refers to the 6 substitution rates, if applicable.
     (A\<-\>C, A\<-\>G, A\<-\>T, C\<-\>G, C\<-\>T, and G\<-\>T)  
-  - statefreqpr = dirichlet(x, y, z, a), where you include the character
-    state frequencies of each base (A, C, G, and T)  
+  - “statefreqpr” refers to the frequencies of each base (A, C, G, and
+    T) in the alignment
   - shapepr = fixed(gamma value)  
   - If there is a kappa value, then include tratiopr = fixed(kappa
     value)  
