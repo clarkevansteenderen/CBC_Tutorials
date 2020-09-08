@@ -29,7 +29,7 @@ begin mrbayes;
  set autoclose=yes nowarn=yes;  
  lset nst= 6 rates= gamma ngammacat=4 code=universal;  
  outgroup Clostridium_botulinum_A_str_ATCC_3502;  
- prset revmatpr=dirichlet(0.5943, 1.4398, 1.0000, 0.5943, 3.0841, 1.0000) statefreqpr=dirichlet(0.2516, 0.2276, 0.3115, 0.2093) shapepr=fixed(0.4520); 
+ prset revmatpr=fixed(0.5943, 1.4398, 1.0000, 0.5943, 3.0841, 1.0000) statefreqpr=fixed(0.2516, 0.2276, 0.3115, 0.2093) shapepr=fixed(0.4520); 
  mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nruns=2 nchains=4 savebrlens=yes starttree=random;   
  sumt relburnin=yes burninfrac=0.25;  
  sump relburnin=yes burninfrac=0.25;   
