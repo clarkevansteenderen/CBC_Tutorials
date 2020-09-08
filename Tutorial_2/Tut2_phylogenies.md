@@ -97,7 +97,7 @@ begin mrbayes;
 set autoclose=yes nowarn=yes;  
 lset nst= rates= ngammacat=4 code=;  
 outgroup ;  
-prset revmatpr=dirichlet(six values) statefreqpr=dirichlet(four values)
+prset revmatpr=fixed(six values) statefreqpr=fixed(four values)
 shapepr=fixed(gamma shape) pinvarpr = fixed(pinvar) tratiopr =
 fixed(kappa value);  
 mcmc ngen= printfreq=1000 samplefreq= nruns= nchains= savebrlens=yes
@@ -154,8 +154,8 @@ set autoclose=yes nowarn=yes;
 lset nst=**6** rates=**gamma** ngammacat=4 code=**universal**;  
 outgroup **Clostridium\_botulinum\_A\_str\_ATCC\_3502**;  
 prset
-revmatpr=dirichlet(**0.5943**,**1.4398**,**1.0000**,**0.5943**,**3.0841**,**1.0000**)
-statefreqpr=dirichlet(**0.2516**,**0.2276**,**0.3115**,**0.2093**)
+revmatpr=fixed(**0.5943**,**1.4398**,**1.0000**,**0.5943**,**3.0841**,**1.0000**)
+statefreqpr=fixed(**0.2516**,**0.2276**,**0.3115**,**0.2093**)
 shapepr=fixed(**0.4520**);  
 mcmc ngen=**10000** printfreq=1000 samplefreq=**100** nruns=**2**
 nchains=**4** savebrlens=yes starttree=random;  
