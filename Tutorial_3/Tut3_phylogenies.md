@@ -234,7 +234,7 @@ specifications, refer to Table 1 in this
 paper (for quick reference, see the **jModelTest\_options.xls** file).
 
 Leave all the settings exactly as they are, and only change the outgroup
-parameter, and the model blocks. Keep outgroups together in your nexus
+parameter, and the model blocks. Keep outgroups together in your NEXUS
 file, so that you can refer to them as, for example, outgroup = 1-5. The
 outgroups are set by referring to their position in the data (sequence
 numbers 1 to 5), not by names. Here we’re setting
@@ -286,7 +286,10 @@ datatype = nucleotide
 :exclamation: Square brackets in a nexus file for MrBayes are not read,
 but in a .conf file, they are. Leave \[model1\], \[model2\], and so on
 exactly as they are; do not change the model names. Set bootstrapreps to
-1 in the conf file.
+1 in the conf file.  
+Be sure to have each model block listed in the same order as they appear
+in the aligned NEXUS file. In this example, it’s 5S \[model1\], 16S
+\[model2\], and 23S \[model3\].
 
 Once you have uploaded the **bacteria.concat.garli.nex** file and the
 **bacteria.concat.conf\_file.conf** file to CIPRES and selected the
@@ -387,7 +390,49 @@ gridExtra::grid.arrange(garlitree2, iotree2, ncol=2) # the gridExtra package all
 If you want a ML phylogeny for just one gene, everything is done in
 exactly the same way, but you’ll only have the one model block in the
 .conf file, and you can delete the **begin sets** block under the
-sequences in the NEXUS file.
+sequences in the NEXUS file. Have a look in the **GARLI\_16S\_only**
+folder for the aligned NEXUS file and the .conf configuration file that
+you would use for this, as well as the outtree file that you will end up
+with.  
+*Clostridium\_botulinum\_A\_str\_Hall* is set as the outgroup again,
+which is the seventh sequence in the alignment, and 1000 bootstrap
+repetitions were run.
+
+After going through the process of converting the allBootTrees file to
+phylip format, getting a consensus tree (as explained in this tut), and
+saving the tree in NEXUS format in FigTree, let’s compare the ML 16S
+output to the MrBayes output from tutorial 2:
+
+``` r
+# MrBayes tree (20 million generations) from the previous tutorial (tut 2):
+
+bac.tree.20M = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_2/MrBayes/infile.nex.con_20M.tre") # read in the 20 million generation run
+
+bayes = bac.tree.20M %>% ggtree(., color = "black", layout = "rectangular", lwd=1.2) +
+  geom_tiplab(size=2.5, color="black", font = 4) +
+  geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=3, color="black", alpha=0, label.size = 0, nudge_x = -0.03, nudge_y = 0.15)  
+
+# the ML tree run in GARLI for just the 16S sequences, saved as a NEXUS file from FigTree:
+
+garli16S = treeio::read.nexus("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_3/GARLI_16S_only/GARLI_outree.nex")
+garli16S$edge.length # these are out of 1000 bootstrap repeats
+```
+
+    ##  [1] 1000  647 1000  489  927 1000 1000 1000 1000 1000 1000 1000
+
+``` r
+garli16S$edge.length = garli16S$edge.length/1000*100 # get these values as percentages
+
+
+ML =garli16S %>% ggtree(., color = "black", layout = "rectangular", lwd=1.2) +
+  geom_tiplab(size=2.5, color="black", font = 4) +
+  geom_label2(aes(subset=!isTip, label=round(branch.length,0)), size=3, color="black", alpha=0, label.size = 0, nudge_x = -18, nudge_y = 0.15)  
+
+# Compare the two phylogenies side by side:
+gridExtra::grid.arrange(bayes, ML, ncol=2, left = "MrBayes (Bayesian)", right = "GARLI (Maximum Likelihood)", top = "Phylogeny comparison")
+```
+
+![](FigsTut3/unnamed-chunk-3-1.png)<!-- -->
 
 > :books: Tutorial 4 will have a look at working with microsatellite
 > (SSR) data.
