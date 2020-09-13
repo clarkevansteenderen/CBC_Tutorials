@@ -211,13 +211,14 @@ assignplot(dapc.neo_b, cex = 0.6, pch=16)
 Zoom in on just the Australian samples :mag: 
 
 ```{r}
-assignplot(dapc.neo_b, cex = 0.8, only.grp = "AUSTRALIA", pch=16)
+assignplot(dapc.neo_b, cex.lab = 0.65, only.grp = "AUSTRALIA", pch=16)
 ```
 
-Look at sample **NBAU2**, for example. It was predefined as an Australian sample (blue cross), but it had a very high posterior probability of belonging to the SAE population. If we have a look again at the posterior probability values (using **dapc.neo_b$posterior**), you will see that this sample was assigned to the Australian group with a probability score of 0.0069, and to the SAE group with a value of 0.973:
+Look at sample **NBAU2**, for example. It was predefined as an Australian sample (blue dot), but it had a very high posterior probability of belonging to the SAE population. If we have a look again at the posterior probability values (using **dapc.neo_b$posterior**), you will see that this sample was assigned to the Australian group with a probability score of 0.0069, and to the SAE group with a value of 0.973:
 
 ```{r}
-dapc.neo_b$posterior[2,] # NBAU2 is the second sample. Use index numbers to access particular posterior probability values
+dapc.neo_b$posterior[2,] # NBAU2 is the second sample. Use index numbers to access particular posterior probability values, or the name of the sample:
+# dapc.neo_b$posterior["NBAU2",]
 ```
 
 Now zoom in on the Texas population :mag: 
