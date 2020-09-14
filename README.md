@@ -28,6 +28,8 @@ BioEdit is also widely used, but I prefer AliView as it can be used on multiple 
 
 * PopART http://popart.otago.ac.nz/downloads.shtml
 
+* Structure https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html 
+
 We'll go through using Inkscape later, for graphical editing https://inkscape.org/
 
 ## Useful online servers:
