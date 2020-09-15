@@ -25,7 +25,7 @@ knitr::opts_chunk$set(fig.path='FigsTut5/')
 3. [SplitsTree](#splitstree)
 
 STRUCTURE reads in .txt files, so save your Excel file as a tab delimited text file. Replace all missing data ("?") with an integer that doesn't appear elsewhere in the data; -9 is often used. 
-We will use some *Dactylopius opuntiae* (D.opuntiae_SA_structure.txt) and *Neocheinta bruchi* (hopper_neochetina_b.txt) ISSR and SSR data, respectively, in this tutorial.
+We will use some *Dactylopius opuntiae* ([D.opuntiae_SA_structure.txt](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/D.opuntiae_SA_structure.txt)) and *Neocheinta bruchi* ([hopper_neochetina_b.txt](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Neochetina_SSR/hopper_neochetina_b.txt)) ISSR and SSR data, respectively, in this tutorial.
 
 ## ISSR data (dominant) <a name = "issr"></a>
 
@@ -49,10 +49,11 @@ The table below shows the template of an input file for dominant marker data for
 * 5 = Mass rearing facility (MRF)
 * 6 = Wild Eastern Cape (EC)
 
+The Excel .csv file [D.opuntiae_SA_structure.csv](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/D.opuntiae_SA_structure.csv) was saved as a .txt file, and then read into STRUCTURE.
 
 #### To start a STRUCTURE analysis, follow these steps:   
 
-File --> New project --> Follow the project wizard to set the file directory to select the input file --> Input the **number of individuals** (check in the Excel file. In this example, there are 36 individuals) --> set **ploidy** to 1 (as ISSRs are dominant markers) --> check the **number of loci** in the Excel file (here there are 419) --> specify the integer used to signify **missing data** (here a -9) --> check the box indicating that there is a **row of marker names** --> check **"individual ID for each individual"** (this is the info in column 1) --> check **"putative population origin for each individual"** (integers in column 2 corresponding to where the sample was collected) 
+File --> New project --> Follow the project wizard to set the file directory to select the [*Dactylopius opuntiae* input .txt](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/D.opuntiae_SA_structure.txt) file --> Input the **number of individuals** (check in the Excel file. In this example, there are 36 individuals) --> set **ploidy** to 1 (as ISSRs are dominant markers) --> check the **number of loci** in the Excel file (here there are 419) --> specify the integer used to signify **missing data** (here a -9) --> check the box indicating that there is a **row of marker names** --> check **"individual ID for each individual"** (this is the info in column 1) --> check **"putative population origin for each individual"** (integers in column 2 corresponding to where the sample was collected) 
 
 Once the data has been successfully read into the program, click on **Parameter Set** --> **New** --> set **burnin** to 5000 and **Number of MCMC reps after burnin** to 2500 --> Under the **Ancestry Model** tab, ensure that the **Use Admixture Model** is selected. You would typically run this whole analysis twice: once where the **use sampling locations as prior** is selected ("supervised clustering"), and once where it is not ("unsupervised clustering"). Leave it unchecked for this run --> when asked to name the parameter set, use **5000,2500** (burnin,mcmc reps) with no space after the comma).
 
@@ -88,7 +89,7 @@ And labels could be:
 4 Namibia   
 5 Wild EC   
 
-These are stored as **colours.txt** and **names.txt** in the **Tutorial_6** folder. 
+These are stored as [**colours.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/colours.txt) and [**names.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/names.txt) in the **Tutorial_6/Dactylopius_ISSR** folder. 
 
 The output for **K = 2** and **K = 4** on CLUMPAK is: <br/> <br/>
 ----
@@ -104,6 +105,7 @@ The output for **K = 2** and **K = 4** on CLUMPAK is: <br/> <br/>
 
 Note the major and minor modes reported in the K = 4 output. We ran 10 repeats for each value of K, and so this is indicating that 6 out of the 10 produced the clustering pattern in the first diagram, and 4 of the 10 produced the second. These minor clustering possibilities may be biologically meaningful. For a more in-depth discussion, see the [Kopelman *et al.* (2016)](https://rosenberglab.stanford.edu/papers/KopelmanEtAl2015-MolEcolResources.pdf) paper. 
 
+
 ## SSR data (co-dominant) <a name = "ssr"></a>
 
 The table below shows the template for co-dominant data for STRUCTURE:   
@@ -116,7 +118,7 @@ The table below shows the template for co-dominant data for STRUCTURE:
 | Sample D | 3 | 255     | 255 | 270     | 270 |
 | Sample E | 3 | 255     | 250 | 275     | -9  |
 
-Edit the **hopper_neochetina_b.csv** file such it looks like the text file with the same name (in the **Tutorial 6/Neochetina_SSR** folder). Replace population names with integers to signify grouping. 
+Edit the [**hopper_neochetina_b.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Neochetina_SSR/hopper_neochetina_b.csv) file such it looks like the [text file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Neochetina_SSR/hopper_neochetina_b.txt) with the same name (in the **Tutorial 6/Neochetina_SSR** folder). Replace population names with integers to signify grouping. 
 
 > :bulb: SSR data input is the same as before, but because this is co-dominant (i.e. you can tell whether alleles are heterozygous or not), there are two columns for each locus. The *Neochetina* data contains 171 individuals and 8 loci. All the input parameters are the same as before, except that **ploidy** must be set to 2, and the **"“special format data: file stores data for individuals in a single line”** check box must be selected in the project wizard settings.
 
@@ -130,6 +132,8 @@ In the Hopper *et al.* (2018) data, the groups are:
 * 6 = SA Enseleni
 * 7 = Uganda
 * 8 = Uruguay
+
+The [.txt file for colours](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Neochetina_SSR/colours.txt), and the [.txt file for group names](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Neochetina_SSR/names.txt) is in the **Tutorial 6/Neochetina_SSR** folder.
 
 In supplementary data file appendix 5 of the Hopper paper, STRUCTURE was run with 1 million mcmc reps and 100 000 burnin; with K set from 1 to 10, with 10 repeats for each K value. 
 Just as a demonstration, we'll run this with 10 000 burnin and 5000 mcmc reps, with K set from 1 to 10, and 8 repeats for each value of K. We'll also set the threshold from 0.5 to 0.8.
@@ -212,10 +216,11 @@ end;
 --- 
 
 
-* Save a copy as a NEXUS file (.nex extension). This is saved as **dactylopius_splitstree.nex** in the **Dactylopius_ISSR** folder.
+* Save a copy as a NEXUS file (.nex extension). This is saved as [**dactylopius_splitstree.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_6/Dactylopius_ISSR/dactylopius_splitstree.nex) in the **Dactylopius_ISSR** folder.
 
 Now open SplitsTree --> File --> Open --> Select Files of type Nexus files --> Distances --> uncorrected p --> in the menu under the **Characters** tab, select **Jaccard** --> under the **Distances** tab, make sure that **NeighborNet** is selected --> Apply. 
 Use ctrl + = to increase the font size of sample names. To bootstrap data, go to Analysis --> Bootstrap --> set the number (here it was set to 500) --> to hide bootstrap values, go to View --> Format nodes and edges --> select the edge labels confidence box. The scale bar indicates 0.1 substitutions/site.
+The Jaccard Index is used, because it does not take the shared absence of bands/peaks into account (as it is not biologically meaningful) when calculating a distance matrix.
 
 To export, go to File --> Export image --> select .svg --> open in Inkscape --> edit and make it attractive!
 
