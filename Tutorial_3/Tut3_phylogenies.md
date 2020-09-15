@@ -402,7 +402,7 @@ plot(garlitree2)
 
 ``` r
 # compare the ML tree to the Bayesian:
-gridExtra::grid.arrange(garlitree2, iotree2, ncol=2) # the gridExtra package allows you to plot multiple graphics together
+gridExtra::grid.arrange(iotree2, garlitree2, ncol=2, left = "MrBayes (Bayesian)", right = "GARLI (Maximum Likelihood)", top = "Phylogeny comparison") # the gridExtra package allows you to plot multiple graphics together
 ```
 
 ![](FigsTut3/unnamed-chunk-2-3.png)<!-- -->

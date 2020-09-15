@@ -241,7 +241,7 @@ garlitree2 = rotate(garlitree2, 10)
 plot(garlitree2)
 
 # compare the ML tree to the Bayesian:
-gridExtra::grid.arrange(garlitree2, iotree2, ncol=2) # the gridExtra package allows you to plot multiple graphics together
+gridExtra::grid.arrange(iotree2, garlitree2, ncol=2, left = "MrBayes (Bayesian)", right = "GARLI (Maximum Likelihood)", top = "Phylogeny comparison") # the gridExtra package allows you to plot multiple graphics together
 
 # Sequence names are cut off if they are long. Instead of setting margins, it's easier to edit this in Inkscape
 
