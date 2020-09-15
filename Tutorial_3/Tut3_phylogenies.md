@@ -1,4 +1,5 @@
-CBC Phylogenetics Tutorial 3
+CBC Phylogenetics Tutorial 3: Concatenated Bayesian and Maximum
+Likelihood Phylogenies
 ================
 Clarke van Steenderen
 Last updated 03/09/2020
@@ -23,6 +24,8 @@ Last updated 03/09/2020
 4.  [View the ML tree using ggtree](#ggtreeML)
 
 ## Getting started <a name = "gettingstarted"></a>
+
+### Creating a concatenated gene NEXUS file
 
 We will use more bacterial sequences again for this tutorial. First, we
 need to upload the 5S.fas, 16S.fas, and 23S.fas aligned sequence files

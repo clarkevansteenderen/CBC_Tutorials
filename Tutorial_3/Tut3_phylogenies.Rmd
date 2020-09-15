@@ -1,5 +1,5 @@
 ---
-title: "CBC Phylogenetics Tutorial 3"
+title: "CBC Phylogenetics Tutorial 3: Concatenated Bayesian and Maximum Likelihood Phylogenies"
 author: "Clarke van Steenderen"
 date: "Last updated 03/09/2020"
 output: github_document
@@ -25,6 +25,7 @@ knitr::opts_chunk$set(fig.path='FigsTut3/') # this creates a folder called FigsT
 4. [View the ML tree using ggtree](#ggtreeML)
 
 ## Getting started <a name = "gettingstarted"></a>
+### Creating a concatenated gene NEXUS file
 
 We will use more bacterial sequences again for this tutorial.
 First, we need to upload the 5S.fas, 16S.fas, and 23S.fas aligned sequence files onto CIPRES. Following the instructions in Tutorial 2, we need to run jModelTest on each file to find the optimal evolutionary models for each gene alignment (we have already done this for 16S in Tut 2).
