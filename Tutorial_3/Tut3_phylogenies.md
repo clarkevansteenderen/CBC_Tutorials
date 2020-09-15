@@ -55,19 +55,20 @@ jModelTest for each gene.
 > gene block:
 
 begin mrbayes;  
-CHARSET GENE1=1-x;  
+<span style="color:blue">CHARSET GENE1=1-x;text</span>  
 CHARSET GENE2=x+1-y;  
 partition genes=2: GENE1, GENE2;  
 set partition = genes;  
 set autoclose=yes nowarn=yes;  
-lset applyto=(1) nst= rates= ngammacat=4 code=universal;  
+<span style="color:blue">lset applyto=(1) nst= rates= ngammacat=4
+code=universal;text</span>  
 lset applyto=(2) nst= rates= ngammacat=4 code=universal;  
 outgroup ;  
 unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all);  
-prset applyto=(1) revmatpr = fixed(6 values) statefreqpr = fixed(4
-values)  
-shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa
-value);  
+<span style="color:blue">prset applyto=(1) revmatpr = fixed(6 values)
+statefreqpr = fixed(4 values)text</span>  
+<span style="color:blue">shapepr = fixed() pinvarpr = fixed(pinvar)
+tratiopr = fixed(kappa value);text</span>  
 prset applyto=(2) revmatpr = fixed(6 values) statefreqpr = fixed(4
 values)  
 shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa

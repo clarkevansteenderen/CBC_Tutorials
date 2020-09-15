@@ -36,17 +36,17 @@ Have a look at the **optimal_models.txt** file in the **Aligned_FASTA_files** fo
 > The template below can be used for inserting the best models for each gene block:
 
 begin mrbayes;  
-CHARSET GENE1=1-x;  
+<span style="color:blue">CHARSET GENE1=1-x;text</span>     
 CHARSET GENE2=x+1-y;  
 partition genes=2: GENE1, GENE2;  
 set partition = genes;  
 set autoclose=yes nowarn=yes;  
-lset applyto=(1) nst= rates= ngammacat=4 code=universal;  
+<span style="color:blue">lset applyto=(1) nst= rates= ngammacat=4 code=universal;text</span>    
 lset applyto=(2) nst= rates= ngammacat=4 code=universal;  
 outgroup ;  
 unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all);  
-prset applyto=(1) revmatpr = fixed(6 values) statefreqpr = fixed(4 values)   
-shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa value);  
+<span style="color:blue">prset applyto=(1) revmatpr = fixed(6 values) statefreqpr = fixed(4 values)text</span>   
+<span style="color:blue">shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa value);text</span>     
 prset applyto=(2) revmatpr = fixed(6 values) statefreqpr = fixed(4 values)   
 shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa value);  
 link topology=(all) brlens=(all);  
@@ -54,6 +54,8 @@ mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nchains=4 savebrlens=yes start
 sumt relburnin=yes burninfrac=0.25   
 sump relburnin=yes burninfrac=0.25  
 end;   
+
+
 
 > We will use the summary information in the **optimal_models.text** file to fill out the template for three genes, and we'll set the run to 20 million generations with a sampling frequency of 1000.
 
