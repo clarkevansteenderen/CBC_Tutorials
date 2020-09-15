@@ -1,0 +1,22 @@
+Tue Sep 15 22:57:21 2020: Job 1600181772 started running.
+Tue Sep 15 22:57:21 2020: Job Parameters:
+Tue Sep 15 22:57:21 2020: Input file: 1600181772.zip
+Tue Sep 15 22:57:21 2020: Input type: STRUCTURE
+Tue Sep 15 22:57:21 2020: CLUMPP repeats: 2000
+Tue Sep 15 22:57:21 2020: CLUMPP search method: LargeKGreedy 
+Tue Sep 15 22:57:21 2020: MCL cluster size threshold: 0.1 (default)
+Tue Sep 15 22:57:21 2020: Extracting file: "1600181772.zip".
+Tue Sep 15 22:57:21 2020: Sorting input files by K
+Tue Sep 15 22:57:22 2020: Working on K=2
+Tue Sep 15 22:57:22 2020: Executing CLUMPP for K=2.
+Tue Sep 15 22:57:22 2020: Clustering K=2 with mcl.
+Tue Sep 15 22:57:22 2020: cutoff used: 0.96
+Tue Sep 15 22:57:22 2020: Executing CLUMPP for major cluster.
+Tue Sep 15 22:57:23 2020: Calculating major cluster LnProb mean and standard deviation.
+Tue Sep 15 22:57:23 2020: LnProb mean: -2603.4625
+Tue Sep 15 22:57:23 2020: LnProb standard deviation: 11.7104272826767
+Tue Sep 15 22:57:23 2020: Ordering clusters by size for K=2
+Tue Sep 15 22:57:23 2020: Calling distruct for K=2.MajorCluster
+Tue Sep 15 22:57:24 2020: Creating job summary PDF
+Tue Sep 15 22:57:24 2020: Creating job summary PDF for K=2
+Tue Sep 15 22:57:24 2020: Creating job zip file

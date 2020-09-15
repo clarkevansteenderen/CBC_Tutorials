@@ -1,0 +1,8 @@
+1 red
+2 color125
+3 yellow
+4 grey
+5 light_purple
+6 sea_green
+7 orange
+8 blue
