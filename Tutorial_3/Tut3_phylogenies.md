@@ -34,45 +34,51 @@ meanwhile, we can create a NEXUS file for each gene, using the
 (these .nex files are all in the **Aligned\_FASTA\_files** folder. Take
 note of the number of characters in each gene (5S = 108; 16S = 1377; 23S
 = 2746). You can then copy and paste each gene’s nexus block into one
-file (see file **bacteria.concat.nex**). Make sure that the order of the
-sequences remains exactly the same. Above each gene block, I like to put
-character information in square brackets (this will not be read by the
-program, it’s just for your own use). So for example, the 5S block
-starts with **\[5S (108) chars 1:108\]**, reminding me that it comprises
-108 characters, and in the model specifications, the model for this must
-be applied to characters 1 through to 108. Similarly, for 16S: **\[16S
-(1377) chars 109:1485\]**. In the model specifications, you want to
-apply certain settings to characters 109 to 1485 (108 + 1377). The same
-logic applies to the last gene block (23S). Be sure to set the **nchar**
-parameter at the top of the document to the full size of the data,
-i.e. 4231. Delete the three lines that follow the first “end;” (begin
-assumptions; options deftype=unord; end;) at the bottom of the document.
-Have a look at the **optimal\_models.txt** file in the
-**Aligned\_FASTA\_files** folder for a summary of the results of
-jModelTest for each gene.
+file (see the final
+[**bacteria.concat.mrbayes.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/MrBayes/bacteria.concat.mrbayes.nex)
+file). Make sure that the order of the sequences remains exactly the
+same. Above each gene block, I like to put character information in
+square brackets (this will not be read by the program, it’s just for
+your own use). So for example, the 5S block starts with **\[5S (108)
+chars 1:108\]**, reminding me that it comprises 108 characters, and in
+the model specifications, the model for this must be applied to
+characters 1 through to 108. Similarly, for 16S: **\[16S (1377) chars
+109:1485\]**. In the model specifications, you want to apply certain
+settings to characters 109 to 1485 (108 + 1377). The same logic applies
+to the last gene block (23S). Be sure to set the **nchar** parameter at
+the top of the document to the full size of the data, i.e. 4231. Delete
+the three lines that follow the first “end;” (begin assumptions; options
+deftype=unord; end;) at the bottom of the document. Have a look at the
+[**optimal\_models.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/Aligned_FASTA_files/optimal_models.txt)
+file in the **Aligned\_FASTA\_files** folder for a summary of the
+results of jModelTest for each gene.
 
 > The template below can be used for inserting the best models for each
-> gene block:
+> gene block. The 1-x and x+1-y means “Gene 1 spans from nucleotide 1 to
+> nucleotide x”, and “Gene2 spans from nucleotide x + 1 to y”,
+> respectively. Light blue highlighting shows the model parameters for
+> GENE1, and yellow for GENE2.
 
 begin mrbayes;  
-<span style="color:blue">CHARSET GENE1=1-x;text</span>  
-CHARSET GENE2=x+1-y;  
+<mark style="background-color: lightblue"> CHARSET GENE1=1-x; </mark>  
+<mark style="background-color: yellow"> CHARSET GENE2=x+1-y; </mark>  
 partition genes=2: GENE1, GENE2;  
 set partition = genes;  
 set autoclose=yes nowarn=yes;  
-<span style="color:blue">lset applyto=(1) nst= rates= ngammacat=4
-code=universal;text</span>  
-lset applyto=(2) nst= rates= ngammacat=4 code=universal;  
+<mark style="background-color: lightblue"> lset applyto=(1) nst= rates=
+ngammacat=4 code=universal; </mark>  
+<mark style="background-color: yellow"> lset applyto=(2) nst= rates=
+ngammacat=4 code=universal; </mark>  
 outgroup ;  
 unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all);  
-<span style="color:blue">prset applyto=(1) revmatpr = fixed(6 values)
-statefreqpr = fixed(4 values)text</span>  
-<span style="color:blue">shapepr = fixed() pinvarpr = fixed(pinvar)
-tratiopr = fixed(kappa value);text</span>  
-prset applyto=(2) revmatpr = fixed(6 values) statefreqpr = fixed(4
-values)  
-shapepr = fixed() pinvarpr = fixed(pinvar) tratiopr = fixed(kappa
-value);  
+<mark style="background-color: lightblue"> prset applyto=(1) revmatpr =
+fixed(6 values) statefreqpr = fixed(4 values) </mark>  
+<mark style="background-color: lightblue"> shapepr = fixed() pinvarpr =
+fixed(pinvar) tratiopr = fixed(kappa value); </mark>  
+<mark style="background-color: yellow"> prset applyto=(2) revmatpr =
+fixed(6 values) statefreqpr = fixed(4 values) </mark>  
+<mark style="background-color: yellow"> shapepr = fixed() pinvarpr =
+fixed(pinvar) tratiopr = fixed(kappa value); </mark>  
 link topology=(all) brlens=(all);  
 mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nchains=4
 savebrlens=yes starttree=random;  
@@ -80,31 +86,41 @@ sumt relburnin=yes burninfrac=0.25
 sump relburnin=yes burninfrac=0.25  
 end;
 
-> We will use the summary information in the **optimal\_models.text**
+> We will use the summary information in the **optimal\_models.txt**
 > file to fill out the template for three genes, and we’ll set the run
 > to 20 million generations with a sampling frequency of 1000.
 
 begin mrbayes;  
 \[Partition your data using CHARSET\]  
-CHARSET **5S=1-108**;  
-CHARSET **16S=109-1485**;  
-CHARSET **23S=1486-4231**;  
+<mark style="background-color: lightblue"> CHARSET **5S=1-108**;
+</mark>  
+<mark style="background-color: yellow"> CHARSET **16S=109-1485**;
+</mark>  
+<mark style="background-color: lightgreen"> CHARSET **23S=1486-4231**;
+</mark>  
 partition genes=**3: 5S,16S,23S**;  
 set partition = genes;  
 set autoclose=yes nowarn=yes;  
-lset applyto=(1) nst= 6 rates= propinv ngammacat=4 code=universal;  
-lset applyto=(2) nst= 6 rates= gamma ngammacat=4 code=universal; lset
-applyto=(3) nst= 6 rates= gamma ngammacat=4 code=universal; outgroup
-Clostridium\_botulinum\_A\_str\_Hall;  
+<mark style="background-color: lightblue"> lset applyto=(1) nst= 6
+rates= propinv ngammacat=4 code=universal; </mark>  
+<mark style="background-color: yellow"> lset applyto=(2) nst= 6 rates=
+gamma ngammacat=4 code=universal; </mark>  
+<mark style="background-color: lightgreen"> lset applyto=(3) nst= 6
+rates= gamma ngammacat=4 code=universal;</mark>  
+outgroup Clostridium\_botulinum\_A\_str\_Hall;  
 unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all);  
-prset applyto=(1) revmatpr=fixed(0.4215, 2.3291, 1.0000, 0.4215, 2.3291,
-1.0000) pinvarpr = fixed(0.1090);  
-prset applyto=(2) revmatpr=fixed(0.5943, 1.4398, 1.0000, 0.5943, 3.0841,
-1.0000) statefreqpr=fixed(0.2516, 0.2276, 0.3115, 0.2093)
-shapepr=fixed(0.4520);  
-prset applyto=(3) revmatpr=fixed(0.5639, 1.2359, 1.0000, 0.5639, 2.6979,
-1.0000) statefreqpr=fixed(0.2630, 0.2073, 0.3064, 0.2233)
-shapepr=fixed(0.5930); link topology=(all) brlens=(all);  
+<mark style="background-color: lightblue"> prset applyto=(1)
+revmatpr=fixed(0.4215, 2.3291, 1.0000, 0.4215, 2.3291, 1.0000) pinvarpr
+= fixed(0.1090); </mark>  
+<mark style="background-color: yellow"> prset applyto=(2)
+revmatpr=fixed(0.5943, 1.4398, 1.0000, 0.5943, 3.0841, 1.0000)
+statefreqpr=fixed(0.2516, 0.2276, 0.3115, 0.2093) shapepr=fixed(0.4520);
+</mark>  
+<mark style="background-color: lightgreen"> prset applyto=(3)
+revmatpr=fixed(0.5639, 1.2359, 1.0000, 0.5639, 2.6979, 1.0000)
+statefreqpr=fixed(0.2630, 0.2073, 0.3064, 0.2233) shapepr=fixed(0.5930);
+</mark>  
+link topology=(all) brlens=(all);  
 mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nchains=4
 savebrlens=yes starttree=random;  
 sumt relburnin=yes burninfrac=0.25;  
@@ -116,8 +132,9 @@ end;
 
 As outlined in Tutorial 2, you would open the two .p files (run1 and
 run2) from the analysis in Tracer to check for mcmc convergence (ESS
-values \> 200). We’ll now open the **concat\_20M.tre** (in the MrBayes
-folder) file in R and use ggtree to plot the phylogeny.
+values \> 200). We’ll now open the
+[**concat\_20M.tre**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/MrBayes/concat_20M.tre)
+(in the MrBayes folder) file in R and use ggtree to plot the phylogeny.
 
 ## Use ggtree <a name = "ggtree"></a>
 
@@ -217,13 +234,14 @@ CHARSET 23S=1486-4231;
 CHARPARTITION byPos = all:5S, all:16S, all:23S;  
 end;
 
-This file is availalbe in the **GARLI** folder as
-**bacteria.concat.garli.nex**. The files mentioned hereafter are all in
-this same folder.
+This file is available in the **GARLI** folder as
+[**bacteria.concat.garli.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI/bacteria.concat.garli.nex).
+The files mentioned hereafter are all in this same folder.
 
 Now we need to create a configuration file (.conf extension). Use the
-template saved as **bacteria.concat.conf\_file.conf**. This was gleaned
-from
+template saved as
+[**bacteria.concat.conf\_file.conf**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI/bacteria.concat.conf_file.conf).
+This was gleaned from
 [here](http://www.peter.unmack.net/molecular/programs/garli.instructions.html).
 The [GARLI configuration
 settings](https://molevol.mbl.edu/index.php/GARLI_Configuration_Settings)
@@ -232,7 +250,9 @@ FAQ](https://molevol.mbl.edu/index.php/Garli_FAQ#MODELTEST_told_me_to_use_model_
 pages are very useful. For help with setting the correct model
 specifications, refer to Table 1 in this
 [jModelTest](https://academic.oup.com/mbe/article/25/7/1253/1045159)
-paper (for quick reference, see the **jModelTest\_options.xls** file).
+paper (for quick reference, see the
+[**jModelTest\_options.xls**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI/jModelTest_options.xlsx)
+file).
 
 Leave all the settings exactly as they are, and only change the outgroup
 parameter, and the model blocks. Keep outgroups together in your NEXUS
@@ -306,7 +326,7 @@ task.
 Once the run has completed, scroll right to the bottom of the output
 results page, and save the **allBootTrees.tre** file. This is in the
 GARLI folder if you want to have a look
-(**bacteria.concat.allBootTrees**).
+([**bacteria.concat.allBootTrees.tre**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI/bacteria.concat.allBootTrees.tre)).
 
 > :bulb: To make things quicker, you can download the output straight
 > back into your current CIPRES data folder instead of downloading it
@@ -327,8 +347,8 @@ Download the **outtree** file.
 I first opened this file in FigTree to reroot it on
 *Clostridium\_botulinum\_A\_str\_Hall*. I then saved this as a NEXUS
 tree (File –\> Export trees)
-(**bacteria\_GARLI\_FIGTREE\_outtree.nex**). This file can now be opened
-in R.
+([**bacteria\_GARLI\_FIGTREE\_outtree.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI/bacteria_GARLI_FIGTREE_outtree.nex)).
+This file can now be opened in R.
 
 ## View the ML tree using ggtree <a name = "ggtreeML"></a>
 
