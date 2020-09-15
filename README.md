@@ -10,37 +10,38 @@ This is where you can find a variety of helpful tips and tricks for phylogenetic
 
 ## For phylogenetic tutorials, you need the following software:
 
-* Chromas (free version 2.6.6) http://technelysium.com.au/wp/chromas/
-
 * AliView http://ormbunkar.se/aliview/ or https://github.com/AliView/AliView
+
+* Chromas (free version 2.6.6) http://technelysium.com.au/wp/chromas/
 
 BioEdit is also widely used, but I prefer AliView as it can be used on multiple operating systems https://bioedit.software.informer.com/7.2/
 
+* FigTree https://github.com/rambaut/figtree/releases
+
 * Notepad++ https://notepad-plus-plus.org/downloads/
+
+* PopART http://popart.otago.ac.nz/downloads.shtml
 
 * R https://cran.r-project.org/bin/windows/base/ 
 
 * RStudio https://rstudio.com/products/rstudio/download/#download
 
-* FigTree https://github.com/rambaut/figtree/releases
-
-* Tracer https://github.com/beast-dev/tracer/releases
-
-* PopART http://popart.otago.ac.nz/downloads.shtml
+* SplitsTree https://splitstree4.software.informer.com/download/
 
 * Structure https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html 
 
-* SplitsTree https://splitstree4.software.informer.com/download/
+* Tracer https://github.com/beast-dev/tracer/releases
+
 
 We'll go through using Inkscape later, for graphical editing https://inkscape.org/
 
 ## Useful online servers:
 
-MAFFT (for multiple sequence alignment) https://mafft.cbrc.jp/alignment/software/
-
 CIPRES (for running various analyses on a server) http://www.phylo.org/
 
 EMBOSS seqret (for converting between file types, e.g. FASTA <-> NEXUS) https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/
+
+MAFFT (for multiple sequence alignment) https://mafft.cbrc.jp/alignment/software/
 
 ## :movie_camera: YouTube tutorials:
 ### Make your own R package:
