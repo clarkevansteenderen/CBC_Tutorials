@@ -89,6 +89,11 @@ sumt relburnin=yes burninfrac=0.25
 sump relburnin=yes burninfrac=0.25  
 end;
 
+The diagram below gives a graphical representation of how we’re laying
+out this NEXUS file, and partitioning genes: <br/> <br/>
+
+![](gene_partitioning.png) <br/> <br/>
+
 > We will use the summary information in the **optimal\_models.txt**
 > file to fill out the template for three genes, and we’ll set the run
 > to 20 million generations with a sampling frequency of 1000.
