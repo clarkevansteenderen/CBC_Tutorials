@@ -133,6 +133,10 @@ end;
 > :warning: Be very careful with commas and semi-colons. One incorrect
 > syntactical issue, and MrBayes will stop running and report an error.
 
+Upload this prepared NEXUS file to [CIPRES](http://www.phylo.org/), and
+create a task with “MrBayes on XSEDE” set as the tool. The rest of the
+instructions are the same as the previous tutorial.
+
 As outlined in Tutorial 2, you would open the two .p files (run1 and
 run2) from the analysis in Tracer to check for mcmc convergence (ESS
 values \> 200). We’ll now open the
