@@ -168,8 +168,8 @@ The model parameter template for a .conf file is:
 [model1]  
 numratecats =  
 ratehetmodel =   
-ratematrix = 
-invariantsites =  
+ratematrix =   
+invariantsites =    
 statefrequencies =   
 datatype = nucleotide  
 
@@ -191,7 +191,7 @@ The .conf settings would be:
 numratecats = 1  
 ratehetmodel = none  
 ratematrix = (0 1 2 0 1 2)  
-invariantsites = estimate  
+invariantsites = estimate    
 statefrequencies = equal  
 datatype = nucleotide   
 

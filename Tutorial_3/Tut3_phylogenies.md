@@ -279,7 +279,8 @@ The model parameter template for a .conf file is:
 \[model1\]  
 numratecats =  
 ratehetmodel =  
-ratematrix = invariantsites =  
+ratematrix =  
+invariantsites =  
 statefrequencies =  
 datatype = nucleotide
 
