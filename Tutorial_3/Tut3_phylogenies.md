@@ -211,6 +211,13 @@ iotree4
 
 ![](FigsTut3/unnamed-chunk-1-4.png)<!-- -->
 
+> :bulb: If you want to make sure that gene alignments can be
+> concatenated (i.e. their topologies are congruent), first create a
+> neighbour joining phylogeny for each individual gene in MEGA. Make
+> sure that the number of sequences, and the names are exactly the same
+> in both, and save each in **Newick** format. Upload these to the
+> [**ICONG**](http://max2.ese.u-psud.fr/icong/index.help.html) server.
+
 ## Prep for a Maximum Likelihood (ML) analysis <a name = "ML"></a>
 
 There are many programs that offer ML analyses, but I found GARLI to be

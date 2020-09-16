@@ -137,6 +137,8 @@ iotree4
 
 ```
 
+> :bulb: If you want to make sure that gene alignments can be concatenated (i.e. their topologies are congruent), first create a neighbour joining phylogeny for each individual gene in MEGA. Make sure that the number of sequences, and the names are exactly the same in both, and save each in **Newick** format. Upload these to the [**ICONG**](http://max2.ese.u-psud.fr/icong/index.help.html) server.
+
 ## Prep for a Maximum Likelihood (ML) analysis <a name = "ML"></a>
 
 There are many programs that offer ML analyses, but I found GARLI to be a great one, as it can handle mutliple genes that have been partitioned in a NEXUS file. Another possible program to experiment with is [IQTree](https://academic.oup.com/mbe/article/32/1/268/2925592). We'll use GARLI for now.
