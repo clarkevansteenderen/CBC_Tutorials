@@ -181,7 +181,7 @@ First, we need to create a NEXUS file for the data. Follow these steps:
 
 * Replace the -9 values with ?
 
-* Remove all the spaces between values by doing a find and replace: **Find:** \[ \\t\]+ **Replace:** leave blank
+* Remove all the spaces between values by doing a find and replace: **Find:** \[ \\t\]+ **Replace:** leave blank. Make sure that **Regular expression** is selected under **Search mode**
 
 * Replace spaces/tabs between the sample names and the string of 0s and 1s (make sure that this ends at the right place after the sample name!)
 
