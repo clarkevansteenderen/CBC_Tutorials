@@ -419,17 +419,22 @@ If you want a ML phylogeny for just one gene, everything is done in
 exactly the same way, but you’ll only have the one model block in the
 .conf file, and you can delete the **begin sets** block under the
 sequences in the NEXUS file. Have a look in the **GARLI\_16S\_only**
-folder for the aligned NEXUS file and the .conf configuration file that
-you would use for this, as well as the outtree file that you will end up
-with.  
+folder for the aligned NEXUS file
+([16S\_garli\_aligned\_seqs.nex](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI_16S_only/16S_garli_aligned_seqs.nex))
+and the .conf configuration file
+([16S\_garli\_conf\_file.conf](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI_16S_only/16S_garli_conf_file.conf))
+that you would use for this, as well as the outtree file
+([GARLI\_outtree](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI_16S_only/GARLI_outtree))
+that you will end up with.  
 *Clostridium\_botulinum\_A\_str\_Hall* is set as the outgroup again,
 which is the seventh sequence in the alignment, and 1000 bootstrap
 repetitions were run.
 
 After going through the process of converting the allBootTrees file to
 phylip format, getting a consensus tree (as explained in this tut), and
-saving the tree in NEXUS format in FigTree, let’s compare the ML 16S
-output to the MrBayes output from tutorial 2:
+saving the tree in NEXUS format in FigTree
+([GARLI\_outree.nex](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_3/GARLI_16S_only/GARLI_outree.nex)),
+let’s compare the ML 16S output to the MrBayes output from tutorial 2:
 
 ``` r
 # MrBayes tree (20 million generations) from the previous tutorial (tut 2):
