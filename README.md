@@ -28,7 +28,7 @@ BioEdit is also widely used, but I prefer AliView as it can be used on multiple 
 
 * SplitsTree https://splitstree4.software.informer.com/download/
 
-* Structure https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html 
+* STRUCTURE https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html 
 
 * Tracer https://github.com/beast-dev/tracer/releases
 
