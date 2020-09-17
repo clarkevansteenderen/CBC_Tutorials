@@ -710,5 +710,5 @@ above (supervised).
 > data is exactly the same, except that you need to set **ploidy** to 2
 > (as it is co-dominant), and select the option **“special format data:
 > file stores data for individuals in a single line”** in the data input
-> settings. Have a look at **Tutorial 6** for an example using
+> settings. Have a look at **Tutorial 4** for an example using
 > *Neochetina bruchi* data.

@@ -328,5 +328,5 @@ To compare the supervised and unsupervised runs for a particular K (we'll just d
 Open the [CLUMPAK](http://clumpak.tau.ac.il/) server, and go to the **Compare** tab. Upload both zipped folders you created, each containing the ClumppIndFile.output. The similarity score for the supervised and unsupervised run here is 0.9895 (99%). This means that even without providing the extra population information, grouping signal is very strong in this data. 
 Have a look at the three lower plots in the figure above (supervised).
 
-> :bulb: The process for running STRUCTURE with SSR (microsatelllite) data is exactly the same, except that you need to set **ploidy** to 2 (as it is co-dominant), and select the option **“special format data: file stores data for individuals in a single line”** in the data input settings. Have a look at **Tutorial 6** for an example using *Neochetina bruchi* data. 
+> :bulb: The process for running STRUCTURE with SSR (microsatelllite) data is exactly the same, except that you need to set **ploidy** to 2 (as it is co-dominant), and select the option **“special format data: file stores data for individuals in a single line”** in the data input settings. Have a look at **Tutorial 4** for an example using *Neochetina bruchi* data. 
 
