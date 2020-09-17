@@ -51,13 +51,13 @@ Download and install the GeneMarker trial 35-day .exe file (email
 download).
 
 Open data –\> Add –\> Select all the ISSR809 .fsa files in the
-**Tutorial\_5/ISSR\_electropherograms/ISSR809** folder –\> Run –\> Set
-the size standard (check which was used by the sequencing facility. It’s
-usually LIZ500, in which case you can set it to **GS500** here) –\> set
-analysis type to **AFLP** (like ISSRs, AFLPs are also dominant markers)
-–\> set **Min intensity** to 50 RFU (be quite permissive at this
-stage, as we’re just doing some basic filtering. More stringent
-parameters will be set later in RawGeno) –\> select **AFLP
+[**Tutorial\_5/ISSR\_electropherograms/ISSR809**](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_5/ISSR_electropherograms/ISSR809)
+folder –\> Run –\> Set the size standard (check which was used by the
+sequencing facility. It’s usually LIZ500, in which case you can set it
+to **GS500** here) –\> set analysis type to **AFLP** (like ISSRs, AFLPs
+are also dominant markers) –\> set **Min intensity** to 50 RFU (be quite
+permissive at this stage, as we’re just doing some basic filtering. More
+stringent parameters will be set later in RawGeno) –\> select **AFLP
 normalization**, and leave the blue box checked (blue = FAM dye, which
 have marked your peaks)
 
@@ -75,13 +75,20 @@ to be re-run:
 
 ![](VS153_Hof.png)
 
+Check each sample carefully, and delete the ones that did not work.
+
+> :pencil: Only use data for which both replicates worked. I’ve tried to
+> include only one primer, and then fill the missing one with ?, but it
+> doesn’t produce reliable output.
+
 If you go to **Applications** –\> **Overlay View**, you can select
 specific files to view together. Move the **2D slider** bar to adjust
 the spacing between samples. Move from left to right by right-clicking
 and dragging across the screen. Left click and drag a square over an
 area of interest to zoom in on it. You can start looking for
 characteristic peaks. For example, these are some *Dactylopius
-tomentosus* biotypes:
+tomentosus* biotypes where characterstic peaks are shown highlighted in
+blue:
 
 ![](tomentosus_compare.png)
 
@@ -94,19 +101,21 @@ asterisks in the **show when no allele call** –\> select the **columns**
 button, and move all the columns on the left to the selected list on the
 right (through \[a lot of\] trial and error, I found that not doing this
 gives an error when reading this table into RawGeno) –\> Save the output
-as a .txt file (**ISSR809\_AlleleReport.txt**).
+as a .txt file
+([**ISSR809\_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)).
 
 ### RawGeno <a name = "rawgeno"></a>
 
 Download the RawGeno v2.0-2 tar.gz file
 [here](https://sourceforge.net/projects/rawgeno/files/rawgeno/RawGeno%202.0-2/),
-or find it in this tutorial folder. The .zip folder doesn’t seem to work
-on R version 4. Follow the instructions on the page to install. I
-recommend saving the tar.gz file to the Desktop, and then setting the
-Desktop as the working directory in R (Session –\> set working directory
-–\> choose working directory –\> select the desktop. Alternatively, you
-can go to Tools –\> install packages –\> then select install from:
-package archive file –\> Install.
+or find it in this [tutorial
+folder](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno_2.0-2.tar.gz).
+The .zip folder doesn’t seem to work on R version 4. Follow the
+instructions on the page to install. I recommend saving the tar.gz file
+to the Desktop, and then setting the Desktop as the working directory in
+R (Session –\> set working directory –\> choose working directory –\>
+select the desktop). Alternatively, you can go to Tools –\> install
+packages –\> then select install from: package archive file –\> Install.
 
 Make sure that you have the **vegan** and **tkrplot** packages
 installed. Run RawGeno using:
@@ -116,9 +125,10 @@ require(vegan)
 RawGeno()
 
 Go to Files –\> Electroph. –\> PeakScanner, GeneMarker or Peakscan
-(\*.txt) –\> select the folder where the AlleleReport.txt file from
-GeneMarker is saved –\> insert file –\> keep the dye colour selected on
-Blue –\> continue
+(.txt) –\> select the folder where the
+[**ISSR809\_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)file
+from GeneMarker is saved –\> insert file –\> keep the dye colour
+selected on Blue –\> continue
 
 A green graph will appear, where you can discard samples with the
 highest and lowest numbers of peaks. Here, the highest was 132 peaks,
@@ -138,16 +148,18 @@ Fluorescence Bins to 100 –\> START
 Click on **Save** –\> Save/ export currently scored dataset –\> select
 **transposed binary table** –\> select the desired export directory –\>
 save. You will see a file called **BinaryDataT.txt** file written to the
-selected directory. Rename it so that you know it is for ISSR809.
+selected directory. Rename it so that you know it is for ISSR809
+([**DataBinaryT\_ISSR809.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.txt)).
 
 Open this file in Excel, and check that each replicate pair is together.
 Cut the first row, and paste it one cell to the right; such that the
 first locus number starts in the second column (column B). Save as a
-.csv file.
+.csv file
+([**DataBinaryT\_ISSR809.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.csv)).
 
 ### BinMat <a name = "binmat"></a>
 
-The next step is to consolidate your replicate pairs into one consensus
+The next step is to consolidate each replicate pair into one consensus
 read. For example, let’s say that we have this replicate pair:
 
 **SampleA\_rep1** 0 1 1 0  
@@ -163,21 +175,28 @@ The consensus would be:
 > (“?”). As the dataset can be really huge, doing this manually
 > would take ages, and will be very prone to errors.
 
-We will use the BinMat R Shiny application to do this automatically (or
-the BinMat package in R). BinMat is also available as an R package that
+We will use the BinMat R Shiny application to do this automatically.
+BinMat is also available as an [R
+package](https://cran.r-project.org/web/packages/BinMat/index.html) that
 can be downloaded from CRAN.
 
-Let’s use both methods (package and server GUI):
+Let’s use both methods (server GUI (graphical user interface) and R
+package):
 
 #### BinMat Shiny Server
 
 Open the [BinMat Shiny URL
 link](https://clarkevansteenderen.shinyapps.io/BINMAT/), and upload the
-**BinaryDataT\_ISSR809.csv** file. Click on **CONSOLIDATE MATRIX**, and
+[**DataBinaryT\_ISSR809.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.csv)
+file that we just got from RawGeno. Click on **CONSOLIDATE MATRIX**, and
 download the file once the message **“COMPLETE. READY FOR DOWNLOAD”**
-appears. Click on the **SUMMARY** and **ERROR RATES** tabs to get
-summary information. If you want to plot a UPGMA tree, download the
-consolidated matrix, and re-upload it in the **UPGMA TREE** tab.
+appears (see the
+[**ConsolidatedBinaryMatrix\_ISSR809\_Shiny.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/ConsolidatedBinaryMatrix_ISSR809_Shiny.csv)
+output file).
+
+Click on the **SUMMARY** and **ERROR RATES** tabs to get summary
+information. If you want to plot a UPGMA tree, download the consolidated
+matrix, and re-upload it in the **UPGMA TREE** tab.
 
 #### BinMat R package
 
@@ -193,9 +212,8 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
 pacman::p_load(BinMat)
 
 # read in the BinaryDataT_ISSR809.csv file:
-setwd("~/CBC_tuts/Tutorial_5/RawGeno output")
 
-issr809 = read.csv("DataBinaryT_ISSR809.csv")
+issr809 = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.csv")
 
 # check for any unwanted characters (other than zeroes and ones):
 BinMat::check.data(issr809)
@@ -247,7 +265,7 @@ BinMat::peaks.consolidated(issr809.cons)
     ## 10                 195
 
 ``` r
-# plot a quick UPGMA clustering tree with 20 bootstrap replicates (default):
+# plot a quick UPGMA clustering tree with 20 bootstrap replicates:
 BinMat::upgma(issr809.cons, lab_size = 0.7, bts = 20)
 ```
 
@@ -267,11 +285,12 @@ BinMat::upgma(issr809.cons, lab_size = 0.7, bts = 20)
     ## NULL
 
 Now, follow exactly the same steps for the electropherograms in the
-ISSR826 folder. Once you have consolidated the data for both ISSR
-primers, you need to make sure that each sample is present in both
-primer datasets, and that the samples appear in the same order. Then
-paste the one next to the other (here, paste the ISSR826 matrix next to
-the ISSR809 data in a new Excel file).
+[ISSR826](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_5/ISSR_electropherograms/ISSR826)
+folder. Once you have consolidated the data for both ISSR primers, you
+need to make sure that each sample is present in both primer datasets,
+and that the samples appear in the same order. Then paste the one next
+to the other (here, paste the ISSR826 matrix next to the ISSR809 data in
+a new Excel file).
 
 > :bulb: A nice tip: freeze the first column pane, and then scroll to
 > the second ISSR block; then you can easily compare if the names match
@@ -279,11 +298,13 @@ the ISSR809 data in a new Excel file).
 
 Now delete the column of sample names in the second (ISSR826) data.
 
-> Look at the sheets in the **Concatenated\_both\_primers.xlsx** Excel
-> document to see each step in preparing this.
+> Look at the sheets in the
+> [**Concatenated\_both\_primers.xlsx**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/Concatenated_both_primers.xlsx)
+> Excel document to see each step in preparing this.
 
 Now copy the final combined sheet into a new Excel document, and save it
-as a .csv file (saved here as **Concatenated\_FINAL.csv**.
+as a .csv file (saved here as
+[**Concatenated\_FINAL.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv)).
 
 > :bulb: To make life easier later on, shorten the names of the samples.
 > Open the **Concatenated\_FINAL.csv** file in Notepad++, and edit the
@@ -303,10 +324,12 @@ to be in the second column). You can give the column any heading.
 #### Shiny Server
 
 On the BinMat Shiny server, go to the **nMDS PLOT** tab at the top of
-the window –\> Upload the **Concatenated\_FINAL.csv** –\> leave the
-distance method set to **binary** (this uses the Jaccard index) –\>
-select colours and/or point shapes for each of your groups that
-automatically appear in the table –\> leave at k = 2 for now –\> Plot
+the window –\> Upload the
+[**Concatenated\_FINAL.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv)
+file –\> leave the distance method set to **binary** (this uses the
+Jaccard index) –\> select colours and/or point shapes for each of your
+groups that automatically appear in the table –\> leave at k = 2 for now
+–\> Plot
 
 Have a look at the **nMDS validation** tab to check the Scree and
 Shepard plots. Use the minimum number of dimensions indicated in the
@@ -323,8 +346,7 @@ Download the plot, and edit in Inkscape\!
 #### BinMat R package
 
 ``` r
-setwd("~/CBC_tuts/Tutorial_5/Consolidated data")
-issr_concat = read.csv("Concatenated_FINAL.csv")
+issr_concat = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv")
 
 # find the overall error rate:
 BinMat::errors(issr_concat)
@@ -455,10 +477,13 @@ BinMat::nmds(issr_concat, k_val = 2, pt_size = 2, colours = colrs, shapes = shps
 
 ### SplitsTree :herb: <a name = "splitstree"></a>
 
-  - Copy the data in the **Concatenated\_FINAL.csv** file, paste into a
-    new Excel document, delete the first row of marker names and the
-    second grouping column, and save as a .txt file. Open this in
-    Notepad++.
+> :pencil: SplitsTree reads data in NEXUS format
+
+  - Copy the data in the
+    [**Concatenated\_FINAL.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv)
+    file, paste into a new Excel document, delete the first row of
+    marker names and the second grouping column, and save as a .txt
+    file. Open this in Notepad++.
 
   - Remove all the spaces between values by doing a find and replace:
     **Find:** \[ \\t\]+ **Replace:** leave blank. Make sure that
@@ -499,6 +524,7 @@ end;
 -----
 
   - Save as a .nex file
+    ([**issr809\_and\_issr826\_SplitsTree.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/SplitsTree/issr809_and_issr826_SplitsTree.nex))
 
 Now open SplitsTree –\> File –\> Open –\> Select Files of type Nexus
 files –\> Distances –\> uncorrected p –\> in the menu under the
@@ -513,7 +539,9 @@ the shared absence of bands/peaks into account (as it is not
 biologically meaningful) when calculating a distance matrix.
 
 To export, go to File –\> Export image –\> select .svg –\> open in
-Inkscape –\> edit and make it attractive\! <br/> <br/>
+Inkscape –\> edit and make it attractive\! ([find the .svg image
+here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/SplitsTree/issr809_and_issr826_SplitsTree.svg))
+<br/> <br/>
 
 ![](splitstree_opuntiae_both_primers.png)
 
@@ -521,38 +549,27 @@ Inkscape –\> edit and make it attractive\! <br/> <br/>
 
 > :pencil: Note: STRUCTURE reads in .txt files
 
-  - Copy the data in the **Concatenated\_FINAL.csv** file, paste into a
-    new Excel document, and replace the group names in the second column
-    with a different integer for each. Delete the Group column heading.
-    In this file, for example, replace all the Saudi Arabia labels with
-    a 1, the KNP with a 2, etc.
+  - Copy the data in the
+    [**Concatenated\_FINAL.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv)
+    file, paste into a new Excel document, and replace the group names
+    in the second column with a different integer for each. Delete the
+    Group column heading. In this file, for example, replace all the
+    Saudi Arabia labels with a 1, the KNP with a 2, etc.
 
   - Find and Replace all the ? symbols with a -9
 
   - Save as a .txt file (here as
-    **combined\_primers\_issr809\_and\_issr826\_STRUCTURE.txt**)
+    [**combined\_primers\_issr809\_and\_issr826\_STRUCTURE.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.txt))
 
-  - Create a separate text file for colours, and a text file for labels
-    (these will be used later, when viewing the STRUCTURE plots). For
-    example, the colour file could be:
-
-1 color46  
-2 red  
-3 yellow  
-4 sea\_green  
-5 light\_purple
+  - Create a separate text file for
+    [colours](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/colours.txt),
+    and a text file for
+    [labels](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/names.txt)
+    (these will be used later, when viewing the STRUCTURE plots).
 
 See page 5 of the
 [Destruct](https://rosenberglab.stanford.edu/software/distructManual.pdf)
 manual for colour options.
-
-And the label file:
-
-1 Saudi Arabia  
-2 KNP  
-3 Namibia  
-4 Uitenhage  
-5 stricta source
 
 #### Input file for STRUCTURE
 
@@ -578,16 +595,16 @@ data for STRUCTURE:
 
 File –\> New project –\> Follow the project wizard to set the file
 directory to select the
-**combined\_primers\_issr809\_and\_issr826\_STRUCTURE.txt** file –\>
-Input the **number of individuals** (check in the Excel file. In this
-example, there are 29 individuals) –\> set **ploidy** to 1 (as ISSRs are
-dominant markers) –\> check the **number of loci** in the Excel file
-(here there are 359) –\> specify the integer used to signify **missing
-data** (here a -9) –\> check the box indicating that there is a **row of
-marker names** –\> check **“individual ID for each individual”** (this
-is the info in column 1) –\> check **“putative population origin for
-each individual”** (integers in column 2 corresponding to where the
-sample was collected)
+[**combined\_primers\_issr809\_and\_issr826\_STRUCTURE.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.txt)
+file –\> Input the **number of individuals** (check in the Excel file.
+In this example, there are 29 individuals) –\> set **ploidy** to 1 (as
+ISSRs are dominant markers) –\> check the **number of loci** in the
+Excel file (here there are 359) –\> specify the integer used to signify
+**missing data** (here a -9) –\> check the box indicating that there is
+a **row of marker names** –\> check **“individual ID for each
+individual”** (this is the info in column 1) –\> check **“putative
+population origin for each individual”** (integers in column 2
+corresponding to where the sample was collected)
 
 Once the data has been successfully read into the program, click on
 **Parameter Set** –\> **New** –\> set **burnin** to 5000 and **Number of
@@ -629,8 +646,9 @@ run to completion.
 > very closely related” [Kopelman *et al.*
 > (2016)](https://rosenberglab.stanford.edu/papers/KopelmanEtAl2015-MolEcolResources.pdf).
 
-Zip the **Results** folder created by STRUCTURE, and upload it to the
-[Structure Selector
+Zip the
+[**Results**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/Results_unsupervised.zip)
+folder created by STRUCTURE, and upload it to the [Structure Selector
 server](https://lmme.ac.cn/StructureSelector/?_ga=2.128163340.1275430146.1600087475-472650450.1600087475).
 Under “Options”, set the **Threshold** to 0.5-0.8 ([Peuchmaille
 (2016)](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12512)).
@@ -642,16 +660,21 @@ rather, how many distinct genetic clusters are detected in your data.
 > little sense, so let’s present the K = 3 and K = 4 plots. Since we
 > know that there are only two biotypes present in the data (stricta and
 > ficus), let’s include a K = 2 plot, where we force the data into one
-> of two groups:
+> of two groups. Just look at the three top plots (unsupervised):
 
 <br/> <br/>
 
 ![](structure_compare.png)
 
+When K = 2, the ‘stricta’ (KNP, Saudi Arabia, and stricta source) and
+‘ficus’ (Nambiia and Uitenhage) groups form separate clusters. When
+forced into 3 and 4 clusters, the Namibian and Uitenhage populations
+separate nicely.
+
 You can also run CLUMPAK straight from Structure Selector, or you can
 upload the same zipped Results folder to the [CLUMPAK
 server](http://clumpak.tau.ac.il/). In the advanced settings in
-Structure Selector, add a .txt file indicating which colours to assign
+Structure Selector, add the .txt file indicating which colours to assign
 to each cluster group, and labels you want designated to each group
 (designated integers in column 2) (optional).
 
@@ -660,24 +683,32 @@ to each cluster group, and labels you want designated to each group
 We just ran an unsupervised analysis (where location information was not
 incorporated into the analysis). We need to run this again, but now the
 box **use sampling locations as prior** needs to be selected. Once this
-has completed, we can compare the two analyses.
+has completed, view the results in Structure Selector again. We can
+compare the two analyses.
 
 To compare the supervised and unsupervised runs for a particular K
 (we’ll just do this for the major cluster groups for K = 3), after
 Structure Selector has run for each, select the desired K value to
 produce the graphical presentation. Click on **Download CLUMPAK
-results** (both of these folders are in the **STRUCTURE** folder, saved
-as **structure\_selector\_K=3** in both the **supervised\_STRUCTURE**
-and **supervised\_STRUCTURE** folders). Unzip them, and open each nested
-folder until you get to one called **MajorCluster**. Open the
-**CLUMPP.files** folder. Create a new folder (here I named them
-**CLUMPAK\_compare\_supervised** and
-**CLUMPAK\_compare\_unsupervised**), and paste the
-**ClumppIndFile.output** into it. Zip the folder. (Do this for both the
-supervised and unsupervised runs). Open the
+results**. Unzip them, and open each nested folder until you get to one
+called **MajorCluster**. Open the **CLUMPP.files** folder. Create a new
+folder (here I named them
+[**CLUMPAK\_compare\_supervised**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/CLUMPAK_compare_supervised.zip)
+and
+[**CLUMPAK\_compare\_unsupervised**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/CLUMPAK_compare_unsupervised.zip)),
+and paste the **ClumppIndFile.output** into it. Zip the folder. (Do this
+for both the supervised and unsupervised runs). Open the
 [CLUMPAK](http://clumpak.tau.ac.il/) server, and go to the **Compare**
 tab. Upload both zipped folders you created, each containing the
 ClumppIndFile.output. The similarity score for the supervised and
 unsupervised run here is 0.9895 (99%). This means that even without
 providing the extra population information, grouping signal is very
-strong in this data.
+strong in this data. Have a look at the three lower plots in the figure
+above (supervised).
+
+> :bulb: The process for running STRUCTURE with SSR (microsatelllite)
+> data is exactly the same, except that you need to set **ploidy** to 2
+> (as it is co-dominant), and select the option **“special format data:
+> file stores data for individuals in a single line”** in the data input
+> settings. Have a look at **Tutorial 6** for an example using
+> *Neochetina bruchi* data.
