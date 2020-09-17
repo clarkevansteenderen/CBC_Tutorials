@@ -291,7 +291,8 @@ prim2 = prim.tree %>% ggtree(., aes(color=branch.length), layout = "rectangular"
   geom_tiplab(size=2.5, color="black") +
   geom_label2(aes(subset=!isTip, label=node), size=3, color="blue", alpha=0.8) + # node numbers +
   theme(legend.position="bottom") +
-  scale_color_continuous(low='white', high='red', name="Branch length")
+  scale_color_continuous(low='white', high='red', name="Branch length") +
+  geom_treescale(fontsize=5, linesize=1, offset=1, x=0, y=-5, color='black') # add a scale bar
 
 plot(prim2)
 ```
