@@ -32,6 +32,7 @@ by NJ Grünwald, ZN Kamvar and SE Everhart.
 10. [FST and Jost’s D values](#fst)
 11. [Linkage Disequilibrium (genepop)](#LDgenepop)
 12. [Linear Mixed Models for genetic diversity](#lmm)
+13. [STRUCTURE for SSR data](#structure_ssr)
 
 We will use the data for *Neochetina bruchi* provided in the
 supplementary section of the Hopper *et. al.* 2018 paper. This is in the
@@ -171,12 +172,12 @@ neo_b.hwe
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40 241.62465 21 0.000000e+00    0.000
     ## NB46 125.15612 21 1.110223e-16    0.000
-    ## NB27   7.05961  1 7.884115e-03    0.014
-    ## NB5   60.28414 28 3.745816e-04    0.086
-    ## NB43  42.18962  6 1.686862e-07    0.031
+    ## NB27   7.05961  1 7.884115e-03    0.009
+    ## NB5   60.28414 28 3.745816e-04    0.060
+    ## NB43  42.18962  6 1.686862e-07    0.018
     ## NB8  256.53829 55 0.000000e+00    0.000
-    ## NB26  28.20725 15 2.030713e-02    0.006
-    ## NB13  16.58297 21 7.360548e-01    0.300
+    ## NB26  28.20725 15 2.030713e-02    0.011
+    ## NB13  16.58297 21 7.360548e-01    0.311
 
 ``` r
 # HWE for each marker within each population:
@@ -186,91 +187,91 @@ neo_b.hwe.pop
 
     ## $AUSTRALIA
     ##            chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  0.41200783  3 9.377509e-01    0.898
+    ## NB40  0.41200783  3 9.377509e-01    0.896
     ## NB46 21.84000000  3 7.042735e-05    0.000
     ## NB27  0.04338843  1 8.349956e-01    1.000
     ## NB5   0.38349160  3 9.436312e-01    1.000
     ## NB43  0.01249256  1 9.110057e-01    1.000
-    ## NB8  13.72000000 10 1.861506e-01    0.113
+    ## NB8  13.72000000 10 1.861506e-01    0.128
     ## NB26  2.40304311  6 8.791570e-01    0.712
     ## NB13  1.56198347  3 6.680402e-01    1.000
     ## 
     ## $CA
     ##           chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  5.5074611  6 4.805554e-01    0.207
-    ## NB46 19.6111111  3 2.043380e-04    0.000
-    ## NB27  3.0738742  1 7.955966e-02    0.110
+    ## NB40  5.5074611  6 4.805554e-01    0.212
+    ## NB46 19.6111111  3 2.043380e-04    0.003
+    ## NB27  3.0738742  1 7.955966e-02    0.111
     ## NB5   0.9070295  3 8.237311e-01    1.000
-    ## NB43 25.0472590  3 1.509315e-05    0.040
-    ## NB8  27.1648586 21 1.654628e-01    0.036
-    ## NB26  5.0302457  6 5.399398e-01    0.288
+    ## NB43 25.0472590  3 1.509315e-05    0.037
+    ## NB8  27.1648586 21 1.654628e-01    0.029
+    ## NB26  5.0302457  6 5.399398e-01    0.273
     ## NB13  1.9888231  6 9.207237e-01    1.000
     ## 
     ## $FL
     ##           chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40  3.9002836  6 0.690168739    0.414
-    ## NB46 21.0581717  6 0.001790981    0.050
-    ## NB27  0.2568249  1 0.612309921    0.675
+    ## NB40  3.9002836  6 0.690168739    0.445
+    ## NB46 21.0581717  6 0.001790981    0.059
+    ## NB27  0.2568249  1 0.612309921    0.652
     ## NB5   0.3834916  6 0.998981706    1.000
     ## NB43  0.1242604  3 0.988775019    1.000
-    ## NB8  21.5933333 21 0.423259647    0.025
+    ## NB8  21.5933333 21 0.423259647    0.043
     ## NB26  0.1620370  3 0.983471757    1.000
-    ## NB13  5.4791439  6 0.483981027    0.340
+    ## NB13  5.4791439  6 0.483981027    0.298
     ## 
     ## $TX
     ##           chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40  0.0000000  0 1.000000e+00    1.000
     ## NB46 41.7355372  6 2.073621e-07    0.000
-    ## NB27  0.9872206  1 3.204226e-01    0.420
+    ## NB27  0.9872206  1 3.204226e-01    0.435
     ## NB5   0.6625203  3 8.819821e-01    1.000
     ## NB43  0.1890359  3 9.793396e-01    1.000
-    ## NB8  15.9743487 10 1.003691e-01    0.219
-    ## NB26  2.4963018  3 4.759598e-01    0.348
-    ## NB13 12.0867347  6 6.006160e-02    0.069
+    ## NB8  15.9743487 10 1.003691e-01    0.222
+    ## NB26  2.4963018  3 4.759598e-01    0.379
+    ## NB13 12.0867347  6 6.006160e-02    0.044
     ## 
     ## $SAB
     ##          chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40 6.3750000  6   0.3825186    0.196
+    ## NB40 6.3750000  6   0.3825186    0.218
     ## NB46 0.2400000  3   0.9708874    1.000
     ## NB27 0.3750000  1   0.5402914    1.000
-    ## NB5  3.0612245  3   0.3822816    0.630
+    ## NB5  3.0612245  3   0.3822816    0.647
     ## NB43 0.6666667  1   0.4142162    1.000
-    ## NB8  4.3600000  6   0.6280814    0.863
-    ## NB26 6.2400000  3   0.1005000    0.117
-    ## NB13 5.6250000  6   0.4664793    0.510
+    ## NB8  4.3600000  6   0.6280814    0.868
+    ## NB26 6.2400000  3   0.1005000    0.137
+    ## NB13 5.6250000  6   0.4664793    0.535
     ## 
     ## $SAE
     ##          chi^2 df Pr(chi^2 >) Pr.exact
-    ## NB40 17.431953 10  0.06533589    0.029
+    ## NB40 17.431953 10  0.06533589    0.030
     ## NB46 22.888889 15  0.08652761    0.000
-    ## NB27  3.306122  1  0.06902218    0.131
-    ## NB5  15.245000 10  0.12338162    0.073
+    ## NB27  3.306122  1  0.06902218    0.137
+    ## NB5  15.245000 10  0.12338162    0.065
     ## NB43  0.281250  1  0.59588309    1.000
-    ## NB8  29.039715 21  0.11305127    0.396
-    ## NB26  2.450617  3  0.48428179    0.375
-    ## NB13  1.469388  1  0.22544232    0.532
+    ## NB8  29.039715 21  0.11305127    0.399
+    ## NB26  2.450617  3  0.48428179    0.374
+    ## NB13  1.469388  1  0.22544232    0.526
     ## 
     ## $UGANDA
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
-    ## NB40  7.940877  6 2.424669e-01    0.032
-    ## NB46 32.587350  6 1.258755e-05    0.001
-    ## NB27  4.012755  1 4.515730e-02    0.106
+    ## NB40  7.940877  6 2.424669e-01    0.030
+    ## NB46 32.587350  6 1.258755e-05    0.003
+    ## NB27  4.012755  1 4.515730e-02    0.110
     ## NB5   1.235000  6 9.751207e-01    1.000
     ## NB43  0.000000  0 1.000000e+00    1.000
-    ## NB8   2.081327 10 9.956780e-01    0.916
-    ## NB26  5.747018 10 8.360509e-01    0.747
-    ## NB13  5.155834  3 1.607354e-01    0.135
+    ## NB8   2.081327 10 9.956780e-01    0.884
+    ## NB26  5.747018 10 8.360509e-01    0.762
+    ## NB13  5.155834  3 1.607354e-01    0.125
     ## 
     ## $URUGUAY
     ##          chi^2 df  Pr(chi^2 >) Pr.exact
     ## NB40 90.592301 21 1.275255e-10    0.000
-    ## NB46 21.086029  6 1.770446e-03    0.006
-    ## NB27  3.399967  1 6.519772e-02    0.094
-    ## NB5  31.752870 21 6.200875e-02    0.130
-    ## NB43  3.473136  3 3.242630e-01    0.280
-    ## NB8  23.559927 36 9.450839e-01    0.758
-    ## NB26 14.284145 10 1.604209e-01    0.055
-    ## NB13  3.074968 15 9.995314e-01    0.943
+    ## NB46 21.086029  6 1.770446e-03    0.008
+    ## NB27  3.399967  1 6.519772e-02    0.093
+    ## NB5  31.752870 21 6.200875e-02    0.136
+    ## NB43  3.473136  3 3.242630e-01    0.228
+    ## NB8  23.559927 36 9.450839e-01    0.735
+    ## NB26 14.284145 10 1.604209e-01    0.050
+    ## NB13  3.074968 15 9.995314e-01    0.950
 
 ``` r
 neo_b.hwe.mat = sapply(neo_b.hwe.pop, "[", i = TRUE, j = 3) # Take the third column with all rows (chi square p-value)
@@ -499,7 +500,7 @@ assignplot(dapc.neo_b, cex = 0.6, pch=16)
 Zoom in on just the Australian samples :mag:
 
 ``` r
-assignplot(dapc.neo_b, cex = 0.8, only.grp = "AUSTRALIA", pch=16)
+assignplot(dapc.neo_b, cex.lab = 0.65, only.grp = "AUSTRALIA", pch=16)
 ```
 
 ![](FigsTut4/unnamed-chunk-6-1.png)<!-- -->
@@ -1183,4 +1184,103 @@ anova(mod3, mod4) # not a significant difference between models: variance struct
     ## mod3     1 10 -5.327086 14.92643 12.66354                       
     ## mod4     2 17 -4.857284 29.57370 19.42864 1 vs 2 13.5302  0.0602
 
-## The next tut will have a look at processing ISSR data :smiley:
+## STRUCTURE for SSR data (co-dominant) <a name = "structure_ssr"></a>
+
+The table below shows the template for co-dominant data for STRUCTURE:
+
+|          |   | Locus 1 |     | Locus 2 |     |
+| -------- | - | ------- | --- | ------- | --- |
+| Sample A | 1 | 260     | 260 | 240     | 241 |
+| Sample B | 1 | 260     | 262 | 240     | 242 |
+| Sample C | 2 | 250     | \-9 | 235     | 230 |
+| Sample D | 3 | 255     | 255 | 270     | 270 |
+| Sample E | 3 | 255     | 250 | 275     | \-9 |
+
+Edit the
+[**hopper\_neochetina\_b.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/hopper_neochetina_b.csv)
+file such it looks like the [text
+file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/hopper_neochetina_b.txt)
+with the same name (in the
+[**Tutorial 4/Neochetina\_SSR**](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_4/Neochetina_SSR)
+folder). Replace population names with integers to signify grouping.
+
+> :bulb: SSR data input is the same as for ISSRs, but because this is
+> co-dominant (i.e. you can tell whether alleles are heterozygous or
+> not), there are two columns for each locus. The *Neochetina* data
+> contains 171 individuals and 8 loci. All the input parameters are the
+> same as before, except that **ploidy** must be set to 2, and the
+> **““special format data: file stores data for individuals in a
+> single line”** check box must be selected in the project wizard
+> settings.
+
+In the Hopper *et al.* (2018) data, the groups are:
+
+  - 1 = Australia
+  - 2 = California
+  - 3 = Florida
+  - 4 = Texas
+  - 5 = SA wolseley
+  - 6 = SA Enseleni
+  - 7 = Uganda
+  - 8 = Uruguay
+
+The [.txt file for
+colours](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/colours.txt),
+and the [.txt file for group
+names](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/names.txt)
+is in the **Tutorial 4/Neochetina\_SSR** folder.
+
+In supplementary data file appendix 5 of the Hopper paper, STRUCTURE was
+run with 1 million mcmc reps and 100 000 burnin; with K set from 1 to
+10, with 10 repeats for each K value. Just as a demonstration, we’ll run
+this with 10 000 burnin and 5000 mcmc reps, with K set from 1 to 10, and
+8 repeats for each value of K. We’ll also set the threshold from 0.5 to
+0.8.
+
+From this short run, Structure Selector found support for **K = 2** and
+**K = 3**. The CLUMPAK output for these are:
+
+## ![](k=2_neochetina_unsupervised.png)
+
+<br/> <br/>
+
+![](k=3_neochetina_unsupervised.png)
+
+For K = 3, half of the 8 repeats produced the first plot, and the other
+half produced the second.
+
+:bulb: Let’s re-run this analysis with the same parameters as before,
+but under the **Ancestry Model** settings, select **“Use sampling
+locations as prior (LOCPRIOR)”**.
+
+Zip the **Results** folder, and upload to Structure Selector again. This
+analysis supports K = 2, K = 3, and K = 4. Comparing these to the
+unsupervised CLUMPAK results:
+
+![](clumpak_compare.png)
+
+## Supervised vs unsupervised STRUCTURE analysis <a name = "compare_structure"></a>
+
+To compare the supervised and unsupervised runs for a particular K
+(we’ll just do this for the major cluster groups for K = 2), after
+Structure Selector has run for each, select the desired K value to
+produce the graphical presentation. Click on **Download CLUMPAK
+results** (both of these folders are in the
+**Tutorial\_4/Neochetina\_SSR** folder, saved as
+[**CLUMPAK\_supervisedK=2**](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_4/Neochetina_SSR/CLUMPAK_supervisedK%3D2/1600179573)
+and
+[**CLUMPAK\_unsupervisedK=2**](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_4/Neochetina_SSR/CLUMPAK_unsupervisedK%3D2/1600181772)).
+Open each nested folder until you get to one called **MajorCluster**.
+Open the **CLUMPP.files** folder. Create a new folder (here I named them
+**supervised\_clumppIndFile.output** and
+**unsupervised\_clumppIndFile.output**), and paste the
+**ClumppIndFile.output** into it. Zip the folder. (Do this for both the
+supervised and unsupervised runs). Open the
+[CLUMPAK](http://clumpak.tau.ac.il/) server, and go to the **Compare**
+tab. Upload both zipped folders you created, each containing the
+ClumppIndFile.output. The similarity score for the supervised and
+unsupervised run here is 0.82 (82%). This is the output:
+
+<br/> <br/>
+
+![](supervised_vs_unsupervised.png)
