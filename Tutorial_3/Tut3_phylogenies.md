@@ -85,8 +85,8 @@ fixed(pinvar) tratiopr = fixed(kappa value); </mark>
 link topology=(all) brlens=(all);  
 mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nchains=4
 savebrlens=yes starttree=random;  
-sumt relburnin=yes burninfrac=0.25  
-sump relburnin=yes burninfrac=0.25  
+sumt relburnin=yes burninfrac=0.25;  
+sump relburnin=yes burninfrac=0.25;  
 end;
 
 The diagram below gives a graphical representation of how we’re laying
