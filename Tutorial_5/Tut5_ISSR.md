@@ -30,6 +30,8 @@ Clarke van Steenderen
 5.  [SplitsTree](#splitstree)
 6.  [STRUCTURE](#structure)
 7.  [Supervised vs unsupervised STRUCTURE analysis](#compare_structure)
+8.  [MrBayes for binary data](#mrbayes)
+9.  [MrBayes with both nucleotide and ISSR data](#mixedmrbayes)
 
 ## ISSR electropherograms <a name = "issr_electropherograms"></a>
 
@@ -157,7 +159,7 @@ first locus number starts in the second column (column B). Save as a
 .csv file
 ([**DataBinaryT\_ISSR809.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.csv)).
 
-### BinMat <a name = "binmat"></a>
+## BinMat <a name = "binmat"></a>
 
 The next step is to consolidate each replicate pair into one consensus
 read. For example, let’s say that we have this replicate pair:
@@ -183,7 +185,7 @@ can be downloaded from CRAN.
 Let’s use both methods (server GUI (graphical user interface) and R
 package):
 
-#### BinMat Shiny Server
+### BinMat Shiny Server
 
 Open the [BinMat Shiny URL
 link](https://clarkevansteenderen.shinyapps.io/BINMAT/), and upload the
@@ -198,7 +200,7 @@ Click on the **SUMMARY** and **ERROR RATES** tabs to get summary
 information. If you want to plot a UPGMA tree, download the consolidated
 matrix, and re-upload it in the **UPGMA TREE** tab.
 
-#### BinMat R package
+### BinMat R package
 
 Install the BinMat package (Packages –\> Install –\> CRAN repository)
 
@@ -209,7 +211,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
     ## Loading required package: pacman
 
 ``` r
-pacman::p_load(BinMat)
+pacman::p_load(BinMat, ape, magrittr, ggtree)
 
 # read in the BinaryDataT_ISSR809.csv file:
 
@@ -321,7 +323,7 @@ to be in the second column). You can give the column any heading.
 
 ### Non-metric multidimensional Scaling Plots and UPGMA dendrograms <a name = "nmds"></a>
 
-#### Shiny Server
+### Shiny Server
 
 On the BinMat Shiny server, go to the **nMDS PLOT** tab at the top of
 the window –\> Upload the
@@ -343,7 +345,7 @@ You can then re-upload that to produce another nMDS plot.
 
 Download the plot, and edit in Inkscape\!
 
-#### BinMat R package
+### BinMat R package
 
 ``` r
 issr_concat = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/Consolidated%20data/Concatenated_FINAL.csv")
@@ -475,7 +477,7 @@ BinMat::nmds(issr_concat, k_val = 2, pt_size = 2, colours = colrs, shapes = shps
 
     ## NULL
 
-### SplitsTree :herb: <a name = "splitstree"></a>
+## SplitsTree :herb: <a name = "splitstree"></a>
 
 > :pencil: SplitsTree reads data in NEXUS format
 
@@ -502,13 +504,9 @@ BinMat::nmds(issr_concat, k_val = 2, pt_size = 2, colours = colrs, shapes = shps
 \#NEXUS  
 \[Dactylopius opuntiae ISSR data\]
 
-begin taxa;  
-dimensions ntax=29;  
-end;
-
-begin characters;
-
-dimensions nchar=359; format datatype=standard missing=?;
+begin data;  
+dimensions ntax=29 nchar=359;  
+format datatype=standard missing=?;
 
 matrix
 
@@ -545,7 +543,7 @@ here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/SplitsTree/i
 
 ![](splitstree_opuntiae_both_primers.png)
 
-### STRUCTURE <a name = "structure"></a>
+## STRUCTURE <a name = "structure"></a>
 
 > :pencil: Note: STRUCTURE reads in .txt files
 
@@ -571,7 +569,7 @@ See page 5 of the
 [Destruct](https://rosenberglab.stanford.edu/software/distructManual.pdf)
 manual for colour options.
 
-#### Input file for STRUCTURE
+### Input file for STRUCTURE
 
 The table below shows the template of an input file for dominant marker
 data for STRUCTURE:
@@ -712,3 +710,168 @@ above (supervised).
 > file stores data for individuals in a single line”** in the data input
 > settings. Have a look at **Tutorial 4** for an example using
 > *Neochetina bruchi* data.
+
+## MrBayes for binary data <a name = "mrbayes"></a>
+
+We’ll use the same NEXUS file that we used in SplitsTree
+([**issr809\_and\_issr826\_SplitsTree.nex**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/SplitsTree/issr809_and_issr826_SplitsTree.nex)),
+and modify it slightly:
+
+In the **begin data** block, change **datatype** from **standard** to
+**restriction**. Restriction means that we’re dealing with binary data
+(0 and 1s only). Once this is set, MrBayes automatically applies the
+**Markov k (Mk) model** to the data. Read more about the model
+[here](https://academic.oup.com/sysbio/article/50/6/913/1628902).
+
+Add this MrBayes block to the end of the document (after the last end;):
+
+begin mrbayes;  
+set autoclose=yes nowarn=yes;  
+lset coding=noabsencesites;  
+mcmc ngen=20000000 printfreq=1000 samplefreq=1000 nruns=2 nchains=4
+savebrlens=yes starttree=random;  
+sumt relburnin=yes burninfrac=0.25;  
+sump relburnin=yes burninfrac=0.25;  
+end;
+
+> coding = noabsencesites means that the absence of peaks is not taken
+> into account. We’ll run 20 million generations here, and apply a
+> burnin of the first 25% of trees.
+
+The log file will highlight this warning: **WARNING: There are 68
+characters incompatible with the specified coding bias. These characters
+will be excluded.**
+
+If we read the NEXUS file into R, we’ll see that this comes from the
+fact that there are 68 columns/loci that contain all zeroes.
+
+``` r
+issrBayes = ape::read.nexus.data("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes/issr_mrbayes.nex")
+# convert to a dataframe, and then transpose so that sample names are rows
+issrBayes = issrBayes %>% as.data.frame() %>% t() 
+# replace ? marks with NA
+issrBayes[issrBayes == "?"] = NA
+# get row names
+sample_names <- rownames(issrBayes)
+# convert the data from character class to numeric class
+issrBayes <- apply(issrBayes, 2, as.numeric)
+# re-set the row names
+rownames(issrBayes) <- sample_names
+# get the sum for each column
+sums = colSums(issrBayes, na.rm = T)
+# get a count of the sums
+table(sums)
+```
+
+    ## sums
+    ##  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 
+    ## 68 60 46 40 22 10 10  7  4  8 10  6  8  7  2  4  7  2  6  2  3  6  1  3  1  2 
+    ## 26 27 28 
+    ##  3  6  5
+
+Here we see that there were 68 columns that were all zeros. This is what
+MrBayes is ignoring at the start of the run.
+
+Let’s read the tree into R and plot with ggtree:
+
+``` r
+issr.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes/infile.nex.con_mrbayes_ISSR_tree.tre")
+
+issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) +
+  geom_tiplab(size=2.5, color="black", font = 1) +
+  geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
+  geom_hilight(node=37, fill="blue", alpha=0.2) +
+  geom_hilight(node=32, fill="red", alpha=0.2) 
+```
+
+    ## "daylight" method was used as default layout for unrooted tree.
+
+    ## Average angle change [1] 0.158867904074621
+
+    ## Average angle change [2] 0.0473850505491631
+
+``` r
+issr.tree.plot
+```
+
+![](FigsTut5/unnamed-chunk-4-1.png)<!-- -->
+
+In this Bayesian tree, the two Saudi Arabian samples (known to be
+‘stricta’) **H1** and **Ah2** do not group with the stricta (blue) or
+ficus samples (red). Let’s see what the tree looks like when we add in
+some 12S rRNA sequences for these same samples to complement the binary
+ISSR data.
+
+### MrBayes with both nucleotide and ISSR data <a name = "mixedmrbayes"></a>
+
+Let’s make a NEXUS file that contains both nucleotide and ISSR data.
+We’ll use 12S rRNA sequences, for which there are representatives of
+almost all the same samples in the ISSR dataset. These were downloaded
+from GenBank, and have already been
+[aligned](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes%20Combo/opuntiae_12S_aligned.fasta).
+Add these to the NEXUS file, and make sure that they are in the exact
+same order as the ISSR samples. We’re missing 12S sequences for
+VS006Ofi, VS007Ofi, VS008Ofi, VS043\_Os, and VS150\_Klein. We’ll fill
+these rows with N’s. Now find and replace all the N’s with ? (or
+vice-versa) to keep the symbol for missing data consistent across data
+sets.
+
+  - Run jModelTest for these 12S aligned sequences, and input the
+    relevant parameters into the MrBayes block
+  - Set the datatype to mixed, and then specify that the first 359
+    characters are restriction data (binary), and the remaining 398
+    characters are DNA nucleotide data:
+    **datatype=mixed(restriction:1-359,dna:360-758)**
+  - Set **interleave=yes**
+  - :bulb: The only modeling information required here is for the 12S
+    sequences
+  - As before, the only **lset** parameter applied to the ISSR binary
+    data is that of **coding=noabsencesites**
+
+The final MrBayes block is:
+
+begin mrbayes;  
+CHARSET **ISSR=1-359**;  
+CHARSET **12S=360-757**;  
+partition **sections=2: ISSR, 12S**;  
+set partition = **sections**;  
+set autoclose=yes nowarn=yes;  
+lset applyto=(1) **coding=noabsencesites**;  
+lset applyto=(2) **nst=1 ngammacat=4 code=metmt**;  
+unlink shape=(all) pinvar=(all) statefreq=(all) revmat=(all);  
+prset applyto=(2) **statefreqpr =
+fixed(0.4467,0.1332,0.0483,0.3719)**;  
+link topology=(all) brlens=(all);  
+mcmc ngen=**20000000** printfreq=1000 **samplefreq=1000** nchains=4
+savebrlens=yes starttree=random;  
+sumt relburnin=yes burninfrac=0.25;  
+sump relburnin=yes burninfrac=0.25;  
+end;
+
+Have a look at the [final NEXUS
+file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S.nex)
+in the **MrBayes Combo** folder.
+
+Let’s read in the tree file from the [results of the MrBayes
+run](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S_infile.nex.con.tre):
+
+``` r
+combo.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S_infile.nex.con.tre")
+
+combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) + # include branch lengths
+  geom_tiplab(size=3, color="black", font = 1) +
+  geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
+  geom_hilight(node=46, fill="red", alpha=0.2) 
+```
+
+    ## "daylight" method was used as default layout for unrooted tree.
+
+    ## Average angle change [1] 0.114341025741152
+
+    ## Average angle change [2] 0.0280890119362703
+
+``` r
+combo.tree.plot
+```
+
+![](FigsTut5/unnamed-chunk-5-1.png)<!-- -->
