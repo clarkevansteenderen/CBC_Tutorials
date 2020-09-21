@@ -829,7 +829,7 @@ Let’s read the tree into R and plot with ggtree:
 ``` r
 issr.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes/infile.nex.con_mrbayes_ISSR_tree.tre")
 
-issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted",  lwd=1.2) +
+issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) +
   geom_tiplab(size=2.5, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=37, fill="blue", alpha=0.2) +
@@ -838,11 +838,9 @@ issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted",  lw
 
     ## "daylight" method was used as default layout for unrooted tree.
 
-    ## Average angle change [1] 0.335991688987995
+    ## Average angle change [1] 0.158867904074621
 
-    ## Average angle change [2] 0.212104095628462
-
-    ## Average angle change [3] 0.0239930789476337
+    ## Average angle change [2] 0.0473850505491631
 
 ``` r
 issr.tree.plot
@@ -912,7 +910,7 @@ run](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes%20Com
 ``` r
 combo.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S_infile.nex.con.tre")
 
-combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none',  lwd=1.2) + # include branch lengths
+combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none',lwd=1.2) + # include branch lengths
   geom_tiplab(size=3, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=46, fill="red", alpha=0.2) 
