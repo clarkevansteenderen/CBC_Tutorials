@@ -211,7 +211,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
     ## Loading required package: pacman
 
 ``` r
-pacman::p_load(BinMat, ape, magrittr, ggtree)
+pacman::p_load(BinMat, ape, magrittr, ggtree, MASS, plot3D)
 
 # read in the BinaryDataT_ISSR809.csv file:
 
@@ -476,6 +476,58 @@ BinMat::nmds(issr_concat, k_val = 2, pt_size = 2, colours = colrs, shapes = shps
 ![](FigsTut5/unnamed-chunk-2-4.png)<!-- -->
 
     ## NULL
+
+### Viewing an nMDS plot in 3 dimensions
+
+``` r
+# removes the first two columns, which contain sample names and grouping information
+d = issr_concat[,c(-1,-2)]
+# assign sample names as row names
+row.names(d) = issr_concat[,1]
+# replaces ? with NA, as NA's are ignored.
+d[d=="?"] <- NA
+# converts the matrix to a data frame
+d = as.data.frame(d)
+# creates a distance matrix
+d = dist((d), method = "binary", diag = TRUE, upper = T)
+
+fit <- MASS::isoMDS(d, k=3)
+```
+
+    ## initial  value 14.546105 
+    ## iter   5 value 8.157774
+    ## iter  10 value 7.752560
+    ## iter  15 value 7.653124
+    ## iter  20 value 7.576167
+    ## iter  20 value 7.572491
+    ## iter  25 value 7.449353
+    ## iter  25 value 7.442231
+    ## iter  25 value 7.442124
+    ## final  value 7.442124 
+    ## converged
+
+``` r
+# nMDS with three dimensions
+x <- fit$points[,1]
+y <- fit$points[,2]
+z <- fit$points[,3]
+
+cl = as.factor(issr_concat$Group)
+
+plot3D::scatter3D(x,y,z, phi = 25, theta = 10, colvar = NA, colkey = F, col = colrs[cl], pch = 16, type = "h", cex = 2)
+legend("topright", levels(cl), pch = 16, col = colrs, cex=0.8, inset=c(-0.01,0.2))
+text3D(x,y,z,labels = issr_concat$X, add = TRUE, colkey = FALSE, cex = 0.7)
+```
+
+![](FigsTut5/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+# 3D plot that you can rotate:
+# rgl::plot3d(x,y,z, col = colrs[cl], size = 5, type = "p")
+# rgl::legend3d("topright", legend = levels(cl), pch = 16, col = colrs, cex=0.6, inset=c(0.02))
+# this code makes the plot
+# rgl::play3d(rgl::spin3d(axis=c(0,1,1), rpm=3), duration=30)
+```
 
 ## SplitsTree :herb: <a name = "splitstree"></a>
 
@@ -777,7 +829,7 @@ Let’s read the tree into R and plot with ggtree:
 ``` r
 issr.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes/infile.nex.con_mrbayes_ISSR_tree.tre")
 
-issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) +
+issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted",  lwd=1.2) +
   geom_tiplab(size=2.5, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=37, fill="blue", alpha=0.2) +
@@ -786,15 +838,17 @@ issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", bra
 
     ## "daylight" method was used as default layout for unrooted tree.
 
-    ## Average angle change [1] 0.158867904074621
+    ## Average angle change [1] 0.335991688987995
 
-    ## Average angle change [2] 0.0473850505491631
+    ## Average angle change [2] 0.212104095628462
+
+    ## Average angle change [3] 0.0239930789476337
 
 ``` r
 issr.tree.plot
 ```
 
-![](FigsTut5/unnamed-chunk-4-1.png)<!-- -->
+![](FigsTut5/unnamed-chunk-5-1.png)<!-- -->
 
 In this Bayesian tree, the two Saudi Arabian samples (known to be
 ‘stricta’) **H1** and **Ah2** do not group with the stricta (blue) or
@@ -858,7 +912,7 @@ run](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes%20Com
 ``` r
 combo.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S_infile.nex.con.tre")
 
-combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) + # include branch lengths
+combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none',  lwd=1.2) + # include branch lengths
   geom_tiplab(size=3, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=46, fill="red", alpha=0.2) 
@@ -874,4 +928,4 @@ combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", b
 combo.tree.plot
 ```
 
-![](FigsTut5/unnamed-chunk-5-1.png)<!-- -->
+![](FigsTut5/unnamed-chunk-6-1.png)<!-- -->

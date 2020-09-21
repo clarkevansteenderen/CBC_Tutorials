@@ -124,7 +124,7 @@ Install the BinMat package (Packages --> Install --> CRAN repository)
 
 ```{r}
 if (!require("pacman")) install.packages("pacman") # pacman is a package that installs other required packages
-pacman::p_load(BinMat, ape, magrittr, ggtree)
+pacman::p_load(BinMat, ape, magrittr, ggtree, MASS, plot3D)
 
 # read in the BinaryDataT_ISSR809.csv file:
 
@@ -210,6 +210,41 @@ shps = c(18,16,18,18,16) # round circles for 'ficus' and diamonds for 'stricta' 
 
 # plot the nMDS:
 BinMat::nmds(issr_concat, k_val = 2, pt_size = 2, colours = colrs, shapes = shps, labs = T)
+
+```
+
+### Viewing an nMDS plot in 3 dimensions
+
+```{r}
+# removes the first two columns, which contain sample names and grouping information
+d = issr_concat[,c(-1,-2)]
+# assign sample names as row names
+row.names(d) = issr_concat[,1]
+# replaces ? with NA, as NA's are ignored.
+d[d=="?"] <- NA
+# converts the matrix to a data frame
+d = as.data.frame(d)
+# creates a distance matrix
+d = dist((d), method = "binary", diag = TRUE, upper = T)
+
+fit <- MASS::isoMDS(d, k=3)
+
+# nMDS with three dimensions
+x <- fit$points[,1]
+y <- fit$points[,2]
+z <- fit$points[,3]
+
+cl = as.factor(issr_concat$Group)
+
+plot3D::scatter3D(x,y,z, phi = 25, theta = 10, colvar = NA, colkey = F, col = colrs[cl], pch = 16, type = "h", cex = 2)
+legend("topright", levels(cl), pch = 16, col = colrs, cex=0.8, inset=c(-0.01,0.2))
+text3D(x,y,z,labels = issr_concat$X, add = TRUE, colkey = FALSE, cex = 0.7)
+
+# 3D plot that you can rotate:
+# rgl::plot3d(x,y,z, col = colrs[cl], size = 5, type = "p")
+# rgl::legend3d("topright", legend = levels(cl), pch = 16, col = colrs, cex=0.6, inset=c(0.02))
+# this code makes the plot
+# rgl::play3d(rgl::spin3d(axis=c(0,1,1), rpm=3), duration=30)
 
 ```
 
@@ -376,7 +411,7 @@ Let's read the tree into R and plot with ggtree:
 ```{r}
 issr.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes/infile.nex.con_mrbayes_ISSR_tree.tre")
 
-issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) +
+issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted",  lwd=1.2) +
   geom_tiplab(size=2.5, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=37, fill="blue", alpha=0.2) +
@@ -422,7 +457,7 @@ Let's read in the tree file from the [results of the MrBayes run](https://github
 ```{r}
 combo.tree = treeio::read.mrbayes("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/MrBayes%20Combo/ISSR%2B12S_infile.nex.con.tre")
 
-combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none', lwd=1.2) + # include branch lengths
+combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", branch.length = 'none',  lwd=1.2) + # include branch lengths
   geom_tiplab(size=3, color="black", font = 1) +
   geom_label2(aes(subset=!isTip, label=round(as.numeric(prob),2)), size=4, color="black", alpha=0.8, label.size = 0) +  # posterior probs. label.size = 0 removes the border around the labels 
   geom_hilight(node=46, fill="red", alpha=0.2) 
