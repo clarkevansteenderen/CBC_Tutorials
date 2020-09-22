@@ -22,15 +22,63 @@ knitr::opts_chunk$set(fig.path='FigsTut5/')
 8. Run a supervised and unsupervised STRUCTURE analysis
 
 ## DOCUMENT CONTENTS
-1. [ISSR electropherograms](#issr_electropherograms)
-2. [RawGeno](#rawgeno)
-3. [BinMat](#binmat)
-4. [Non-metric multidimensional Scaling Plots and UPGMA dendrograms](#nmds)
-5. [SplitsTree](#splitstree)
-5. [STRUCTURE](#structure)
-6. [Supervised vs unsupervised STRUCTURE analysis](#compare_structure)
-7. [MrBayes for binary data](#mrbayes)
-8. [MrBayes with both nucleotide and ISSR data](#mixedmrbayes)
+[What are ISSRs?](#issr)
+[ISSR electropherograms](#issr_electropherograms)   
+[RawGeno](#rawgeno)   
+[BinMat](#binmat)   
+[Non-metric multidimensional Scaling Plots and UPGMA dendrograms](#nmds)   
+[SplitsTree](#splitstree)   
+[STRUCTURE](#structure)   
+[Supervised vs unsupervised STRUCTURE analysis](#compare_structure)   
+[MrBayes for binary data](#mrbayes)   
+[MrBayes with both nucleotide and ISSR data](#mixedmrbayes)   
+
+## What are ISSRs? <a name = "issr"></a>
+
+Inter-simple sequence repeats are sections of the genome found between microsatellites (SSRs). The differing lengths of these regions are what can be used to distinguish one individual from another. Only one ISSR primer is used (as opposed to a different forward and reverse primer) in a PCR reaction, which binds to either the flanking region (5'-anchored) of the SSR, or to the SSR region itself (3'-anchored). 
+<br/> 
+
+![](issr_diagram.png)
+
+<br/> <br/>
+
+The resulting PCR products are fragments of different lengths. Traditionally, these were viewed and scored on a gel. The image below shows the banding pattern of two *Dactylopius tomentosus* biotypes, using the ISSR 809 primer.
+<br/> 
+
+![](issr_gel.png)
+
+<br/> 
+
+Scoring from a gel would entail compiling a presence/absence matrix, as show below:
+<br/> 
+
+![](gel_scoring.png)
+
+A newer, more accurate method of scoring fragments is to label the ISSR primer with a fluorescent dye (typically FAM), so that each fragment amplified during PCR is tagged with it. The sample is then sent for fragment analysis by capillary electrophoresis. This process detects the dye attached to each fragment (would-be band), and produces a peak electropherogram. As an example, **Sample 1** in the gel diagram above would look something like this:
+
+<br/> 
+
+![](issr_capillary_scoring.png)
+
+<br/> 
+
+RFU is Relative Fluorescence Units. The FAM tags are here for illustration purposes only.
+Notice how each peak can have an exact base pair size, as opposed to an estimation on a gel.
+The peak electropherograms are then converted into a binary (presence/absence) matrix, from which a distance matrix can be obtained using the Jaccard Index. This index calculates the similarity or distance between samples, and in contrast to the Euclidean method, does not take the shared absence of peaks as being biologically meaningful. For example, the diagram below shows how the Jaccard similarity index is applied to two samples, x and y. These two samples are therefore 57% similar, or 43% different.
+
+<br/> 
+![](jaccard.png)
+
+> :pencil: **A note about the scoring of peaks:**    
+One of the main criticisms of ISSRs is the subjectivity of scoring peaks. When is a peak a real peak? How do you minimise the scoring of false positive and false negative peaks? How strong must the fluorescence of the fragment be to score it? What should the bin width ideally be? What is considered too lenient, or too strict when scoring? How reproducible are the results? How do you disentangle PCR errors from scoring errors? 
+Some of the issues brought about by scoring peaks is illustrated below:
+
+<br/> 
+![](scoring_errors.png)
+
+<br/>
+
+A) Determining the optimal threshold value to apply when scoring the presence or absence of a peak. The illustration shows three RFU (Relative Fluorescence Units) threshold levels (a, b and c), the resulting binary output at each, and the consolidated binary output representing a replicate pair (where a 1 and 0 or 0 and 1 outputs a `?', the shared presence of a band outputs a "1" and the shared absence a "0"). B) The effect of bin width on the scoring of peaks. Replicate 1 shows a band of 50.1 base pairs (bp) in size, and replicate 2 shows one of 0.9 bp larger. With a bin width set at b1, both will be scored as present at the same locus, but at a width of b2, these bands will be scored as two separate loci.
 
 ## ISSR electropherograms <a name = "issr_electropherograms"></a>
 
@@ -117,6 +165,17 @@ Let's use both methods (server GUI (graphical user interface) and R package):
 Open the [BinMat Shiny URL link](https://clarkevansteenderen.shinyapps.io/BINMAT/), and upload the [**DataBinaryT_ISSR809.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno%20output/DataBinaryT_ISSR809.csv) file that we just got from RawGeno. Click on **CONSOLIDATE MATRIX**, and download the file once the message **"COMPLETE. READY FOR DOWNLOAD"** appears (see the [**ConsolidatedBinaryMatrix_ISSR809_Shiny.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/Consolidated%20data/ConsolidatedBinaryMatrix_ISSR809_Shiny.csv) output file).
 
 Click on the **SUMMARY** and **ERROR RATES** tabs to get summary information. If you want to plot a UPGMA tree, download the consolidated matrix, and re-upload it in the **UPGMA TREE** tab.
+
+:pencil: The Jaccard and Euclidean error rates are the average "mismatches" across replicate pairs. In other words, an indication of how often replicate pairs had ambiguous calls (contradicting presence/absences of bands). For example:
+
+Rep1 00101    
+Rep2 01100   
+
+Jaccard Error = (f10 + f01)/(f10 + f01 + f11)    
+Euclidean Error = (f10 + f01)/(f10 + f01 + f11 + f00)   
+
+Jaccard Error = (1+1)/(1+1+1) = 2/3 = 0.67   
+Euclidean Error = (1+1)/(1+1+1+2) = 2/5 = 0.4   
 
 ### BinMat R package
 
@@ -236,9 +295,11 @@ z <- fit$points[,3]
 
 cl = as.factor(issr_concat$Group)
 
-plot3D::scatter3D(x,y,z, phi = 25, theta = 10, colvar = NA, colkey = F, col = colrs[cl], pch = 16, type = "h", cex = 2)
+# change the values of phi and theta to alter the angle of the 3D plot. Phi turns it up and down, theta turns it right and left
+plot3D::scatter3D(x,y,z, phi = 25, theta = 10, colvar = NA, colkey = F, col = colrs[cl], pch = 16, type = "h", lty = 3, cex = 1.5)
 legend("topright", levels(cl), pch = 16, col = colrs, cex=0.8, inset=c(-0.01,0.2))
-text3D(x,y,z,labels = issr_concat$X, add = TRUE, colkey = FALSE, cex = 0.7)
+# if you want to add text labels to each point, use this line:
+# text3D(x,y,z,labels = issr_concat$X, add = TRUE, colkey = FALSE, cex = 0.7)
 
 # 3D plot that you can rotate:
 # rgl::plot3d(x,y,z, col = colrs[cl], size = 5, type = "p")
