@@ -103,17 +103,15 @@ different.
 
 <br/>
 
-1)  Determining the optimal threshold value to apply when scoring the
-    presence or absence of a peak. The illustration shows three RFU
-    (Relative Fluorescence Units) threshold levels (a, b and c), the
-    resulting binary output at each, and the consolidated binary output
-    representing a replicate pair (where a 1 and 0 or 0 and 1 outputs a
-    \`?’, the shared presence of a band outputs a “1” and the shared
-    absence a “0”). B) The effect of bin width on the scoring of peaks.
-    Replicate 1 shows a band of 50.1 base pairs (bp) in size, and
-    replicate 2 shows one of 0.9 bp larger. With a bin width set at b1,
-    both will be scored as present at the same locus, but at a width of
-    b2, these bands will be scored as two separate loci.
+Part A): shows three RFU (Relative Fluorescence Units) threshold levels
+(a, b and c), the resulting binary output at each, and the consolidated
+binary output representing a replicate pair (where a 1 and 0 or 0 and 1
+outputs a \`?’, the shared presence of a band outputs a “1” and the
+shared absence a “0”). Part B) shows the effect of bin width on the
+scoring of peaks. Replicate 1 shows a band of 50.1 base pairs (bp) in
+size, and replicate 2 shows one of 0.9 bp larger. With a bin width set
+at b1, both will be scored as present at the same locus, but at a width
+of b2, these bands will be scored as two separate loci.
 
 ## ISSR electropherograms <a name = "issr_electropherograms"></a>
 
@@ -624,7 +622,7 @@ legend("topright", levels(cl), pch = 16, col = colrs, cex=0.8, inset=c(-0.01,0.2
 # 3D plot that you can rotate:
 # rgl::plot3d(x,y,z, col = colrs[cl], size = 5, type = "p")
 # rgl::legend3d("topright", legend = levels(cl), pch = 16, col = colrs, cex=0.6, inset=c(0.02))
-# this code makes the plot
+# this code makes the plot spin
 # rgl::play3d(rgl::spin3d(axis=c(0,1,1), rpm=3), duration=30)
 ```
 
