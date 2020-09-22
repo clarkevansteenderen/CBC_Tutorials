@@ -97,13 +97,13 @@ different.
 > ideally be? What is considered too lenient, or too strict when
 > scoring? How reproducible are the results? How do you disentangle PCR
 > errors from scoring errors? Some of the issues brought about by
-> scoring peaks is illustrated below:
+> scoring peaks are illustrated below:
 
 <br/> ![](scoring_errors.png)
 
 <br/>
 
-Part A): shows three RFU (Relative Fluorescence Units) threshold levels
+Part A) shows three RFU (Relative Fluorescence Units) threshold levels
 (a, b and c), the resulting binary output at each, and the consolidated
 binary output representing a replicate pair (where a 1 and 0 or 0 and 1
 outputs a \`?’, the shared presence of a band outputs a “1” and the
@@ -119,14 +119,14 @@ When running ISSR PCRs, you should replicate each sample in a different
 PCR machine. ISSR fragment data usually gets sent back to you as
 **.fsa** files.
 
-In this tut, we’ll look at electropherograms from 58 **Dactylopius
-opuntiae** samples (29 replicated samples), from two ISSR primers: ISSR
-809 and ISSR 826. In total, this was 116 PCRs\!
+In this tut, we’ll look at electropherograms from 58 *Dactylopius
+opuntiae* samples (29 replicated samples), from two ISSR primers: ISSR
+809 and ISSR 826. In total, this was 116 PCR samples\!
 
 > :bulb: I recommend that you rename the .fsa files to start with the
 > actual sample name (the sequencing facility sends them back with a
 > code prefix). Renaming ensures that the replicate pairs remain
-> together.
+> together, as files are listed alphabetically.
 
 Download and install the GeneMarker trial 35-day .exe file (email
 [GeneMarker](https://softgenetics.com/GeneMarker.php) to get the
@@ -145,9 +145,11 @@ have marked your peaks)
 
 The first sample, Ah2\_I\_809\_ISSR809\_19.fsa, looks like this:
 
-![](Ah2_I_809.png) :bulb: You’ll see that the peaks up to the first 100
-or so base pairs in size are quite messy. We’ll keep these in for now,
-but will remove them later in RawGeno.
+![](Ah2_I_809.png)
+
+:bulb: You’ll see that the peaks up to the first 100 or so base pairs in
+size are quite messy. We’ll keep these in for now, but will remove them
+later in RawGeno.
 
 All the files read in should have green page symbols next to them,
 signifying that they were successfully scored. You will very quickly see
@@ -174,7 +176,7 @@ blue:
 
 ![](tomentosus_compare.png)
 
-#### Export a summary peak table
+### Export a summary peak table
 
 At the top right of the window, select **Report settings** –\> select
 **Peak table** –\> deselect **Abide by panel**, **Show Only Uncertain
@@ -186,18 +188,19 @@ gives an error when reading this table into RawGeno) –\> Save the output
 as a .txt file
 ([**ISSR809\_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)).
 
-### RawGeno <a name = "rawgeno"></a>
+## RawGeno <a name = "rawgeno"></a>
 
 Download the RawGeno v2.0-2 tar.gz file
 [here](https://sourceforge.net/projects/rawgeno/files/rawgeno/RawGeno%202.0-2/),
 or find it in this [tutorial
 folder](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno_2.0-2.tar.gz).
 The .zip folder doesn’t seem to work on R version 4. Follow the
-instructions on the page to install. I recommend saving the tar.gz file
-to the Desktop, and then setting the Desktop as the working directory in
-R (Session –\> set working directory –\> choose working directory –\>
-select the desktop). Alternatively, you can go to Tools –\> install
-packages –\> then select install from: package archive file –\> Install.
+instructions on the page to install. I recommend saving the **tar.gz**
+file to the Desktop, and then setting the Desktop as the working
+directory in R (Session –\> set working directory –\> choose working
+directory –\> select the desktop). Alternatively, you can go to Tools
+–\> install packages –\> then select install from: package archive
+file –\> Install.
 
 Make sure that you have the **vegan** and **tkrplot** packages
 installed. Run RawGeno using:
@@ -208,8 +211,8 @@ RawGeno()
 
 Go to Files –\> Electroph. –\> PeakScanner, GeneMarker or Peakscan
 (.txt) –\> select the folder where the
-[**ISSR809\_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)file
-from GeneMarker is saved –\> insert file –\> keep the dye colour
+[**ISSR809\_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)
+file from GeneMarker is saved –\> insert file –\> keep the dye colour
 selected on Blue –\> continue
 
 A green graph will appear, where you can discard samples with the
@@ -799,8 +802,10 @@ folder created by STRUCTURE, and upload it to the [Structure Selector
 server](https://lmme.ac.cn/StructureSelector/?_ga=2.128163340.1275430146.1600087475-472650450.1600087475).
 Under “Options”, set the **Threshold** to 0.5-0.8 ([Peuchmaille
 (2016)](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12512)).
-The results produced here tell you what the predicted K value is, or
-rather, how many distinct genetic clusters are detected in your data.
+The larger the threshold, the more stringent the algorithm is at
+assigning individuals to a cluster group. The results produced here tell
+you what the predicted K value is, or rather, how many distinct genetic
+clusters are detected in your data.
 
 > For this run, the Peuchmaille method suggests K = 3 and K = 4, and the
 > Evanno method method suggests that K = 7. In this case, K = 7 makes
@@ -883,9 +888,14 @@ sumt relburnin=yes burninfrac=0.25;
 sump relburnin=yes burninfrac=0.25;  
 end;
 
+See the final file
+[here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes/issr_mrbayes.nex).
+
 > coding = noabsencesites means that the absence of peaks is not taken
 > into account. We’ll run 20 million generations here, and apply a
 > burnin of the first 25% of trees.
+
+Upload this file to CIPRES and run MrBayes.
 
 The log file will highlight this warning: **WARNING: There are 68
 characters incompatible with the specified coding bias. These characters

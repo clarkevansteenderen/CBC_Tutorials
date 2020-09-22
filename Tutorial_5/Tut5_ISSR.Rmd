@@ -71,23 +71,23 @@ The peak electropherograms are then converted into a binary (presence/absence) m
 
 > :pencil: **A note about the scoring of peaks:**    
 One of the main criticisms of ISSRs is the subjectivity of scoring peaks. When is a peak a real peak? How do you minimise the scoring of false positive and false negative peaks? How strong must the fluorescence of the fragment be to score it? What should the bin width ideally be? What is considered too lenient, or too strict when scoring? How reproducible are the results? How do you disentangle PCR errors from scoring errors? 
-Some of the issues brought about by scoring peaks is illustrated below:
+Some of the issues brought about by scoring peaks are illustrated below:
 
 <br/> 
 ![](scoring_errors.png)
 
 <br/>
 
-Part A): shows three RFU (Relative Fluorescence Units) threshold levels (a, b and c), the resulting binary output at each, and the consolidated binary output representing a replicate pair (where a 1 and 0 or 0 and 1 outputs a `?', the shared presence of a band outputs a "1" and the shared absence a "0"). Part B) shows the effect of bin width on the scoring of peaks. Replicate 1 shows a band of 50.1 base pairs (bp) in size, and replicate 2 shows one of 0.9 bp larger. With a bin width set at b1, both will be scored as present at the same locus, but at a width of b2, these bands will be scored as two separate loci.
+Part A) shows three RFU (Relative Fluorescence Units) threshold levels (a, b and c), the resulting binary output at each, and the consolidated binary output representing a replicate pair (where a 1 and 0 or 0 and 1 outputs a `?', the shared presence of a band outputs a "1" and the shared absence a "0"). Part B) shows the effect of bin width on the scoring of peaks. Replicate 1 shows a band of 50.1 base pairs (bp) in size, and replicate 2 shows one of 0.9 bp larger. With a bin width set at b1, both will be scored as present at the same locus, but at a width of b2, these bands will be scored as two separate loci.
 
 ## ISSR electropherograms <a name = "issr_electropherograms"></a>
 
 When running ISSR PCRs, you should replicate each sample in a different PCR machine.
 ISSR fragment data usually gets sent back to you as **.fsa** files. 
 
-In this tut, we'll look at electropherograms from 58 **Dactylopius opuntiae** samples (29 replicated samples), from two ISSR primers: ISSR 809 and ISSR 826. In total, this was 116 PCRs!
+In this tut, we'll look at electropherograms from 58 *Dactylopius opuntiae* samples (29 replicated samples), from two ISSR primers: ISSR 809 and ISSR 826. In total, this was 116 PCR samples!
 
-> :bulb: I recommend that you rename the .fsa files to start with the actual sample name (the sequencing facility sends them back with a code prefix). Renaming ensures that the replicate pairs remain together.
+> :bulb: I recommend that you rename the .fsa files to start with the actual sample name (the sequencing facility sends them back with a code prefix). Renaming ensures that the replicate pairs remain together, as files are listed alphabetically.
 
 Download and install the GeneMarker trial 35-day .exe file (email [GeneMarker](https://softgenetics.com/GeneMarker.php) to get the download). 
 
@@ -96,6 +96,7 @@ Open data --> Add --> Select all the ISSR809 .fsa files in the [**Tutorial_5/ISS
 The first sample, Ah2_I_809_ISSR809_19.fsa, looks like this:
 
 ![](Ah2_I_809.png)
+
 :bulb: You'll see that the peaks up to the first 100 or so base pairs in size are quite messy. We'll keep these in for now, but will remove them later in RawGeno.
 
 All the files read in should have green page symbols next to them, signifying that they were successfully scored. You will very quickly see which samples didn't work, as there will be a flat line, or the peaks will be very messy.
@@ -112,15 +113,15 @@ You can start looking for characteristic peaks. For example, these are some *Dac
 
 ![](tomentosus_compare.png)
 
-#### Export a summary peak table
+### Export a summary peak table
 
 At the top right of the window, select **Report settings** --> select **Peak table** --> deselect **Abide by panel**, **Show Only Uncertain Alleles**, and **Show Rejected Low Score Alleles** --> delete the two asterisks in the **show  when no allele call** --> select the **columns** button, and move all the columns on the left to the selected list on the right (through [a lot of] trial and error, I found that not doing this gives an error when reading this table into RawGeno) --> Save the output as a .txt file ([**ISSR809_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)).
 
 
-### RawGeno <a name = "rawgeno"></a>
+## RawGeno <a name = "rawgeno"></a>
 
 Download the RawGeno v2.0-2 tar.gz file [here](https://sourceforge.net/projects/rawgeno/files/rawgeno/RawGeno%202.0-2/), or find it in this [tutorial folder](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/RawGeno_2.0-2.tar.gz). The .zip folder doesn't seem to work on R version 4. 
-Follow the instructions on the page to install. I recommend saving the tar.gz file to the Desktop, and then setting the Desktop as the working directory in R (Session --> set working directory --> choose working directory --> select the desktop).
+Follow the instructions on the page to install. I recommend saving the **tar.gz** file to the Desktop, and then setting the Desktop as the working directory in R (Session --> set working directory --> choose working directory --> select the desktop).
 Alternatively, you can go to Tools --> install packages --> then select install from: package archive file --> Install.
 
 Make sure that you have the **vegan** and **tkrplot** packages installed. Run RawGeno using:
@@ -129,7 +130,7 @@ require(RawGeno)
 require(vegan)   
 RawGeno()   
 
-Go to Files --> Electroph. --> PeakScanner, GeneMarker or Peakscan (.txt) --> select the folder where the  [**ISSR809_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT)file from GeneMarker is saved --> insert file --> keep the dye colour selected on Blue --> continue 
+Go to Files --> Electroph. --> PeakScanner, GeneMarker or Peakscan (.txt) --> select the folder where the  [**ISSR809_AlleleReport.txt**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/GeneMarker%20Allele%20Reports/ISSR809_AlleleReport.TXT) file from GeneMarker is saved --> insert file --> keep the dye colour selected on Blue --> continue 
 
 A green graph will appear, where you can discard samples with the highest and lowest numbers of peaks. Here, the highest was 132 peaks, and the lowest 48. Drag the rectangle to cover the desired range. Typically, you would discard 5% of the smallest peaks, and 5% of the higher ones (marked with dashed lines). For this analysis, let's keep all of them. Click on **START**.
 
@@ -399,7 +400,7 @@ Now click on **Project** --> **Start a job** --> Leave the analysis to run to co
 
 > :white_check_mark: Don't forget to repeat the same analysis, with the same parameters, but check the **use sampling locations as prior** to enable supervised clustering. In doing this, the predefined population groupings provided in the second column are used by the algorithm as prior information. Compare the output from both runs. This second supervised run is "recommended for cases in which the inferred population structure is weak, or the populations examined are very closely related" [Kopelman *et al.* (2016)](https://rosenberglab.stanford.edu/papers/KopelmanEtAl2015-MolEcolResources.pdf).
 
-Zip the [**Results**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/Results_unsupervised.zip) folder created by STRUCTURE, and upload it to the [Structure Selector server](https://lmme.ac.cn/StructureSelector/?_ga=2.128163340.1275430146.1600087475-472650450.1600087475). Under "Options", set the **Threshold** to 0.5-0.8 ([Peuchmaille (2016)](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12512)). 
+Zip the [**Results**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/STRUCTURE/Results_unsupervised.zip) folder created by STRUCTURE, and upload it to the [Structure Selector server](https://lmme.ac.cn/StructureSelector/?_ga=2.128163340.1275430146.1600087475-472650450.1600087475). Under "Options", set the **Threshold** to 0.5-0.8 ([Peuchmaille (2016)](https://onlinelibrary.wiley.com/doi/10.1111/1755-0998.12512)). The larger the threshold, the more stringent the algorithm is at assigning individuals to a cluster group. 
 The results produced here tell you what the predicted K value is, or rather, how many distinct genetic clusters are detected in your data. 
 
 > For this run, the Peuchmaille method suggests K = 3 and K = 4, and the Evanno method method suggests that K = 7. In this case, K = 7 makes little sense, so let's present the K = 3 and K = 4 plots. Since we know that there are only two biotypes present in the data (stricta and ficus), let's include a K = 2 plot, where we force the data into one of two groups. Just look at the three top plots (unsupervised):
@@ -439,8 +440,12 @@ sumt relburnin=yes burninfrac=0.25;
 sump relburnin=yes burninfrac=0.25;   
 end;   
 
+See the final file [here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/MrBayes/issr_mrbayes.nex).
+
 > coding = noabsencesites means that the absence of peaks is not taken into account.
 We'll run 20 million generations here, and apply a burnin of the first 25% of trees.
+
+Upload this file to CIPRES and run MrBayes.
 
 The log file will highlight this warning:
 **WARNING: There are 68 characters incompatible with the specified coding bias. These characters will be excluded.** 
