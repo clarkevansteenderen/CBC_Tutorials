@@ -22,8 +22,8 @@ Clarke van Steenderen
 
 ## DOCUMENT CONTENTS
 
-[What are ISSRs?](#issr) [ISSR
-electropherograms](#issr_electropherograms)  
+[What are ISSRs?](#issr)  
+[ISSR electropherograms](#issr_electropherograms)  
 [RawGeno](#rawgeno)  
 [BinMat](#binmat)  
 [Non-metric multidimensional Scaling Plots and UPGMA

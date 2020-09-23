@@ -22,8 +22,8 @@ knitr::opts_chunk$set(fig.path='FigsTut5/')
 8. Run a supervised and unsupervised STRUCTURE analysis
 
 ## DOCUMENT CONTENTS
-[What are ISSRs?](#issr)
-[ISSR electropherograms](#issr_electropherograms)   
+[What are ISSRs?](#issr)    
+[ISSR electropherograms](#issr_electropherograms)    
 [RawGeno](#rawgeno)   
 [BinMat](#binmat)   
 [Non-metric multidimensional Scaling Plots and UPGMA dendrograms](#nmds)   
