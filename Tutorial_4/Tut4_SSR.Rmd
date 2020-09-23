@@ -33,6 +33,17 @@ Many of the functions used here were gleaned from [this great population genetic
 12. [Linear Mixed Models for genetic diversity](#lmm)
 13. [STRUCTURE for SSR data](#structure_ssr)
 
+## What are SSRs?
+
+SSR (simple-sequence repeats), or "microsatellites" are are repetitive regions (= motifs) of one to ten nucleotides that occur throughout the genomes of eukaryotes and prokaryotes (mostly in non-coding regions), and mutate rapidly. A motif could, for example, be a dinucleotide repeat unit such as [AG]n, or a pentanucleotide unit such as [AGTTA]n. 
+The diagram below illustrates how SSR regions differ in length (due to differing numbers of motifs) on either chromosome (as SSRs are co-dominant), and how these might show up on a gel. 
+
+<br/>
+
+![](ssr_gel.png)
+
+<br/>
+
 We will use the data for *Neochetina bruchi* provided in the supplementary section of the Hopper *et. al.* 2018 paper. This is in the **Tutorial 4/Data** folder (**hopper_neochetina_b.csv**). The paper reports that raw SSR data were read into Geneious first, and then the output was opened in Excel and saved in GenAlex format (Microsoft Excel plugin).
 
 ## Overview of the SSR data <a name = "overview"></a>
