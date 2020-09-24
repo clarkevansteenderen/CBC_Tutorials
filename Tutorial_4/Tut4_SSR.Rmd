@@ -44,7 +44,7 @@ The diagram below illustrates how SSR regions differ in length (due to differing
 
 <br/>
 
-We will use the data for *Neochetina bruchi* provided in the supplementary section of the Hopper *et. al.* 2018 paper. This is in the **Tutorial 4/Data** folder (**hopper_neochetina_b.csv**). The paper reports that raw SSR data were read into Geneious first, and then the output was opened in Excel and saved in GenAlex format (Microsoft Excel plugin).
+We will use the data for *Neochetina bruchi* provided in the supplementary section of the Hopper *et. al.* 2018 paper. This is in the **Tutorial 4/Data** folder ([**hopper_neochetina_b.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/hopper_neochetina_b.csv)). The paper reports that raw SSR data were read into Geneious first, and then the output was opened in Excel and saved in GenAlex format (Microsoft Excel plugin).
 
 ## Overview of the SSR data <a name = "overview"></a>
 
@@ -429,7 +429,9 @@ writeGenPop(neochetina_b, "~/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.t
 div_basic_stats = diveRsity::divBasic("~/CBC_tuts/Tutorial_4/Data/Neochetina_b_writeGenPop.txt", outfile = "diveRsity_Results", gp = 3, bootstraps = 1000, HWEexact = T, mcRep = 10000)
 ```
 
-Have a look at the "overall" column in the [divBasic] output Excel file, and compare the values to those in Hopper's Table 2.
+The converted genepop-format file is [here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Data/Neochetina_b_writeGenPop.txt).
+
+Have a look at the "overall" column in the [[divBasic] output Excel file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/diveRsity_Results-%5BdiveRsity%5D/%5BdivBasic%5D.xlsx), and compare the values to those in Hopper's Table 2.
 
 The significant FIS values are marked in bold in the table. This was ascertained through the upper and lower confidence intervals. If the range of the upper and lower CI values do not cross zero, then the value is significant:
 
@@ -539,9 +541,11 @@ jostsD = popgenreport(convert_neo, mk.counts = F, mk.differ.stats = T, mk.pdf = 
 
 ```
 
+These results are [here](https://github.com/CJMvS/CBC_Tutorials/tree/master/Tutorial_4/results).
+
 ## Linkage Disequilibrium (genepop) <a name = "LDgenepop"></a>
 
-Now let's have a look at Linkage Disequilibrium again, using the genepop package. The **LD.txt** file produced here is in the Tutorial 4 folder.
+Now let's have a look at Linkage Disequilibrium again, using the genepop package. The [**LD.txt** file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/LD_genepop.txt) produced here is in the Tutorial 4 folder.
 
 ```{r}
 # we'll read in the file that was converted using the writeGenPop function again
