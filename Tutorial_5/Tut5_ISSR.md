@@ -695,6 +695,15 @@ here](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/SplitsTree/i
 
 ![](splitstree_opuntiae_both_primers.png)
 
+We can copy the same NEXUS file used for SplitsTree, add a TRAITS block
+to the end, and open the
+[file](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_5/PopArt/issr809_and_issr826_popart.nex)
+in PopArt to make a haplotype network: <br/> <br/>
+
+![](issrs_popart.png)
+
+<br/> <br/>
+
 ## STRUCTURE <a name = "structure"></a>
 
 > :pencil: Note: STRUCTURE reads in .txt files
