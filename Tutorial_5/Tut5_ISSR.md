@@ -308,7 +308,7 @@ if (!require("pacman")) install.packages("pacman") # pacman is a package that in
     ## Loading required package: pacman
 
 ``` r
-pacman::p_load(BinMat, ape, magrittr, ggtree, MASS, plot3D)
+pacman::p_load(adegenet, BinMat, ape, magrittr, ggtree, MASS, plot3D)
 
 # read in the BinaryDataT_ISSR809.csv file:
 
@@ -874,6 +874,58 @@ above (supervised).
 > settings. Have a look at **Tutorial 4** for an example using
 > *Neochetina bruchi* data.
 
+### Use the R package ‘adegenet’ to produce a DAPC plot
+
+DAPC (discriminant analysis of principal components) is a very useful
+tool to view genetic cluster groups. It’s worth exploring this method
+for ISSR binary data, but keep in mind that the algorithm applies the
+Euclidean distance measure. See page 20 of [this
+document](file:///C:/Users/s1000334/Downloads/tutorial-basics.pdf) for
+more information.
+
+We’ll read in the file used for STRUCTURE, but saved as a [.csv
+file](https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.csv):
+
+``` r
+issr_concat = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.csv", row.names = 1)
+# remove the population column
+issr_concat = issr_concat[-1]
+# convert the data to a genind object. Specify the type to be Presence/Absence (PA), ploidy to be 1 (dominant), and the character for missing data
+obj <- adegenet::df2genind(issr_concat, ploidy=1, type="PA", NA.char = "-9")
+# create a list of population names (8 Saudi Arabia, 10 kruger national park, 3 Namibia samples, etc.)
+a = rep(c('Saudi Arabia', 'Kruger NP', 'Namibia', 'Uitenhage', 'Stricta Source'), times = c(8,10,3,3,5))
+# assign this list to be the population information
+pop(obj) = a
+# find the optimal number of PCAs
+best_a_score = adegenet::optim.a.score(dapc(obj, n.pca = 25, n.da = nPop(obj))) # shows that the best no. of PCs is 3
+```
+
+![](FigsTut5/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+# create the DAPC object
+dapc <- adegenet::dapc(obj, var.contrib = TRUE, scale = FALSE, n.pca = 3, n.da = nPop(obj))
+# assign colours to each population
+myCol2 <- c("blue","red", "green", "orange", "purple")
+# create the plot
+scatter(dapc, cell = 2, pch = 16, cstar = 1, col=myCol2, scree.da=FALSE, legend = T, clab = 0, solid = 0.4, cex = 2)
+```
+
+![](FigsTut5/unnamed-chunk-4-2.png)<!-- -->
+
+``` r
+# view discriminant functions as density plots
+scatter(dapc,1,1, col=myCol2, bg="white", scree.da=FALSE, legend=TRUE, solid=.4)
+```
+
+![](FigsTut5/unnamed-chunk-4-3.png)<!-- -->
+
+``` r
+scatter(dapc,2,2, col=myCol2, bg="white", scree.da=FALSE, legend=TRUE, solid=.4)
+```
+
+![](FigsTut5/unnamed-chunk-4-4.png)<!-- -->
+
 ## MrBayes for binary data <a name = "mrbayes"></a>
 
 We’ll use the same NEXUS file that we used in SplitsTree
@@ -962,7 +1014,7 @@ issr.tree.plot = issr.tree %>% ggtree(., color = "black", layout="unrooted", bra
 issr.tree.plot
 ```
 
-![](FigsTut5/unnamed-chunk-5-1.png)<!-- -->
+![](FigsTut5/unnamed-chunk-6-1.png)<!-- -->
 
 In this Bayesian tree, the two Saudi Arabian samples (known to be
 ‘stricta’) **H1** and **Ah2** do not group with the stricta (blue) or
@@ -1042,4 +1094,4 @@ combo.tree.plot = combo.tree %>% ggtree(., color = "black", layout="unrooted", b
 combo.tree.plot
 ```
 
-![](FigsTut5/unnamed-chunk-6-1.png)<!-- -->
+![](FigsTut5/unnamed-chunk-7-1.png)<!-- -->

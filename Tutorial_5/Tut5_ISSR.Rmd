@@ -184,7 +184,7 @@ Install the BinMat package (Packages --> Install --> CRAN repository)
 
 ```{r}
 if (!require("pacman")) install.packages("pacman") # pacman is a package that installs other required packages
-pacman::p_load(BinMat, ape, magrittr, ggtree, MASS, plot3D)
+pacman::p_load(adegenet, BinMat, ape, magrittr, ggtree, MASS, plot3D)
 
 # read in the BinaryDataT_ISSR809.csv file:
 
@@ -430,6 +430,37 @@ Open the [CLUMPAK](http://clumpak.tau.ac.il/) server, and go to the **Compare** 
 Have a look at the three lower plots in the figure above (supervised).
 
 > :bulb: The process for running STRUCTURE with SSR (microsatelllite) data is exactly the same, except that you need to set **ploidy** to 2 (as it is co-dominant), and select the option **“special format data: file stores data for individuals in a single line”** in the data input settings. Have a look at **Tutorial 4** for an example using *Neochetina bruchi* data. 
+
+### Use the R package 'adegenet' to produce a DAPC plot
+
+DAPC (discriminant analysis of principal components) is a very useful tool to view genetic cluster groups. It's worth exploring this method for ISSR binary data, but keep in mind that the algorithm applies the Euclidean distance measure. See page 20 of [this document](file:///C:/Users/s1000334/Downloads/tutorial-basics.pdf) for more information.
+
+We'll read in the file used for STRUCTURE, but saved as a [.csv file](https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.csv):
+
+```{r}
+
+issr_concat = read.csv("https://raw.githubusercontent.com/CJMvS/CBC_Tutorials/master/Tutorial_5/STRUCTURE/combined_primers_issr809_and_issr826_STRUCTURE.csv", row.names = 1)
+# remove the population column
+issr_concat = issr_concat[-1]
+# convert the data to a genind object. Specify the type to be Presence/Absence (PA), ploidy to be 1 (dominant), and the character for missing data
+obj <- adegenet::df2genind(issr_concat, ploidy=1, type="PA", NA.char = "-9")
+# create a list of population names (8 Saudi Arabia, 10 kruger national park, 3 Namibia samples, etc.)
+a = rep(c('Saudi Arabia', 'Kruger NP', 'Namibia', 'Uitenhage', 'Stricta Source'), times = c(8,10,3,3,5))
+# assign this list to be the population information
+pop(obj) = a
+# find the optimal number of PCAs
+best_a_score = adegenet::optim.a.score(dapc(obj, n.pca = 25, n.da = nPop(obj))) # shows that the best no. of PCs is 3
+# create the DAPC object
+dapc <- adegenet::dapc(obj, var.contrib = TRUE, scale = FALSE, n.pca = 3, n.da = nPop(obj))
+# assign colours to each population
+myCol2 <- c("blue","red", "green", "orange", "purple")
+# create the plot
+scatter(dapc, cell = 2, pch = 16, cstar = 1, col=myCol2, scree.da=FALSE, legend = T, clab = 0, solid = 0.4, cex = 2)
+# view discriminant functions as density plots
+scatter(dapc,1,1, col=myCol2, bg="white", scree.da=FALSE, legend=TRUE, solid=.4)
+scatter(dapc,2,2, col=myCol2, bg="white", scree.da=FALSE, legend=TRUE, solid=.4)
+
+```
 
 ## MrBayes for binary data <a name = "mrbayes"></a>
 
