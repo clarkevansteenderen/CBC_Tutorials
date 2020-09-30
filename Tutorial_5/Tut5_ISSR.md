@@ -41,7 +41,7 @@ microsatellites (SSRs). The differing lengths of these regions are what
 can be used to distinguish one individual from another. Only one ISSR
 primer is used (as opposed to a different forward and reverse primer) in
 a PCR reaction, which binds to either the flanking region (5’-anchored)
-of the SSR, or to the SSR region itself (3’-anchored). <br/>
+of the SSR, or to the SSR region itself (3’-anchored). ISSR primers are universal, and so prior knowledge of the target species' genome is not required. <br/>
 
 ![](issr_diagram.png)
 
