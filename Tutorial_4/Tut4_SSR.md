@@ -52,7 +52,7 @@ co-dominant), and how these might show up on a gel.
 <br/>
 
 We will use the data for *Neochetina bruchi* provided in the
-supplementary section of the Hopper *et. al.* 2018 paper. This is in the
+supplementary section of the [Hopper *et. al.* 2018 paper](https://onlinelibrary.wiley.com/doi/full/10.1111/eva.12755). This is in the
 **Tutorial 4/Data** folder
 ([**hopper\_neochetina\_b.csv**](https://github.com/CJMvS/CBC_Tutorials/blob/master/Tutorial_4/Neochetina_SSR/hopper_neochetina_b.csv)).
 The paper reports that raw SSR data were read into Geneious first, and
