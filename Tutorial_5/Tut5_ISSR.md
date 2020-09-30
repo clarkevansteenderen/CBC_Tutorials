@@ -880,7 +880,7 @@ DAPC (discriminant analysis of principal components) is a very useful
 tool to view genetic cluster groups. It’s worth exploring this method
 for ISSR binary data, but keep in mind that the algorithm applies the
 Euclidean distance measure. See page 20 of [this
-document](file:///C:/Users/s1000334/Downloads/tutorial-basics.pdf) for
+document](http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf) for
 more information.
 
 We’ll read in the file used for STRUCTURE, but saved as a [.csv
