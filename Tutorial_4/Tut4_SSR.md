@@ -988,6 +988,7 @@ g2.data = as.data.frame(g2.data) ;g2.data
 
 Let’s get the pairwise FST and Jost’s D values, as reported in Table 3
 of the Hopper paper. We’ll use the PopGenReport package.
+The pairwise FST and Jost's D values measure the fraction/proportion of allelic variation/differention among populations. The higher the value, the more genetically distant they are from each other. 
 
 ``` r
 # First, we need to convert the original neochetina_b data into a genind object using the genclone2genind() function:
