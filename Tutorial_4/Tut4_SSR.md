@@ -678,7 +678,7 @@ length(which(rD_p_vals < 0.05))
 
 ``` r
 # if you want to look at individual populations, you can first subset them:
-LD.Aus <- popsub(neochetina_b, "AUSTRALIA")
+LD.Aus = popsub(neochetina_b, "AUSTRALIA")
 LD.CA = popsub(neochetina_b, "CA")
 LD.FL = popsub(neochetina_b, "FL")
 LD.TX = popsub(neochetina_b, "TX")
