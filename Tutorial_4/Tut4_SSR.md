@@ -566,6 +566,8 @@ table.value(table(dapc.neo_b$assign, pop(neochetina_b)), col.lab = levels(pop(ne
 
 ![](FigsTut4/unnamed-chunk-9-1.png)<!-- -->
 
+In this table, columns represent the predefined population groups that you assigned to samples, and the rows represent the cluster that the DAPC algorithm assigned the sample to.
+
 ## STRUCTURE-like “compoplots” <a name = "compoplots"></a>
 
 Similar to the output of STRUCTURE, we can create a graphic showing the
