@@ -907,7 +907,7 @@ ggplot(ciTable, aes(x = levels(pop(neochetina_b)), y = Fis)) +
 
 ![](FigsTut4/unnamed-chunk-16-1.png)<!-- -->
 
-> From this graph, CA, SAE, and URUGUAY are significant.
+> From this graph, CA, SAE, and URUGUAY are significant. You can tell this by looking at whether the error bars span over the x-axis. Those that don't are significant.
 
 ## Inbreeding coefficients using inbreedR <a name = "inbreedR"></a>
 
