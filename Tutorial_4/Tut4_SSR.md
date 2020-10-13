@@ -660,7 +660,7 @@ won’t.
 > with an associated p-value. High index values indicate linkage
 > disequilibrium (i.e. alleles are linked, and not independent) We will
 > first have a look at assessing LD using the poppr package. Hopper *et.
-> al.* used the genepop package, which we’ll get to later.
+> al.* used the genepop package, which we’ll get to later. In the figure below, heatmap colours represent the index value, and the values printed on each block are p-values.
 
 ``` r
 # LD across marker pairs over all populations:
