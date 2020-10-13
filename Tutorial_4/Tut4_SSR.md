@@ -179,7 +179,7 @@ Now we can check whether there are any deviations from Hardy-Weinberg
 Equilibrium (HWE) across and within each population. See page 75 of the
 **Introduction to Conservation Genetics** by Frankham *et. al* 2002 for
 some really great definitions and explanations of various population
-genetics concepts (in the **Helpful Books** folder).
+genetics concepts (in the **Helpful Books** folder). See also [this definition](https://www.nature.com/scitable/definition/hardy-weinberg-equilibrium-122/).
 
 ``` r
 # HW equilibrium (for each marker across all populations)
