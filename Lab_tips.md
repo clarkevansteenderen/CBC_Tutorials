@@ -69,8 +69,9 @@ chemical.
 
 ## Diluting ethanol
 
-To make up a 70% ethanol dilution, mix ethanol and deionised water in a ratio of 7:3. For example, to make 1 L, mix 700 mL ethanol with 300 mL water.  An 80% solution would
-be 800 mL ethanol in 200 mL water. You get the gist.
+To make up a 70% ethanol dilution, mix absolute (100%) ethanol and deionised water in a ratio of 7:3. 
+For example, to make 1 L, mix 700 mL absolute ethanol with 300 mL water.  An 80% solution would
+be 800 mL absolute ethanol in 200 mL water. You get the gist.
 
 ## Preparing agarose gels
 
