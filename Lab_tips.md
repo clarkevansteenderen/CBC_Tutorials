@@ -12,7 +12,7 @@ store them vertically.
 
 ## Preparing primers
 
-Once your primers arrive, you need to spin it down in the
+Once your primers arrive, you need to spin them down in the
 microcentrifuge (just in case the dried pellet stuck to the lid or the
 side of the tube), add the specified amount of deionised water to it
 (this will be provided in the information sheet that comes with the
