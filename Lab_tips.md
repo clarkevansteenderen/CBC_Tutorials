@@ -67,6 +67,11 @@ As with the primer dilution, mix 10 uL concentrated ethidium bromide
 with 90 uL water. Always wear gloves and a lab coat when handling this
 chemical.
 
+## Diluting ethanol
+
+To make up a 70% ethanol dilution, mix ethanol and deionised water in a ratio of 7:3. For example, to make 1 L, mix 700 mL ethanol with 300 mL water.  An 80% solution would
+be 800 mL ethanol in 200 mL water. You get the gist.
+
 ## Preparing agarose gels
 
 To make a standard 1% agarose gel for a small gel tank, mix 100 mL 1X
