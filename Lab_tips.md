@@ -34,6 +34,9 @@ them to set up PCR reactions, be sure to mix them well, as settling
 could have occurred, and then you have more water at the surface, and
 highly concentrated primer at the bottom of the tube.
 
+:bulb: Keep primers labelled with fluorescent dyes in the dark, as they are light-sensitive.
+Wrapping the tube in foil is a good idea.
+
 ## Nano-dropping
 
 Be sure to run a blank before starting, by using 2 uL of the solution
