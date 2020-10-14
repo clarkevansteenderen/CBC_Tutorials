@@ -14,11 +14,11 @@ store them vertically.
 
 Once your primers arrive, you need to spin them down in the
 microcentrifuge (just in case the dried pellet stuck to the lid or the
-side of the tube), add the specified amount of deionised water to it
+side of the tube), add the specified amount of deionised water to them
 (this will be provided in the information sheet that comes with the
-primer/s), and mix it well by flicking the tube. This is now at a 100 uM
-concentration, and is referred to as the ‘master stock solution’. Store
-this in the freezer.
+primer/s), and mix well by flicking the tube. These are now at a 100 uM
+concentration, and are referred to as the ‘master stock solutions’. Store
+them in the freezer.
 
 To make working solutions for your PCRs, you need to create working
 solutions at a concentration of 10 uM. To do this, mix 90 uL deionised
