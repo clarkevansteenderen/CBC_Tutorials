@@ -23,7 +23,8 @@ them in the freezer.
 To make working solutions for your PCRs, you need to create working
 solutions at a concentration of 10 uM. To do this, mix 90 uL deionised
 water with 10 uL of the master stock solution to make up a final volume
-of 100 uL.
+of 100 uL. Make up a few of these to avoid defrosting the master stock too often. Numerous freeze-thaw cycles can 
+cause degradation.
 
 **C1V1 = C2V2**  
 (100 uM)(V1) = (10 uM)(100 uL)  
@@ -85,7 +86,7 @@ careful, as this is extremely hot (use the thick gloves to handle the
 bottle)\! Once this is done, add 10 uL ethidium bromide (diluted EtBr),
 mix well, and leave to cool for a few minutes (but not long enough for
 it to set yet\!). Position the combs in the gel mould, and then pour the
-agarose solution into it. Leave to cool for about 20 - 30 minutes.
+agarose solution into it. Leave to cool for about 20 - 30 minutes. Gels can be reused, but I wouldn't recommend using them more than two or three times at most.
 
 ## Loading a gel
 
@@ -98,3 +99,20 @@ well. Connect the gel dock to the powerpack battery, and set it to 90
 Volts for 40 minutes. Make sure that the gel is positioned such that the
 wells are at the negative end, and can migrate to the positive end of
 the gel tray.
+
+## Some extraction tips
+
+When using the kits (e.g. Invitrogen genomic DNA mini kit), I've found that smaller amounts of tissue work better.
+So don't put a whole caterpillar or moth in for digestion. If you want to preserve the sample, you can just use three legs from one side of the body.
+What works well is to crush the sample in the digestion buffer with the pipette tip. I bend the tip slightly so that the sample doesn't get stuck in the tip opening.
+Crushing the sample ensures that the proteinase K gets in over a larger surface area, and also breaks the hard exoskeleton.
+Overnight digestion seems to work really well, so I usually put samples in to digest in the late afternoon, and then finsih up the next morning.
+
+## Possible pitfalls
+
+Don't prepare PCR mastermix and then store it in the fridge for later.   
+Always double check the settings on the PCR machine; check each step for the correct time and temperature.   
+Always put the lid on the centrifuge before spinning.   
+If you're unsure what substance is in a bottle, rather make up your own solution to be safe.   
+Always autoclave pipette tips and epps before use.  
+
