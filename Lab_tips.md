@@ -5,7 +5,7 @@ Clarke van Steenderen
 
 ## CONTENTS
 
-Pipettes[#pipettes]   
+1. Pipettes[#pipettes]   
 Preparing primers[#primerprep]   
 Nano-dropping[#nanodrop]   
 Diluting DNA extracts[#dilutingDNA]   
