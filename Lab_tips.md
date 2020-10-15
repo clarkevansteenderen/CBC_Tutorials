@@ -5,17 +5,17 @@ Clarke van Steenderen
 
 ## CONTENTS
 
-Pipettes [#pipettes]   
-Preparing primers [#primerprep]   
-Nano-dropping [#nanodrop]   
-Diluting DNA extracts [#dilutingDNA]   
-Diluting TBE buffer [#dilutingTBE]   
-Diluting ethidium bromide [#dilutingEtBr]    
-Diluting ethanol [#dilutingEt]   
-Preparing agarose gels [#agarose]    
-Loading a gel [#gelloading]    
-Some Extraction tips [#extractions]    
-Possible pitfalls [#pitfalls]    
+Pipettes[#pipettes]   
+Preparing primers[#primerprep]   
+Nano-dropping[#nanodrop]   
+Diluting DNA extracts[#dilutingDNA]   
+Diluting TBE buffer[#dilutingTBE]   
+Diluting ethidium bromide[#dilutingEtBr]    
+Diluting ethanol[#dilutingEt]   
+Preparing agarose gels[#agarose]    
+Loading a gel[#gelloading]    
+Some Extraction tips[#extractions]    
+Possible pitfalls[#pitfalls]    
 
 ## Pipettes <a name = "pipettes"></a>
 
