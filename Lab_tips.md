@@ -34,8 +34,7 @@ primer/s), and mix well by flicking the tube. These are now at a 100 uM
 concentration, and are referred to as the ‘master stock solutions’. Store
 them in the freezer.
 
-To make working solutions for your PCRs, you need to create working
-solutions at a concentration of 10 uM. To do this, mix 90 uL deionised
+To make working solutions for your PCRs, you need to create dilutions at a concentration of 10 uM. To do this, mix 90 uL deionised
 water with 10 uL of the master stock solution to make up a final volume
 of 100 uL. Make up a few of these to avoid defrosting the master stock too often. Numerous freeze-thaw cycles can 
 cause degradation.
