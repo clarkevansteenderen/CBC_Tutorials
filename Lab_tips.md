@@ -15,12 +15,13 @@ Clarke van Steenderen
 [Preparing agarose gels](#agarose)    
 [Loading a gel](#gelloading)    
 [Some Extraction tips](#extractions)    
+[A typical PCR setup](#pcr)    
 [Possible pitfalls](#pitfalls)   
 
 ## Pipettes <a name = "pipettes"></a>
 
 When you are finished using pipettes for the day, set them back to their
-highest volume (e.g. set a 200 uL pipette up to 200 uL). This preserves
+highest volume (e.g. set a 200 uL pipette up to 200 uL). This preserves
 the springs inside and will keep them calibrated for longer. Always
 store them vertically.
 
@@ -121,11 +122,22 @@ What works well is to crush the sample in the digestion buffer with the pipette 
 Crushing the sample ensures that the proteinase K gets in over a larger surface area, and also breaks the hard exoskeleton.
 Overnight digestion seems to work really well, so I usually put samples in to digest in the late afternoon, and then finsih up the next morning.
 
+## A typical PCR setup <a name = "pcr"></a>
+
+A standard PCR master mix would comprise:   
+
+12.5 uL taq mix    
+2.0 uL forward primer   
+2.0 uL reverse primer   
+6.5 uL deionised water   
+2.0 uL DNA (~ 100 ng)   
+ 
+Which makes up a 25 uL volume.   
+
 ## Possible pitfalls <a name = "pitfalls"></a>
 
 Don't prepare PCR mastermix and then store it in the fridge for later.   
 Always double check the settings on the PCR machine; check each step for the correct time and temperature.   
 Always put the lid on the centrifuge before spinning.   
 If you're unsure what substance is in a bottle, rather make up your own solution to be safe.   
-Always autoclave pipette tips and epps before use.  
-
+Always autoclave pipette tips and epps before use. 
