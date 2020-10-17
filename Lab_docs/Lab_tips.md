@@ -142,7 +142,8 @@ A standard PCR master mix would comprise:
 6.5 uL deionised water  
 2.0 uL DNA (\~ 100 ng)
 
-Which makes up a 25 uL volume.
+Which makes up a 25 uL volume. Preferably, don't leave the PCR machine on hold overnight, as it puts strain on it.  
+Store PCR products in the fridge or freezer.
 
 ## :exclamation: Possible pitfalls <a name = "pitfalls"></a>
 
