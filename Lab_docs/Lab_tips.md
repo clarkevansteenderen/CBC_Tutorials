@@ -146,7 +146,7 @@ Which makes up a 25 uL volume.
 
 ## Possible pitfalls <a name = "pitfalls"></a>
 
-Don’t prepare PCR mastermix and then store it in the fridge for later.  
+Don’t mix taq with primers and then store it in the fridge for later. Do everything sequentially.   
 Always double check the settings on the PCR machine; check each step for
 the correct time and temperature.  
 Always put the lid on the centrifuge before spinning.  
