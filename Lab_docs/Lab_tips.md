@@ -102,8 +102,8 @@ careful, as this is extremely hot (use the thick gloves to handle the
 bottle)\! Once this is done, add 10 uL ethidium bromide (diluted EtBr),
 mix well, and leave to cool for a few minutes (but not long enough for
 it to set yet\!). Position the combs in the gel mould, and then pour the
-agarose solution into it. Leave to cool for about 20 - 30 minutes. Gels
-can be reused, but I wouldn’t recommend using them more than two or
+agarose solution into it. Leave to cool for about 20 - 30 minutes. Don't pour very hot agarose into the mould, as it will damage the plastic.
+Gels can be reused, but I wouldn’t recommend using them more than two or
 three times at most. Always handle gels with gloves on, and wipe down all surfaces afterwards.
 
 ## Loading a gel <a name = "gelloading"></a>
