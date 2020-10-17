@@ -144,7 +144,7 @@ A standard PCR master mix would comprise:
 
 Which makes up a 25 uL volume.
 
-## Possible pitfalls <a name = "pitfalls"></a>
+## :exclamation: Possible pitfalls <a name = "pitfalls"></a>
 
 Don’t mix taq with primers and then store it in the fridge for later. Do everything sequentially.   
 Always double check the settings on the PCR machine; check each step for
