@@ -76,7 +76,7 @@ a total quantity of 100 ng DNA.
 
 ## Diluting TBE buffer <a name = "dilutingTBE"></a>
 
-To make a 1X buffer solution, mix TBE buffer and deionised water in a
+To make a 1X buffer solution, mix 10X TBE buffer and deionised water in a
 ratio of 1:9, respectively. For example, to make a 1 L solution, mix 100
 mL TBE buffer (10X solution) with 900 mL water.
 
@@ -104,7 +104,7 @@ mix well, and leave to cool for a few minutes (but not long enough for
 it to set yet\!). Position the combs in the gel mould, and then pour the
 agarose solution into it. Leave to cool for about 20 - 30 minutes. Gels
 can be reused, but I wouldn’t recommend using them more than two or
-three times at most.
+three times at most. Always handle gels with gloves on, and wipe down all surfaces afterwards.
 
 ## Loading a gel <a name = "gelloading"></a>
 
@@ -114,9 +114,9 @@ dye. Add 2 - 4 uL ladder into the first well in the gel (if you have two
 combs, put ladder into the first well in the second row as well). Now
 load up the 7 uL sample (2 uL loading dye + 5 uL PCR product) into each
 well. Connect the gel dock to the powerpack battery, and set it to 90
-Volts for 40 minutes. Make sure that the gel is positioned such that the
+volts for 40 minutes. Make sure that the gel is positioned such that the
 wells are at the negative end, and can migrate to the positive end of
-the gel tray.
+the gel tray (since DNA is negatively charged).
 
 ## Some extraction tips <a name = "extractions"></a>
 
@@ -130,7 +130,7 @@ stuck in the tip opening. Crushing the sample ensures that the
 proteinase K gets in over a larger surface area, and also breaks the
 hard exoskeleton. Overnight digestion seems to work really well, so I
 usually put samples in to digest in the late afternoon, and then finsih
-up the next morning.
+up the next morning. Don't despair if you get low DNA concentrations. Even samples of 4 ng/uL or less can produce bright bands! 
 
 ## A typical PCR setup <a name = "pcr"></a>
 
