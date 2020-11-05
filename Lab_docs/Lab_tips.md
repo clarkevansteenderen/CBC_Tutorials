@@ -145,8 +145,8 @@ up the next morning. Don't despair if you get low DNA concentrations. Even sampl
 A standard PCR master mix would comprise:
 
 12.5 uL taq mix (2X)   
-2.0 uL forward primer  
-2.0 uL reverse primer  
+2.0 uL forward primer (at 10 uM)   
+2.0 uL reverse primer (at 10 uM)    
 6.5 uL deionised water  
 2.0 uL DNA (total of \~ 30 - 100 ng)
 
