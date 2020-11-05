@@ -144,11 +144,11 @@ up the next morning. Don't despair if you get low DNA concentrations. Even sampl
 
 A standard PCR master mix would comprise:
 
-12.5 uL taq mix (2X)
+12.5 uL taq mix (2X)   
 2.0 uL forward primer  
 2.0 uL reverse primer  
 6.5 uL deionised water  
-2.0 uL DNA (\~ 100 ng)
+2.0 uL DNA (total of \~ 30 - 100 ng)
 
 Which makes up a 25 uL volume. Preferably, don't leave the PCR machine on hold overnight, as it puts strain on it.  
 Store PCR products in the fridge or freezer.
