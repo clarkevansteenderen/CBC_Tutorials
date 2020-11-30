@@ -99,7 +99,7 @@ lset nst= rates= ngammacat=4 code=;
 outgroup ;  
 prset revmatpr=fixed(six values) statefreqpr=fixed(four values)
 shapepr=fixed(gamma shape) pinvarpr = fixed(pinvar) tratiopr =
-fixed(kappa value);  
+fixed(ti/tv value);  
 mcmc ngen= printfreq=1000 samplefreq= nruns= nchains= savebrlens=yes
 starttree=random;  
 sumt relburnin=yes burninfrac=0.25;  
