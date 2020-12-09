@@ -18,12 +18,14 @@ Last updated 03/09/2020
         posterior probability values
 7.  Compare a Bayesian analysis of 20 million generations to one of 10
     000
+8. EXTRA: Partition protein-coding sequence data by nucleotide position, and run a separate model for each
 
 ## DOCUMENT CONTENTS
 
 1.  [Data Preparation](#dataprep)
 2.  [Run MrBayes](#mrbayes)
 3.  [ggtree for MrBayes output](#ggtree)
+4.  [Partition Finder](#partitionfinder)
 
 Create a profile on [CIPRES](http://www.phylo.org/). This is a very
 useful online server that you can use to run numerous programs on a
@@ -380,6 +382,42 @@ new
 ```
 
 ![](FigsTut2/unnamed-chunk-4-2.png)<!-- -->
+
+## Partition Finder <a name = "partitionfinder"></a>
+
+If you have protein-coding sequence data (e.g. COI), then you can use a program such as [Partition Finder](http://www.robertlanfear.com/partitionfinder/) to get the best evolutionary model for each codon position (1, 2, and 3).
+Partition Finder is available on CIPRES.
+First, convert your aligned FASTA sequence file to PHYLIP format. This is easy to do from AliView (File --> Save as Phylip). All you need then is a configuration file, which is available on the [Partition Finder site](http://www.robertlanfear.com/partitionfinder/tutorial/assets/partition_finder.cfg). If you use CIPRES, be sure to set the alignment = infile.phy irrespective of the input file name. In the example below, the sequence length is 492 base pairs, which is being divided into three data blocks (all the first, all the second, and all the third codon positions).   
+
+Configuration file templat:  
+
+-----
+
+\## ALIGNMENT FILE ##   
+alignment = infile.phy;   
+
+\## BRANCHLENGTHS: linked | unlinked ##   
+branchlengths = linked;   
+
+\## MODELS OF EVOLUTION: all | allx | mrbayes | beast | gamma | gammai | <list> ##   
+models = mrbayes;   
+
+\# MODEL SELECCTION: AIC | AICc | BIC #   
+model_selection = bic;   
+
+\## DATA BLOCKS: see manual for how to define ##   
+[data_blocks]   
+COI_1stpos  = 1-492\3;   
+COI_2ndpos  = 2-492\3;   
+COI_3rdpos  = 3-492\3;   
+
+\## SCHEMES, search: all | user | greedy | rcluster | rclusterf | kmeans ##   
+[schemes]   
+search = greedy;   
+
+-----
+
+You then need to save the zipped **Analysis** output file, and open the **best_scheme** text file. This will give the best model for each codon position, and an automatically-created MrBayes block that you can use.
 
 > :books: Tutorial 3 will have a look at running a Bayesian analysis
 > with more than one gene, and how to run a maximum likelihood analysis
