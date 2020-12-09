@@ -15,6 +15,7 @@ Last updated 03/09/2020
 4.  Get a consensus output ML tree, reroot and swap branches around in
     FigTree, read the result into R, and edit using ggtree
 5.  Compare the topology of the two phylogenies
+6.  Use IQtree as an alternative tool for ML analysis
 
 ## DOCUMENT CONTENTS
 
@@ -22,6 +23,7 @@ Last updated 03/09/2020
 2.  [Use ggtree](#ggtree)
 3.  [Prep for a Maximum Likelihood analysis](#ML)
 4.  [View the ML tree using ggtree](#ggtreeML)
+5.  [IQtree](#iqtree)
 
 ## Getting started <a name = "gettingstarted"></a>
 
@@ -479,6 +481,11 @@ gridExtra::grid.arrange(bayes, ML, ncol=2, left = "MrBayes (Bayesian)", right = 
 ```
 
 ![](FigsTut3/unnamed-chunk-3-1.png)<!-- -->
+
+## IQ-TREE <a name = "iqtree"></a>
+
+IQ-TREE is a rapid tool that creates maximum likelihood phylogenies, and estimates the best evolutionary models for the input data (with our without partitions). 
+The [IQ-TREE site](http://www.iqtree.org/doc/Web-Server-Tutorial#tree-inference) has an option for using a web server to run an analysis. You just need to upload your alignment and partition file (in any of the example formats they present), and then open the file with the extension .phy.treefile in R, or Figtree.
 
 > :books: Tutorial 4 will have a look at working with microsatellite
 > (SSR) data.
