@@ -23,7 +23,7 @@ Last updated 03/09/2020
 2.  [Use ggtree](#ggtree)
 3.  [Prep for a Maximum Likelihood analysis](#ML)
 4.  [View the ML tree using ggtree](#ggtreeML)
-5.  [IQtree](#iqtree)
+5.  [IQ-TREE](#iqtree)
 
 ## Getting started <a name = "gettingstarted"></a>
 
