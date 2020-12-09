@@ -389,7 +389,7 @@ If you have protein-coding sequence data (e.g. COI), then you can use a program 
 Partition Finder is available on CIPRES.
 First, convert your aligned FASTA sequence file to PHYLIP format. This is easy to do from AliView (File --> Save as Phylip). All you need then is a configuration file, which is available on the [Partition Finder site](http://www.robertlanfear.com/partitionfinder/tutorial/assets/partition_finder.cfg). If you use CIPRES, be sure to set the alignment = infile.phy irrespective of the input file name. In the example below, the sequence length is 492 base pairs, which is being divided into three data blocks (all the first, all the second, and all the third codon positions).   
 
-Configuration file templat:  
+Configuration file template:  
 
 -----
 
