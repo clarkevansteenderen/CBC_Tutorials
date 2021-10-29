@@ -1,0 +1,274 @@
+---
+title: 'CBC Phylogenetics Tutorial 7: Barcode Gaps'
+author: "Clarke van Steenderen"
+date: "Last updated 28/10/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path='FigsTut7/')
+```
+
+## AIMS OF THIS TUTORIAL :white_check_mark:
+
+1. Graphically represent barcode gaps from an aligned FASTA file
+2. Subset sequences into desired groups 
+
+## R CODE
+
+```{r}
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(ape, tidyr, reshape2, ggplot2, spider, readxl, magrittr)
+
+# upload the FASTA file
+
+tetra_seqs = ape::read.FASTA("data/tetramesa_COI.fasta")
+tetra_seqs
+
+# upload an Excel file with sequence information
+
+source_mods = readxl::read_excel("data/source_modifiers.xlsx")
+
+head(source_mods)
+
+# out of interest, find what is in the source modifiers file that isn't in the sequence alignment to find missing sequences
+setdiff(source_mods$Sequence_ID, names(tetra_seqs))
+
+# Use all the sequences in the FASTA file
+
+spp_names = c()
+
+# Go through each sequence name in the FASTA file, and search for it in the source_modifiers Excel sheet.  When a match is found, store the corresponding organism name for that sequence in the spp_names vector
+
+for(i in 1:length(names(tetra_seqs))){
+  for(j in 1:nrow(source_mods)){
+    if(names(tetra_seqs)[i] == source_mods$Sequence_ID[j]) spp_names[i] = source_mods$Organism[j]
+  }
+}
+
+# Check that the length of the spp_names and number of sequences are equal
+
+length(spp_names) # 120
+length(tetra_seqs) # 120
+
+# Get the distance matrix for the COI sequences
+
+dist_all = dist.dna(tetra_seqs, as.matrix = T, pairwise.deletion = T)
+
+# Reshape the data in order to use it in ggplot later
+
+dist_all_reshape = reshape::melt(dist_all)
+
+# Using the spider package:
+
+# Get the furthest intraspecific distance within each organism group
+inter <- nonConDist(dist_all, spp_names) 
+
+# And the closest, non-conspecific (i.e., interspecific distance)
+intra <- maxInDist(dist_all, spp_names) 
+
+# Find how many times there are no barcode gaps
+length(which(inter-intra <= 0)) # 96
+
+# Create a dataframe with the intra and interspecific values
+
+barcode_gap_vals = c()
+barcode_gap_vals$intra = intra
+barcode_gap_vals$inter = inter
+barcode_gap_vals = as.data.frame(barcode_gap_vals)
+gaps = barcode_gap_vals$intra < barcode_gap_vals$inter 
+
+barcode_gap_vals$gap = gaps
+
+# Plot barcode gap as a dot plot
+barcode_gap_plot = 
+  barcode_gap_vals %>%
+  drop_na %>%
+  ggplot(aes(x = intra, y = inter, colour = gap)) + 
+  geom_point(size = 2) +
+  scale_color_manual(values = c("red", "green"), name = "Barcode Gap") +
+  geom_abline(intercept = 0, slope=1) +
+  theme_classic() +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 0.2)) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.15)) +
+  ylab("Distance to nearest neighbour") +
+  xlab("Maximum intraspecific distance")
+
+barcode_gap_plot
+  
+# Plot barcode gap as a histogram
+
+barcode_gap_hist = ggplot(data = dist_all_reshape, aes(x = value)) + 
+  geom_histogram(binwidth = 0.005, fill = "royalblue", col = "black", alpha = 0.7) +
+  xlab("K2P genetic distance") +
+  ylab("Number of distances/frequency") +
+  scale_x_continuous(breaks = seq(0, 0.3, by = 0.025)) +
+  theme_classic() 
+
+barcode_gap_hist
+
+# have a look at the barcode gap for each sequence. From the manual to the spider package: "grey lines represent the furthest intraspecific distance (bottom of line value), and the closest interspecific distance (top of line value). The red lines show where this relationship is reversed, and the closest non-conspecific is actually closer to the query than its nearest conspecific, i.e., situation where there is no barcoding gap
+
+bnd <- cbind(data.frame(inter, intra))
+ord <- bnd[order(bnd$inter),]
+plot(ord$inter, type="n", ylab="K2P distance",xlab="", xaxt = "n")
+segCol <- rep("gray50", length(ord$inter))
+segCol[ord$inter-ord$intra < 0] <- "red"
+segments(x0=1:length(ord$inter), y0=ord$inter, y1=ord$intra, col=segCol, lwd=6)
+axis(1, at=1:length(ord$inter), labels=names(tetra_seqs), las=2, cex.axis=0.55)
+```
+
+### :pushpin: Perhaps we want to compare all sequences that have been classified as Organisms "Tetramesa sp.4" and "Tetramesa sp.5". To subset this, one can do the following:
+
+```{r}
+t4_and_t5 = which(source_mods$Organism == "Tetramesa sp.4" | source_mods$Organism == "Tetramesa sp.5") ;t4_and_t5
+t4_and_t5_names = source_mods$Sequence_ID[t4_and_t5] ;t4_and_t5_names
+length(t4_and_t5_names)
+
+# now subset the FASTA file into these samples of interest
+tetra_seqs_subsetted = subset(tetra_seqs, names(tetra_seqs) %in% t4_and_t5_names) ;tetra_seqs_subsetted
+
+# if there is not a sequence for all the names in the source modifiers file (maybe some sequences didn't work), then one can look for which particular names are missing in the FASTA file, and remove those from the list of extracted names (t4_and_t5_names):
+diffs = setdiff(t4_and_t5_names, names(tetra_seqs_subsetted))
+indx = which(t4_and_t5_names %in% diffs) ; indx
+t4_and_t5_names = t4_and_t5_names[-indx]
+
+# write this as a FASTA file if desired:
+# write.dna(tetra_seqs_subsetted, "tetra_sp4_sp_5.fas", format = "fasta")
+
+# get distance matrices for the subsetted FASTA file
+tetra_seqs_subsetted.dist = dist.dna(tetra_seqs_subsetted, as.matrix = T, pairwise.deletion = T)
+# get the distance matrix into an appropriate format for ggplot
+tetra_dists = reshape::melt(tetra_seqs_subsetted.dist)
+
+# store the organism names for each sequence
+spp_names = c()
+
+for(i in 1:length(names(tetra_seqs_subsetted))){
+  for(j in 1:nrow(source_mods)){
+    if(names(tetra_seqs_subsetted)[i] == source_mods$Sequence_ID[j]) spp_names[i] = source_mods$Organism[j]
+  }
+}
+
+# Get the furthest intraspecific distance within each organism group
+inter <- spider::nonConDist(tetra_seqs_subsetted.dist, spp_names) ; inter 
+# And the closest, non-conspecific (i.e., interspecific distance)
+intra <- spider::maxInDist(tetra_seqs_subsetted.dist, spp_names) ; intra
+
+# Find how many times there are no barcode gaps
+length(which(inter-intra <= 0))
+
+barcode_gap_vals = c()
+barcode_gap_vals$intra = intra
+barcode_gap_vals$inter = inter
+barcode_gap_vals = as.data.frame(barcode_gap_vals)
+gaps = barcode_gap_vals$intra < barcode_gap_vals$inter 
+
+barcode_gap_vals$gap = gaps
+
+# Plot barcode gap as a dot plot
+barcode_gap_plot = 
+  barcode_gap_vals %>%
+  drop_na %>%
+  ggplot(aes(x = intra, y = inter, colour = gap)) + 
+  geom_point(size = 2) +
+  scale_color_manual(values = c("red", "green"), name = "Barcode Gap") +
+  geom_abline(intercept = 0, slope=1) +
+  theme_classic() +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 0.25)) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.2)) +
+  ylab("Distance to nearest neighbour") +
+  xlab("Maximum intraspecific distance")
+
+barcode_gap_plot
+
+# plot the barcode gap as a histogram
+barcode_gap = ggplot(data = tetra_dists, aes(x = value)) + 
+  geom_histogram(binwidth = 0.008, fill = "royalblue", col = "black", alpha = 0.7) +
+  xlab("K2P genetic distance") +
+  ylab("Number of distances/frequency") +
+  scale_x_continuous(breaks = seq(0, 0.3, by = 0.025)) +
+  theme_classic() ; barcode_gap
+
+# have a look at the barcode gap for each sequence. From the manual to the spider package: "grey lines represent the furthest intraspecific distance (bottom of line value), and the closest interspecific distance (top of line value). The red lines show where this relationship is reversed, and the closest non-conspecific is actually closer to the query than its nearest conspecific, i.e., situation where there is no barcoding gap
+
+bnd <- cbind(data.frame(inter, intra))
+ord <- bnd[order(bnd$inter),]
+plot(ord$inter, type="n", ylab="K2P distance",xlab="", xaxt = "n")
+segCol <- rep("gray50", length(ord$inter))
+segCol[ord$inter-ord$intra < 0] <- "red"
+segments(x0=1:length(ord$inter), y0=ord$inter, y1=ord$intra, col=segCol, lwd=6)
+axis(1, at=1:length(ord$inter), labels=names(tetra_seqs_subsetted), las=2, cex.axis=0.55)
+```
+
+### :pushpin: If one wants to subset the sequences based on a few conditions the following code can be used. For example, "extract all the specimens with a golden shoulder, from the Eastern Cape whose host plant is *Eragrostis curvula*, and all the specimens with a golden shoulder, from KwaZulu Natal, and whose host plant is *Eragrostis trichophora*":
+
+```{r}
+EC_KZN = which( (source_mods$`Golden shoulder` == "Yes" & source_mods$province == "EC" & source_mods$host == "Eragrostis curvula") | (source_mods$`Golden shoulder` == "Yes" & source_mods$province == "KZN" & source_mods$host == "Eragrostis trichophora") )
+# check the names extracted
+EC_KZN_names = source_mods$Sequence_ID[EC_KZN]
+# remove some if desired
+EC_KZN = EC_KZN[-c(26,33)]
+# subset the sequences based on the extracted names
+EC_KZN_seqs_subsetted = subset(tetra_seqs, names(tetra_seqs) %in% EC_KZN_names);EC_KZN_seqs_subsetted
+
+# make sure that the subsetted sequences correspond with the extracted names
+EC_KZN_spp_names = c()
+
+for(i in 1:length(names(EC_KZN_seqs_subsetted))){
+  for(j in 1:nrow(source_mods)){
+    if(names(EC_KZN_seqs_subsetted)[i] == source_mods$Sequence_ID[j]) EC_KZN_spp_names[i] = source_mods$Organism[j]
+  }
+}
+
+# get distances
+EC_KZN_seqs_subsetted.dist = dist.dna(EC_KZN_seqs_subsetted, as.matrix = T, pairwise.deletion = F)
+EC_KZN_seqs_subsetted.dist_2 = reshape::melt(EC_KZN_seqs_subsetted.dist)
+
+# Plot a barcode gap histogram
+barcode_gap_2 = ggplot(data = EC_KZN_seqs_subsetted.dist_2, aes(x = value)) + 
+  geom_histogram(binwidth = 0.005, fill = "royalblue", col = "black", alpha = 0.7) +
+  xlab("K2P genetic distance") +
+  ylab("Number of distances/frequency") +
+  scale_x_continuous(breaks = seq(0, 0.2, by = 0.01)) +
+  theme_classic() ;barcode_gap_2
+
+# Get the furthest intraspecific distance within each organism group
+inter <- spider::nonConDist(EC_KZN_seqs_subsetted.dist, EC_KZN_spp_names) ; inter 
+# And the closest, non-conspecific (i.e., interspecific distance)
+intra <- spider::maxInDist(EC_KZN_seqs_subsetted.dist, EC_KZN_spp_names) ; intra
+
+# Find how many times there are no barcode gaps
+length(which(inter-intra <= 0))
+
+# Create a dataframe with the intra and interspecific values
+barcode_gap_vals = c()
+barcode_gap_vals$intra = intra
+barcode_gap_vals$inter = inter
+barcode_gap_vals = as.data.frame(barcode_gap_vals)
+gaps = barcode_gap_vals$intra < barcode_gap_vals$inter 
+
+barcode_gap_vals$gap = gaps
+
+ggplot(data= barcode_gap_vals, aes(x = intra, y = inter, colour = as.factor(gaps))) + 
+  geom_point(size = 2) +
+  scale_color_manual(values = c("red", "green"), name = "Barcode Gap") +
+  geom_abline(intercept = 0, slope=1) +
+  theme_classic() +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 0.25)) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.2)) +
+  ylab("Distance to nearest neighbour") +
+  xlab("Maximum intraspecific distance")
+
+# have a look at the barcode gap for each sequence. From the manual to the spider package: "grey lines represent the furthest intraspecific distance (bottom of line value), and the closest interspecific distance (top of line value). The red lines show where this relationship is reversed, and the closest non-conspecific is actually closer to the query than its nearest conspecific, i.e., situation where there is no barcoding gap
+
+bnd <- cbind(data.frame(inter, intra))
+ord <- bnd[order(bnd$inter),]
+plot(ord$inter, type="n", ylab="K2P distance",xlab="", xaxt = "n")
+segCol <- rep("gray50", length(ord$inter))
+segCol[ord$inter-ord$intra < 0] <- "red"
+segments(x0=1:length(ord$inter), y0=ord$inter, y1=ord$intra, col=segCol, lwd=6)
+axis(1, at=1:length(ord$inter), labels=names(EC_KZN_seqs_subsetted), las=2, cex.axis=0.55)
+```
+
