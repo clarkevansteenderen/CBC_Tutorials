@@ -8,6 +8,8 @@ Last updated 28/10/2021
 1.  Graphically represent barcode gaps from an aligned FASTA file
 2.  Subset sequences into desired groups
 
+<img src='dated_COI.png'>
+
 ## R CODE
 
 ``` r
