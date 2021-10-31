@@ -8,9 +8,13 @@ Last updated 28/10/2021
 1.  Graphically represent barcode gaps from an aligned FASTA file
 2.  Subset sequences into desired groups
 
+🌳 The COI sequences in this dataset are from *Tetramesa* wasps (Hymenoptera: Eurytomidae), and produce the following dated BEAST phylogeny:
+
 <img src='dated_COI.png'>
 
-## R CODE
+--- 
+
+## R CODE: DETERMINING BARCODE GAPS
 
 ``` r
 if (!require("pacman")) install.packages("pacman")
